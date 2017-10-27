@@ -1,19 +1,31 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26730.16
+VisualStudioVersion = 15.0.27004.2005
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "paercebal.Kizuko", "paercebal.Kizuko.vcxproj", "{05ED6661-EF24-4823-B1E6-A6538DC37ABB}"
 	ProjectSection(ProjectDependencies) = postProject
+		{E5F09D4D-0235-495E-9939-9312EF0503E2} = {E5F09D4D-0235-495E-9939-9312EF0503E2}
 		{649E0B7C-3B8E-4E5A-AFCA-E8F032D0A5C7} = {649E0B7C-3B8E-4E5A-AFCA-E8F032D0A5C7}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "paercebal.KizukoTests", "paercebal.KizukoTests.vcxproj", "{25E11720-D3AB-4577-A259-1943D2CB69A2}"
 	ProjectSection(ProjectDependencies) = postProject
+		{E5F09D4D-0235-495E-9939-9312EF0503E2} = {E5F09D4D-0235-495E-9939-9312EF0503E2}
 		{649E0B7C-3B8E-4E5A-AFCA-E8F032D0A5C7} = {649E0B7C-3B8E-4E5A-AFCA-E8F032D0A5C7}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "paercebal.KizukoLib", "paercebal.KizukoLib.vcxproj", "{649E0B7C-3B8E-4E5A-AFCA-E8F032D0A5C7}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E5F09D4D-0235-495E-9939-9312EF0503E2} = {E5F09D4D-0235-495E-9939-9312EF0503E2}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "paercebal.Graphics", "paercebal.Graphics.vcxproj", "{E5F09D4D-0235-495E-9939-9312EF0503E2}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "paercebal.GraphicsTests", "paercebal.GraphicsTests.vcxproj", "{92BE4A04-792F-4F61-94E8-64DBFBDC619C}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E5F09D4D-0235-495E-9939-9312EF0503E2} = {E5F09D4D-0235-495E-9939-9312EF0503E2}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -52,6 +64,24 @@ Global
 		{649E0B7C-3B8E-4E5A-AFCA-E8F032D0A5C7}.ReleaseDev|x64.ActiveCfg = ReleaseDev|x64
 		{649E0B7C-3B8E-4E5A-AFCA-E8F032D0A5C7}.ReleaseDev|x64.Build.0 = ReleaseDev|x64
 		{649E0B7C-3B8E-4E5A-AFCA-E8F032D0A5C7}.ReleaseDev|x86.ActiveCfg = ReleaseDev|x64
+		{E5F09D4D-0235-495E-9939-9312EF0503E2}.Debug|x64.ActiveCfg = Debug|x64
+		{E5F09D4D-0235-495E-9939-9312EF0503E2}.Debug|x64.Build.0 = Debug|x64
+		{E5F09D4D-0235-495E-9939-9312EF0503E2}.Debug|x86.ActiveCfg = Debug|x64
+		{E5F09D4D-0235-495E-9939-9312EF0503E2}.Release|x64.ActiveCfg = Release|x64
+		{E5F09D4D-0235-495E-9939-9312EF0503E2}.Release|x64.Build.0 = Release|x64
+		{E5F09D4D-0235-495E-9939-9312EF0503E2}.Release|x86.ActiveCfg = Release|x64
+		{E5F09D4D-0235-495E-9939-9312EF0503E2}.ReleaseDev|x64.ActiveCfg = ReleaseDev|x64
+		{E5F09D4D-0235-495E-9939-9312EF0503E2}.ReleaseDev|x64.Build.0 = ReleaseDev|x64
+		{E5F09D4D-0235-495E-9939-9312EF0503E2}.ReleaseDev|x86.ActiveCfg = ReleaseDev|x64
+		{92BE4A04-792F-4F61-94E8-64DBFBDC619C}.Debug|x64.ActiveCfg = Debug|x64
+		{92BE4A04-792F-4F61-94E8-64DBFBDC619C}.Debug|x64.Build.0 = Debug|x64
+		{92BE4A04-792F-4F61-94E8-64DBFBDC619C}.Debug|x86.ActiveCfg = Debug|x64
+		{92BE4A04-792F-4F61-94E8-64DBFBDC619C}.Release|x64.ActiveCfg = Release|x64
+		{92BE4A04-792F-4F61-94E8-64DBFBDC619C}.Release|x64.Build.0 = Release|x64
+		{92BE4A04-792F-4F61-94E8-64DBFBDC619C}.Release|x86.ActiveCfg = Release|x64
+		{92BE4A04-792F-4F61-94E8-64DBFBDC619C}.ReleaseDev|x64.ActiveCfg = ReleaseDev|x64
+		{92BE4A04-792F-4F61-94E8-64DBFBDC619C}.ReleaseDev|x64.Build.0 = ReleaseDev|x64
+		{92BE4A04-792F-4F61-94E8-64DBFBDC619C}.ReleaseDev|x86.ActiveCfg = ReleaseDev|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
