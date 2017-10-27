@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="p.Graphics">
+      <UniqueIdentifier>{D6620A9D-5C56-4742-BDF3-3AE8A009D177}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="p.Graphics.world">
+      <UniqueIdentifier>{f04defdd-25ae-4288-be80-1bf5270cfd4a}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\paercebal\Graphics\dllmain.cpp">
+      <Filter>p.Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\paercebal\Graphics\world\Object.cpp">
+      <Filter>p.Graphics.world</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\paercebal\Graphics\dllmain.hpp">
+      <Filter>p.Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\paercebal\Graphics\world\Object.hpp">
+      <Filter>p.Graphics.world</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
