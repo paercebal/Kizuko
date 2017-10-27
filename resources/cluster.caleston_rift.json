@@ -1,0 +1,21 @@
+{
+   "cluster-name" : "Caleston Rift",
+   "stars" :
+   [
+      { name : "Balor", x : 0, y : 0, z : 0, r : 255, g : 0, b : 0, relay : true },
+      { name : "Ogami", x : -10, y : -30, z : -25, r : 255, g : 0, b : 0, relay : true },
+      { name : "Talava", x : -10, y : 20, z : 15, r : 255, g : 128, b : 128, relay : true },
+      { name : "Solveig", x : 65, y : 40, z : -17.5, r : 255, g : 128, b : 128, relay : true },
+      { name : "Yakawa", x : 75, y : -25, z : 22.5, r : 255, g : 128, b : 128, relay : true },
+      { name : "Aysur", x : 60, y : -50, z : .25, r : 255, g : 128, b : 128, relay : true },
+   ],
+
+   "distances" :
+   [
+      { begin : "Balor (*)", end : "Ogami" },
+      { begin : "Balor (*)", end : "Talava" },
+      { begin : "Balor (*)", end : "Solveig" },
+      { begin : "Balor (*)", end : "Yakawa" },
+      { begin : "Balor (*)", end : "Aysur" },
+   ],
+}

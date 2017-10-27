@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="resources">
+      <UniqueIdentifier>{ecd17b0d-c756-4280-a136-35b1e5065703}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="p.Kizuko">
+      <UniqueIdentifier>{848FC8D8-3833-4F6E-89B4-F19F1F06253D}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\paercebal\Kizuko\main.cpp">
+      <Filter>p.Kizuko</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\paercebal\Kizuko\main.hpp">
+      <Filter>p.Kizuko</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\resources\_clusters.bat">
+      <Filter>resources</Filter>
+    </None>
+    <None Include="..\resources\cluster.caleston_rift.json">
+      <Filter>resources</Filter>
+    </None>
+    <None Include="..\resources\cluster.default.json">
+      <Filter>resources</Filter>
+    </None>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="p.KizukoTests">
+      <UniqueIdentifier>{E38934D6-0C83-44A1-8A6D-11A10A75A285}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\paercebal\KizukoTests\main.cpp">
+      <Filter>p.KizukoTests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\paercebal\KizukoTests\matricesTest.cpp">
+      <Filter>p.KizukoTests</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\paercebal\KizukoTests\main.hpp">
+      <Filter>p.KizukoTests</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
