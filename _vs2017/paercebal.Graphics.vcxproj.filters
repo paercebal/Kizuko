@@ -7,6 +7,9 @@
     <Filter Include="p.Graphics.world">
       <UniqueIdentifier>{f04defdd-25ae-4288-be80-1bf5270cfd4a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="p.Graphics.maths">
+      <UniqueIdentifier>{6ede77fb-2280-4ebb-9105-3186521493cf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\paercebal\Graphics\dllmain.cpp">
@@ -15,12 +18,36 @@
     <ClCompile Include="..\paercebal\Graphics\world\Object.cpp">
       <Filter>p.Graphics.world</Filter>
     </ClCompile>
+    <ClCompile Include="..\paercebal\Graphics\maths\Matrix3D.cpp">
+      <Filter>p.Graphics.maths</Filter>
+    </ClCompile>
+    <ClCompile Include="..\paercebal\Graphics\maths\utilities.cpp">
+      <Filter>p.Graphics.maths</Filter>
+    </ClCompile>
+    <ClCompile Include="..\paercebal\Graphics\world\DefaultObject.cpp">
+      <Filter>p.Graphics.world</Filter>
+    </ClCompile>
+    <ClCompile Include="..\paercebal\Graphics\world\World.cpp">
+      <Filter>p.Graphics.world</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\paercebal\Graphics\dllmain.hpp">
       <Filter>p.Graphics</Filter>
     </ClInclude>
     <ClInclude Include="..\paercebal\Graphics\world\Object.hpp">
+      <Filter>p.Graphics.world</Filter>
+    </ClInclude>
+    <ClInclude Include="..\paercebal\Graphics\maths\Matrix3D.hpp">
+      <Filter>p.Graphics.maths</Filter>
+    </ClInclude>
+    <ClInclude Include="..\paercebal\Graphics\maths\utilities.hpp">
+      <Filter>p.Graphics.maths</Filter>
+    </ClInclude>
+    <ClInclude Include="..\paercebal\Graphics\world\DefaultObject.hpp">
+      <Filter>p.Graphics.world</Filter>
+    </ClInclude>
+    <ClInclude Include="..\paercebal\Graphics\world\World.hpp">
       <Filter>p.Graphics.world</Filter>
     </ClInclude>
   </ItemGroup>
