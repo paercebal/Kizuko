@@ -15,6 +15,9 @@
     <ClCompile Include="..\paercebal\GraphicsTests\ObjectTests.cpp">
       <Filter>p.GraphicsTests</Filter>
     </ClCompile>
+    <ClCompile Include="..\paercebal\GraphicsTests\AverageScenesTests.cpp">
+      <Filter>p.GraphicsTests</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\paercebal\GraphicsTests\main.hpp">

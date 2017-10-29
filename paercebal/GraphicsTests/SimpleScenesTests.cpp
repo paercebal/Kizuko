@@ -21,7 +21,7 @@ TEST(SimpleScenesTests, SimpleInitialization)
 
    EXPECT_EQ(o.getAbsolutePositions().size(), 0);
 
-   calculateAbsolutePosition(o);
+   initializeAndCalculateAbsolutePosition(o);
 
    Object::Positions positions = { { 0, 0, 0 },{ 2, 4, 6 } };
 
@@ -38,7 +38,7 @@ TEST(SimpleScenesTests, SimpleTranslation)
 
    EXPECT_EQ(o.getAbsolutePositions().size(), 0);
 
-   calculateAbsolutePosition(o);
+   initializeAndCalculateAbsolutePosition(o);
 
    Object::Positions positions = { { 1, 2, 3 },{ 3, 6, 9 } };
 
@@ -57,7 +57,7 @@ TEST(SimpleScenesTests, SimpleRotation)
 
       EXPECT_EQ(o.getAbsolutePositions().size(), 0);
 
-      calculateAbsolutePosition(o);
+      initializeAndCalculateAbsolutePosition(o);
 
       Object::Positions positions = { { 0, 0, 0 },{ -4, 2, 6 } };
 
@@ -74,7 +74,7 @@ TEST(SimpleScenesTests, SimpleRotation)
 
       EXPECT_EQ(o.getAbsolutePositions().size(), 0);
 
-      calculateAbsolutePosition(o);
+      initializeAndCalculateAbsolutePosition(o);
 
       Object::Positions positions = { { 0, 0, 0 },{ 2, -4, -6 } };
 
@@ -91,7 +91,7 @@ TEST(SimpleScenesTests, SimpleRotation)
 
       EXPECT_EQ(o.getAbsolutePositions().size(), 0);
 
-      calculateAbsolutePosition(o);
+      initializeAndCalculateAbsolutePosition(o);
 
       Object::Positions positions = { { 0, 0, 0 },{ 2, -4, -6 } };
 
@@ -108,7 +108,7 @@ TEST(SimpleScenesTests, SimpleRotation)
 
       EXPECT_EQ(o.getAbsolutePositions().size(), 0);
 
-      calculateAbsolutePosition(o);
+      initializeAndCalculateAbsolutePosition(o);
 
       Object::Positions positions = { { 0, 0, 0 },{ 2, 6, -4 } };
 
@@ -125,7 +125,7 @@ TEST(SimpleScenesTests, SimpleRotation)
 
       EXPECT_EQ(o.getAbsolutePositions().size(), 0);
 
-      calculateAbsolutePosition(o);
+      initializeAndCalculateAbsolutePosition(o);
 
       Object::Positions positions = { { 0, 0, 0 },{ 2, 4, 6 } };
 
@@ -134,7 +134,22 @@ TEST(SimpleScenesTests, SimpleRotation)
    }
 }
 
+TEST(SimpleScenesTests, ComplexCaseForOneObject)
+{
+   DefaultObject o;
+   auto r = maths::utilities::createRotationMatrixAroundZ(maths::utilities::pi_1_2<float>);
 
+   o.setCenter({ 1, 2, 3 });
+   o.setRelativePositions({ { 0, 0, 0 },{ 2, 4, 6 } });
+   o.setRelativeRotations({ r });
+
+   initializeAndCalculateAbsolutePosition(o);
+
+   Object::Positions positions = { { 1, 2, 3 },{ -3, 4, 9 } };
+
+   EXPECT_EQ(o.getAbsolutePositions().size(), 2);
+   EXPECT_TRUE(is_mostly_equal(o.getAbsolutePositions(), positions));
+}
 
 
 }
