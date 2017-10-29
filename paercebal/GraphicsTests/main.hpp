@@ -7,7 +7,37 @@
 #include <cstdlib>
 #include <cmath>
 #include <limits>
+#include <vector>
+#include <algorithm>
+#include <iostream>
 
+
+namespace sf
+{
+
+template <typename T>
+void PrintTo(const Vector2<T> & object, ::std::ostream * os)
+{
+   *os << "{" << object.x << ", " << object.y << "}";
+}
+
+template <typename T>
+void PrintTo(const Vector3<T> & object, ::std::ostream * os)
+{
+   *os << "{" << object.x << ", " << object.y << ", " << object.z << "}";
+}
+
+}
+
+namespace paercebal::Graphics::world
+{
+
+//void PrintTo(const Object & object, ::std::ostream * os)
+//{
+//   *os << bar.DebugString();  // whatever needed to print bar to os
+//}
+
+}
 
 namespace paercebal::Graphics::world::tests
 {
@@ -46,52 +76,94 @@ bool is_mostly_equal(std::vector<sf::Vector3<T>> & lhs, std::vector<sf::Vector3<
 }
 
 
-inline void calculateAbsolutePosition(DefaultObject & o)
+inline void initializeAbsolutePositions(Object & o)
 {
-   o.resetAbsolutePositions();
-   auto & absolute = o.getAbsolutePositions();
+   o.getAbsolutePositions() = o.getRelativePositions();
+}
 
-   // Initialization
+inline void rotateAbsolutePositionsAroundCenter(const Object & center, Object & o)
+{
+   for (const auto & rotation : center.getRelativeRotations())
    {
-      auto itS = begin(o.getRelativePositions()), itSEnd = end(o.getRelativePositions());
-      auto itD = begin(o.getAbsolutePositions()), itDEnd = end(o.getAbsolutePositions());
-
-      for (; (itS != itSEnd) && (itD != itDEnd); ++itS, ++itD)
+      for (auto & position : o.getAbsolutePositions())
       {
-         *itD += *itS;
-      }
-   }
-
-   // Rotation
-   {
-      auto itR = begin(o.getRelativeRotations()), itREnd = end(o.getRelativeRotations());
-
-      for (; itR != itREnd; ++itR)
-      {
-         auto itD = begin(o.getAbsolutePositions()), itDEnd = end(o.getAbsolutePositions());
-
-         for (; itD != itDEnd; ++itD)
-         {
-            {
-               const maths::Matrix3D<float> & rotation = *itR;
-               sf::Vector3f & position = *itD;
-
-               position = rotation * position;
-            }
-         }
-      }
-   }
-
-   // Translation
-   {
-      auto itD = begin(o.getAbsolutePositions()), itDEnd = end(o.getAbsolutePositions());
-
-      for (; itD != itDEnd; ++itD)
-      {
-         *itD += o.getCenter();
+         position = rotation * position;
       }
    }
 }
+
+inline void translateAbsolutePositionToCenterCoordinates(const Object & center, Object & o)
+{
+   for (auto & position : o.getAbsolutePositions())
+   {
+      position += center.getCenter();
+   }
+}
+
+inline void calculateAbsolutePosition(Object & o)
+{
+   rotateAbsolutePositionsAroundCenter(o, o);
+   translateAbsolutePositionToCenterCoordinates(o, o);
+}
+
+inline void initializeAndCalculateAbsolutePosition(Object & o)
+{
+   initializeAbsolutePositions(o);
+   calculateAbsolutePosition(o);
+}
+
+inline void initializeAbsolutePositionsOfCurrentAndDescendants(Object & o)
+{
+   for (auto & c : o.getChildren())
+   {
+      initializeAbsolutePositionsOfCurrentAndDescendants(*c);
+   }
+
+   initializeAbsolutePositions(o);
+}
+
+inline void RotateAndTranslateAbsolutePositionsOfObjectAccordingToAncestors(std::vector<Object *> & ancestors, Object & o)
+{
+   auto applyTranslateAndRotate = [&o](Object * origin)
+   {
+      rotateAbsolutePositionsAroundCenter(*origin, o);
+      translateAbsolutePositionToCenterCoordinates(*origin, o);
+   };
+
+   std::for_each(ancestors.rbegin(), ancestors.rend(), applyTranslateAndRotate);
+}
+
+inline void RotateAndTranslateAbsolutePositionsOfObjectAndDescendantsAccordingToAncestors(std::vector<Object *> & ancestors, Object & o)
+{
+   ancestors.push_back(&o);
+
+   for (auto & c : o.getChildren())
+   {
+      RotateAndTranslateAbsolutePositionsOfObjectAndDescendantsAccordingToAncestors(ancestors, *c);
+   }
+
+   RotateAndTranslateAbsolutePositionsOfObjectAccordingToAncestors(ancestors, o);
+
+   ancestors.pop_back();
+}
+
+inline void RotateAndTranslateAbsolutePositionsOfDescendants(Object & o)
+{
+   std::vector<Object *> ancestors;
+   ancestors.push_back(&o);
+
+   for (auto & c : o.getChildren())
+   {
+      RotateAndTranslateAbsolutePositionsOfObjectAndDescendantsAccordingToAncestors(ancestors, *c);
+   }
+}
+
+inline void calculateAbsolutePositionRecursive(Object & o)
+{
+   initializeAbsolutePositionsOfCurrentAndDescendants(o);
+   RotateAndTranslateAbsolutePositionsOfDescendants(o);
+}
+
 
 } // namespace paercebal::Graphics::world::tests
 
