@@ -28,7 +28,6 @@
     <ClInclude Include="..\paercebal\KizukoLib\GlobalResources.hpp" />
     <ClInclude Include="..\paercebal\KizukoLib\IDrawable.hpp" />
     <ClInclude Include="..\paercebal\KizukoLib\input\Data.hpp" />
-    <ClInclude Include="..\paercebal\KizukoLib\matrices\Matrix3D.hpp" />
     <ClInclude Include="..\paercebal\KizukoLib\ProgramOptions.hpp" />
     <ClInclude Include="..\paercebal\KizukoLib\shapes\AbstractLine.hpp" />
     <ClInclude Include="..\paercebal\KizukoLib\shapes\AbstractShape.hpp" />

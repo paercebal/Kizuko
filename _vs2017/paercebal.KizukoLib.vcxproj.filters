@@ -7,9 +7,6 @@
     <Filter Include="p.KizukoLib">
       <UniqueIdentifier>{B099B27C-C1E0-4E8C-B290-CFE1FB459D78}</UniqueIdentifier>
     </Filter>
-    <Filter Include="p.KizukoLib.matrices">
-      <UniqueIdentifier>{42b8eac6-f4d8-42f6-820d-d7830aaf48c4}</UniqueIdentifier>
-    </Filter>
     <Filter Include="p.KizukoLib.shapes">
       <UniqueIdentifier>{751f5963-31df-4012-8d1d-8b13f91ff4a7}</UniqueIdentifier>
     </Filter>
@@ -64,9 +61,6 @@
     </ClInclude>
     <ClInclude Include="..\paercebal\KizukoLib\shapes\DistanceLine.hpp">
       <Filter>p.KizukoLib.shapes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\paercebal\KizukoLib\matrices\Matrix3D.hpp">
-      <Filter>p.KizukoLib.matrices</Filter>
     </ClInclude>
     <ClInclude Include="..\paercebal\KizukoLib\shapes\DistanceShape.hpp">
       <Filter>p.KizukoLib.shapes</Filter>
