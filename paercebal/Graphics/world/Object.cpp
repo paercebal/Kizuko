@@ -38,6 +38,7 @@ Object::Object(const Object & that)
    : center(that.center)
    , relativePositions(that.relativePositions)
    , relativeRotations(that.relativeRotations)
+   , relativeScaling(that.relativeScaling)
    , absolutePositions(that.absolutePositions)
    , children(cloneChildren(that.children))
 {
@@ -155,6 +156,41 @@ Object & Object::setRelativeRotations(Rotations && relativeRotations_) noexcept
    return *this;
 }
 
+/// @brief returns the scaling factor of the object
+///
+/// @return the scaling factor
+///
+/// @note Exception guarantee: Nothrow
+
+const Object::Scaling & Object::getRelativeScaling() const noexcept
+{
+   return this->relativeScaling;
+}
+
+/// @brief sets the scaling factor of the object
+///
+/// @param relativeScaling_ the scaling factor to be set
+///
+/// @note Exception guarantee: Nothrow
+
+Object & Object::setRelativeScaling(const Scaling & relativeScaling_)
+{
+   this->relativeScaling = relativeScaling_;
+   return *this;
+}
+
+/// @brief sets the scaling factor of the object
+///
+/// @param relativeScaling_ the scaling factor to be set
+///
+/// @note Exception guarantee: Nothrow
+
+Object & Object::setRelativeScaling(Scaling && relativeScaling_) noexcept
+{
+   this->relativeScaling.swap(relativeScaling_);
+   return *this;
+}
+
 /// @brief returns the absolute positions of this object
 ///
 /// @return the absolute positions
@@ -264,90 +300,6 @@ Object & Object::calculateAbsolutePositions()
    return *this;
 }
 
-
-
-
-/*
-
-Simple case: Parent->Child
-0. the current object's center is in the parent's origin.
-1. The current object's relative positions are set to zero
-2. we apply the translation/rotation of the current object (to orient it in the desired way)
-2. then we translate the current object depending on the parent's origin
-
-
-Complex case: Ancestor->Parent->Child
-0. all the current objects' centers are in their parent's origin
-1. we move to the Child
-2. We apply the rotation on the current object (i.e. the child)
-3. we translate the current object (i.e. the child) depending on its parent's (i.e. Parent's) origin
-4. we move to the current object's parent (i.e. Parent)
-5. We apply the rotation on the current object (i.e. the Parent) and all its descendant
-5. We translate the current object (i.e. the Parent) and all its descendant on the current object's parent's (i.e. Ancestor's) origin
-6. we move to the current object's parent (i.e. Ancestor)
-7. etc.
-
-*/
-/*
-void resetAbsolutePositionsRecursively(Object & current)
-{
-   current.resetAbsolutePositions();
-}
-
-void applyRelativeTransformationsToTheCurrentObjectAbsolutePositions(const Object & origin, Object & object)
-{
-   for (auto & position : object.getAbsolutePositions())
-   {
-      position = origin.getCenter() + position;
-   }
-
-   for (auto & rotation : origin.getRelativeRotations())
-   {
-      for (auto & position : object.getAbsolutePositions())
-      {
-         position = rotation * position;
-      }
-   }
-}
-
-void applyRelativeTransformationsToTheCurrentObjectAndItsDescendentsAbsolutePositions(const Object & origin, Object & object)
-{
-   for (auto & child : object.getChildren())
-   {
-      applyRelativeTransformationsToTheCurrentObjectAndItsDescendentsAbsolutePositions(origin, *child);
-   }
-
-   applyRelativeTransformationsToTheCurrentObjectAbsolutePositions(object, object);
-}
-
-void applyRelativeRotationsToAbsolutePositionsRecursively(Object & object)
-{
-   for (auto & child : object.getChildren())
-   {
-      applyRelativeRotationsToAbsolutePositionsRecursively(*child);
-   }
-
-   applyRelativeTransformationsToTheCurrentObjectAndItsDescendentsAbsolutePositions(object, object);
-}
-
-void calculateAbsolutePositions(Object & current)
-{
-   resetAbsolutePositionsRecursively(current);
-
-
-   for (auto & child : this->children)
-   {
-      child->calculateAbsolutePositions();
-   }
-
-   this->applyRotationsOnCurrentAndDescendants(this->relativeRotations);
-}
-
-void Object::applyRotationsOnCurrentAndDescendants(const Rotations & rotations)
-{
-}
-*/
-
 namespace private_
 {
 
@@ -356,9 +308,9 @@ PAERCEBAL_x_GRAPHICS_x_API void initializeAbsolutePositions(Object & o)
    o.getAbsolutePositions() = o.getRelativePositions();
 }
 
-PAERCEBAL_x_GRAPHICS_x_API void rotateAbsolutePositionsAroundCenter(const Object & center, Object & o)
+PAERCEBAL_x_GRAPHICS_x_API void rotateAbsolutePositionsAroundOrigin(const Object & origin, Object & o)
 {
-   for (const auto & rotation : center.getRelativeRotations())
+   for (const auto & rotation : origin.getRelativeRotations())
    {
       for (auto & position : o.getAbsolutePositions())
       {
@@ -367,18 +319,29 @@ PAERCEBAL_x_GRAPHICS_x_API void rotateAbsolutePositionsAroundCenter(const Object
    }
 }
 
-PAERCEBAL_x_GRAPHICS_x_API void translateAbsolutePositionToCenterCoordinates(const Object & center, Object & o)
+PAERCEBAL_x_GRAPHICS_x_API void scaleAbsolutePositionsRelativeToOrigin(const Object & origin, Object & o)
+{
+   const auto & scaling = origin.getRelativeScaling();
+
+   for (auto & position : o.getAbsolutePositions())
+   {
+      position = scaling * position;
+   }
+}
+
+PAERCEBAL_x_GRAPHICS_x_API void translateAbsolutePositionToOriginCoordinates(const Object & origin, Object & o)
 {
    for (auto & position : o.getAbsolutePositions())
    {
-      position += center.getCenter();
+      position += origin.getCenter();
    }
 }
 
 PAERCEBAL_x_GRAPHICS_x_API void calculateAbsolutePosition(Object & o)
 {
-   rotateAbsolutePositionsAroundCenter(o, o);
-   translateAbsolutePositionToCenterCoordinates(o, o);
+   rotateAbsolutePositionsAroundOrigin(o, o);
+   scaleAbsolutePositionsRelativeToOrigin(o, o);
+   translateAbsolutePositionToOriginCoordinates(o, o);
 }
 
 PAERCEBAL_x_GRAPHICS_x_API void initializeAndCalculateAbsolutePosition(Object & o)
@@ -397,39 +360,40 @@ PAERCEBAL_x_GRAPHICS_x_API void initializeAbsolutePositionsOfCurrentAndDescendan
    initializeAbsolutePositions(o);
 }
 
-PAERCEBAL_x_GRAPHICS_x_API void RotateAndTranslateAbsolutePositionsOfObjectAccordingToAncestors(std::vector<Object *> & ancestors, Object & o)
+PAERCEBAL_x_GRAPHICS_x_API void RotateAndScaleAndTranslateAbsolutePositionsOfObjectAccordingToAncestors(std::vector<Object *> & ancestors, Object & o)
 {
    auto applyTranslateAndRotate = [&o](Object * origin)
    {
-      rotateAbsolutePositionsAroundCenter(*origin, o);
-      translateAbsolutePositionToCenterCoordinates(*origin, o);
+      rotateAbsolutePositionsAroundOrigin(*origin, o);
+      scaleAbsolutePositionsRelativeToOrigin(*origin, o);
+      translateAbsolutePositionToOriginCoordinates(*origin, o);
    };
 
    std::for_each(ancestors.rbegin(), ancestors.rend(), applyTranslateAndRotate);
 }
 
-PAERCEBAL_x_GRAPHICS_x_API void RotateAndTranslateAbsolutePositionsOfObjectAndDescendantsAccordingToAncestors(std::vector<Object *> & ancestors, Object & o)
+PAERCEBAL_x_GRAPHICS_x_API void RotateAndScaleAndTranslateAbsolutePositionsOfObjectAndDescendantsAccordingToAncestors(std::vector<Object *> & ancestors, Object & o)
 {
    ancestors.push_back(&o);
 
    for (auto & c : o.getChildren())
    {
-      RotateAndTranslateAbsolutePositionsOfObjectAndDescendantsAccordingToAncestors(ancestors, *c);
+      RotateAndScaleAndTranslateAbsolutePositionsOfObjectAndDescendantsAccordingToAncestors(ancestors, *c);
    }
 
-   RotateAndTranslateAbsolutePositionsOfObjectAccordingToAncestors(ancestors, o);
+   RotateAndScaleAndTranslateAbsolutePositionsOfObjectAccordingToAncestors(ancestors, o);
 
    ancestors.pop_back();
 }
 
-PAERCEBAL_x_GRAPHICS_x_API void RotateAndTranslateAbsolutePositionsOfDescendants(Object & o)
+PAERCEBAL_x_GRAPHICS_x_API void RotateAndScaleAndTranslateAbsolutePositionsOfDescendants(Object & o)
 {
    std::vector<Object *> ancestors;
    ancestors.push_back(&o);
 
    for (auto & c : o.getChildren())
    {
-      RotateAndTranslateAbsolutePositionsOfObjectAndDescendantsAccordingToAncestors(ancestors, *c);
+      RotateAndScaleAndTranslateAbsolutePositionsOfObjectAndDescendantsAccordingToAncestors(ancestors, *c);
    }
 }
 
@@ -438,7 +402,7 @@ PAERCEBAL_x_GRAPHICS_x_API void RotateAndTranslateAbsolutePositionsOfDescendants
 PAERCEBAL_x_GRAPHICS_x_API void calculateAbsolutePositionRecursive(Object & o)
 {
    private_::initializeAbsolutePositionsOfCurrentAndDescendants(o);
-   private_::RotateAndTranslateAbsolutePositionsOfDescendants(o);
+   private_::RotateAndScaleAndTranslateAbsolutePositionsOfDescendants(o);
 }
 
 
