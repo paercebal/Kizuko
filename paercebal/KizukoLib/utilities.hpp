@@ -3,7 +3,8 @@
 
 #include <paercebal/KizukoLib/dllmain.hpp>
 
-#include <paercebal/KizukoLib/matrices/Matrix3D.hpp>
+#include <paercebal/Graphics/maths/Matrix3D.hpp>
+#include <paercebal/Graphics/maths/utilities.hpp>
 #include <paercebal/KizukoLib/Exception.hpp>
 
 #include <SFML/Graphics.hpp>
@@ -53,12 +54,13 @@ void assertResourceLoading(T & t, const std::string & path, const std::string & 
 
 inline sf::Vector2<long double> convert_3D_to_iso2D(const sf::Vector3<long double> value)
 {
-   static const long double pi = 3.141592653589793238462643383279502884L;
+   static const long double pi = Graphics::maths::utilities::pi<long double>;
    static const auto firstAngle = pi / 4;
    static const auto secondAngle = pi / 3;
 
-   static const auto firstMatrix = matrices::createRotationMatrixAroundZ(firstAngle);
-   static const auto secondMatrix = matrices::createRotationMatrixAroundX(secondAngle);
+   static const auto mirrorMatrix = Graphics::maths::utilities::createMirrorMatrixAroundZ<long double>();
+   static const auto firstMatrix = Graphics::maths::utilities::createRotationMatrixAroundZ(firstAngle);
+   static const auto secondMatrix = Graphics::maths::utilities::createRotationMatrixAroundX(secondAngle);
    static const auto totalMatrix = secondMatrix * firstMatrix;
 
    const auto resultDouble = totalMatrix * value;

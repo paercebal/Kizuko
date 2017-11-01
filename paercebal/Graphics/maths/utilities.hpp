@@ -52,6 +52,24 @@ inline Matrix3D<T> createRotationMatrixAroundZ(const T angle)
 }
 
 template <typename T>
+inline Matrix3D<T> createMirrorMatrixAroundX()
+{
+   return { -1, 0, 0, 0, 1, 0, 0, 0, 1 };
+}
+
+template <typename T>
+inline Matrix3D<T> createMirrorMatrixAroundY()
+{
+   return { 1, 0, 0, 0, -1, 0, 0, 0, 1 };
+}
+
+template <typename T>
+inline Matrix3D<T> createMirrorMatrixAroundZ()
+{
+   return { 1, 0, 0, 0, 1, 0, 0, 0, -1 };
+}
+
+template <typename T>
 inline sf::Vector3<T> createTranslationVector(const T x, const T y, const T z)
 {
    return { x, y, z };
@@ -73,6 +91,12 @@ template <typename T>
 inline sf::Vector3<T> createTranslationVectorOnZ(const T value)
 {
    return { 0, 0, z };
+}
+
+template <typename T>
+inline Matrix3D<T> createScaleMatrix(const T value)
+{
+   return { value, 0, 0, 0, value, 0, 0, 0, value };
 }
 
 template <typename T>
