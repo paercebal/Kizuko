@@ -54,7 +54,6 @@ template <typename T>
    return os;
 }
 
-
 inline ::std::ostream & operator << (::std::ostream & os, const Object::Positions & object)
 {
    os << "{ ";
@@ -76,17 +75,17 @@ namespace paercebal::Graphics::world::tests
 
 inline bool is_mostly_equal(float lhs, float rhs)
 {
-   return std::abs(lhs - rhs) < 10 * std::numeric_limits<float>::epsilon();
+   return std::abs(lhs - rhs) < 100 * std::numeric_limits<float>::epsilon();
 }
 
 inline bool is_mostly_equal(double lhs, double rhs)
 {
-   return std::abs(lhs - rhs) < 10 * std::numeric_limits<double>::epsilon();
+   return std::abs(lhs - rhs) < 100 * std::numeric_limits<double>::epsilon();
 }
 
 inline bool is_mostly_equal(long double lhs, long double rhs)
 {
-   return std::abs(lhs - rhs) < 10 * std::numeric_limits<long double>::epsilon();
+   return std::abs(lhs - rhs) < 100 * std::numeric_limits<long double>::epsilon();
 }
 
 template <typename T>

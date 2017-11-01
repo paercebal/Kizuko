@@ -103,6 +103,8 @@ public:
    Matrix3D() = default;         ///< default constructor
    Matrix3D(T vxx_, T vxy_, T vxz_, T vyx_, T vyy_, T vyz_, T vzx_, T vzy_, T vzz_);
 
+   void                 swap(Matrix3D & that) noexcept;
+
    const T &            operator () (int i, int j) const;
    T &                  operator () (int i, int j);
 
@@ -209,6 +211,31 @@ template <typename T>
 inline Matrix3D<T>::Matrix3D(T vxx_, T vxy_, T vxz_, T vyx_, T vyy_, T vyz_, T vzx_, T vzy_, T vzz_)
    : values{ vxx_, vxy_, vxz_, vyx_, vyy_, vyz_, vzx_, vzy_, vzz_ }
 {
+}
+
+/// @brief swaps the matrix' contents
+///
+/// @param that the matrix with wich the contents will be swapped
+///
+/// @note exception guarantee: Nothrow
+
+template <typename T>
+inline void Matrix3D<T>::swap(Matrix3D & that) noexcept
+{
+   this->values.swap(that.values);
+}
+
+/// @brief swaps the two matrices' contents
+///
+/// @param lhs the left-hand-side operand
+/// @param rhs the right-hand-side operand
+///
+/// @note exception guarantee: Nothrow
+
+template <typename T>
+inline void swap(Matrix3D<T> & lhs, Matrix3D<T> & rhs) noexcept
+{
+   lhs.swap(rhs);
 }
 
 /// @brief const getter for the Matrix3D
