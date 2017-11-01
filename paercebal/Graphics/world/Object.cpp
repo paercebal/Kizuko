@@ -348,6 +348,98 @@ void Object::applyRotationsOnCurrentAndDescendants(const Rotations & rotations)
 }
 */
 
+namespace private_
+{
+
+PAERCEBAL_x_GRAPHICS_x_API void initializeAbsolutePositions(Object & o)
+{
+   o.getAbsolutePositions() = o.getRelativePositions();
+}
+
+PAERCEBAL_x_GRAPHICS_x_API void rotateAbsolutePositionsAroundCenter(const Object & center, Object & o)
+{
+   for (const auto & rotation : center.getRelativeRotations())
+   {
+      for (auto & position : o.getAbsolutePositions())
+      {
+         position = rotation * position;
+      }
+   }
+}
+
+PAERCEBAL_x_GRAPHICS_x_API void translateAbsolutePositionToCenterCoordinates(const Object & center, Object & o)
+{
+   for (auto & position : o.getAbsolutePositions())
+   {
+      position += center.getCenter();
+   }
+}
+
+PAERCEBAL_x_GRAPHICS_x_API void calculateAbsolutePosition(Object & o)
+{
+   rotateAbsolutePositionsAroundCenter(o, o);
+   translateAbsolutePositionToCenterCoordinates(o, o);
+}
+
+PAERCEBAL_x_GRAPHICS_x_API void initializeAndCalculateAbsolutePosition(Object & o)
+{
+   initializeAbsolutePositions(o);
+   calculateAbsolutePosition(o);
+}
+
+PAERCEBAL_x_GRAPHICS_x_API void initializeAbsolutePositionsOfCurrentAndDescendants(Object & o)
+{
+   for (auto & c : o.getChildren())
+   {
+      initializeAbsolutePositionsOfCurrentAndDescendants(*c);
+   }
+
+   initializeAbsolutePositions(o);
+}
+
+PAERCEBAL_x_GRAPHICS_x_API void RotateAndTranslateAbsolutePositionsOfObjectAccordingToAncestors(std::vector<Object *> & ancestors, Object & o)
+{
+   auto applyTranslateAndRotate = [&o](Object * origin)
+   {
+      rotateAbsolutePositionsAroundCenter(*origin, o);
+      translateAbsolutePositionToCenterCoordinates(*origin, o);
+   };
+
+   std::for_each(ancestors.rbegin(), ancestors.rend(), applyTranslateAndRotate);
+}
+
+PAERCEBAL_x_GRAPHICS_x_API void RotateAndTranslateAbsolutePositionsOfObjectAndDescendantsAccordingToAncestors(std::vector<Object *> & ancestors, Object & o)
+{
+   ancestors.push_back(&o);
+
+   for (auto & c : o.getChildren())
+   {
+      RotateAndTranslateAbsolutePositionsOfObjectAndDescendantsAccordingToAncestors(ancestors, *c);
+   }
+
+   RotateAndTranslateAbsolutePositionsOfObjectAccordingToAncestors(ancestors, o);
+
+   ancestors.pop_back();
+}
+
+PAERCEBAL_x_GRAPHICS_x_API void RotateAndTranslateAbsolutePositionsOfDescendants(Object & o)
+{
+   std::vector<Object *> ancestors;
+   ancestors.push_back(&o);
+
+   for (auto & c : o.getChildren())
+   {
+      RotateAndTranslateAbsolutePositionsOfObjectAndDescendantsAccordingToAncestors(ancestors, *c);
+   }
+}
+
+} // namespace private_
+
+PAERCEBAL_x_GRAPHICS_x_API void calculateAbsolutePositionRecursive(Object & o)
+{
+   private_::initializeAbsolutePositionsOfCurrentAndDescendants(o);
+   private_::RotateAndTranslateAbsolutePositionsOfDescendants(o);
+}
 
 
 
