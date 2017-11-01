@@ -81,6 +81,22 @@ private:
    Children                            children;                     ///< the children objects of the current object
 };
 
+PAERCEBAL_x_GRAPHICS_x_API void calculateAbsolutePositionRecursive(Object & o);
+
+namespace private_
+{
+
+PAERCEBAL_x_GRAPHICS_x_API void initializeAbsolutePositions(Object & o);
+PAERCEBAL_x_GRAPHICS_x_API void rotateAbsolutePositionsAroundCenter(const Object & center, Object & o);
+PAERCEBAL_x_GRAPHICS_x_API void translateAbsolutePositionToCenterCoordinates(const Object & center, Object & o);
+PAERCEBAL_x_GRAPHICS_x_API void calculateAbsolutePosition(Object & o);
+PAERCEBAL_x_GRAPHICS_x_API void initializeAndCalculateAbsolutePosition(Object & o);
+PAERCEBAL_x_GRAPHICS_x_API void initializeAbsolutePositionsOfCurrentAndDescendants(Object & o);
+PAERCEBAL_x_GRAPHICS_x_API void RotateAndTranslateAbsolutePositionsOfObjectAccordingToAncestors(std::vector<Object *> & ancestors, Object & o);
+PAERCEBAL_x_GRAPHICS_x_API void RotateAndTranslateAbsolutePositionsOfObjectAndDescendantsAccordingToAncestors(std::vector<Object *> & ancestors, Object & o);
+PAERCEBAL_x_GRAPHICS_x_API void RotateAndTranslateAbsolutePositionsOfDescendants(Object & o);
+
+} // namespace private_
 
 } // namespace paercebal::Graphics::world
 

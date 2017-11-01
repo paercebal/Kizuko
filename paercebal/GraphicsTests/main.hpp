@@ -16,15 +16,17 @@ namespace sf
 {
 
 template <typename T>
-void PrintTo(const Vector2<T> & object, ::std::ostream * os)
+::std::ostream & operator << (::std::ostream & os, const Vector2<T> & object)
 {
-   *os << "{" << object.x << ", " << object.y << "}";
+   os << "{" << object.x << ", " << object.y << "}";
+   return os;
 }
 
 template <typename T>
-void PrintTo(const Vector3<T> & object, ::std::ostream * os)
+::std::ostream & operator << (::std::ostream & os, const Vector3<T> & object)
 {
-   *os << "{" << object.x << ", " << object.y << ", " << object.z << "}";
+   os << "{" << object.x << ", " << object.y << ", " << object.z << "}";
+   return os;
 }
 
 }
@@ -32,10 +34,40 @@ void PrintTo(const Vector3<T> & object, ::std::ostream * os)
 namespace paercebal::Graphics::world
 {
 
-//void PrintTo(const Object & object, ::std::ostream * os)
-//{
-//   *os << bar.DebugString();  // whatever needed to print bar to os
-//}
+template <typename T>
+struct AnythingPrinter
+{
+   AnythingPrinter(const T & t_) :t(t_) {}
+   const T & t;
+};
+
+template <typename T>
+inline AnythingPrinter<T> anythingPrinter(const T & t)
+{
+   return AnythingPrinter<T>(t);
+}
+
+template <typename T>
+::std::ostream & operator << (::std::ostream & os, const AnythingPrinter<T> & object)
+{
+   os << object.t;
+   return os;
+}
+
+
+inline ::std::ostream & operator << (::std::ostream & os, const Object::Positions & object)
+{
+   os << "{ ";
+
+   for (const auto & position : object)
+   {
+      os << position;
+   }
+
+   os << " }";
+
+   return os;
+}
 
 }
 
@@ -70,100 +102,10 @@ bool is_mostly_equal(const sf::Vector3<T> & lhs, const sf::Vector3<T> & rhs)
 }
 
 template <typename T>
-bool is_mostly_equal(std::vector<sf::Vector3<T>> & lhs, std::vector<sf::Vector3<T>> & rhs)
+bool is_mostly_equal(const std::vector<sf::Vector3<T>> & lhs, const std::vector<sf::Vector3<T>> & rhs)
 {
    return std::equal(lhs.begin(), lhs.end(), rhs.begin(), rhs.end(), [](const sf::Vector3<T> & lhs, const sf::Vector3<T> & rhs) {return is_mostly_equal(lhs, rhs); });
 }
-
-
-inline void initializeAbsolutePositions(Object & o)
-{
-   o.getAbsolutePositions() = o.getRelativePositions();
-}
-
-inline void rotateAbsolutePositionsAroundCenter(const Object & center, Object & o)
-{
-   for (const auto & rotation : center.getRelativeRotations())
-   {
-      for (auto & position : o.getAbsolutePositions())
-      {
-         position = rotation * position;
-      }
-   }
-}
-
-inline void translateAbsolutePositionToCenterCoordinates(const Object & center, Object & o)
-{
-   for (auto & position : o.getAbsolutePositions())
-   {
-      position += center.getCenter();
-   }
-}
-
-inline void calculateAbsolutePosition(Object & o)
-{
-   rotateAbsolutePositionsAroundCenter(o, o);
-   translateAbsolutePositionToCenterCoordinates(o, o);
-}
-
-inline void initializeAndCalculateAbsolutePosition(Object & o)
-{
-   initializeAbsolutePositions(o);
-   calculateAbsolutePosition(o);
-}
-
-inline void initializeAbsolutePositionsOfCurrentAndDescendants(Object & o)
-{
-   for (auto & c : o.getChildren())
-   {
-      initializeAbsolutePositionsOfCurrentAndDescendants(*c);
-   }
-
-   initializeAbsolutePositions(o);
-}
-
-inline void RotateAndTranslateAbsolutePositionsOfObjectAccordingToAncestors(std::vector<Object *> & ancestors, Object & o)
-{
-   auto applyTranslateAndRotate = [&o](Object * origin)
-   {
-      rotateAbsolutePositionsAroundCenter(*origin, o);
-      translateAbsolutePositionToCenterCoordinates(*origin, o);
-   };
-
-   std::for_each(ancestors.rbegin(), ancestors.rend(), applyTranslateAndRotate);
-}
-
-inline void RotateAndTranslateAbsolutePositionsOfObjectAndDescendantsAccordingToAncestors(std::vector<Object *> & ancestors, Object & o)
-{
-   ancestors.push_back(&o);
-
-   for (auto & c : o.getChildren())
-   {
-      RotateAndTranslateAbsolutePositionsOfObjectAndDescendantsAccordingToAncestors(ancestors, *c);
-   }
-
-   RotateAndTranslateAbsolutePositionsOfObjectAccordingToAncestors(ancestors, o);
-
-   ancestors.pop_back();
-}
-
-inline void RotateAndTranslateAbsolutePositionsOfDescendants(Object & o)
-{
-   std::vector<Object *> ancestors;
-   ancestors.push_back(&o);
-
-   for (auto & c : o.getChildren())
-   {
-      RotateAndTranslateAbsolutePositionsOfObjectAndDescendantsAccordingToAncestors(ancestors, *c);
-   }
-}
-
-inline void calculateAbsolutePositionRecursive(Object & o)
-{
-   initializeAbsolutePositionsOfCurrentAndDescendants(o);
-   RotateAndTranslateAbsolutePositionsOfDescendants(o);
-}
-
 
 } // namespace paercebal::Graphics::world::tests
 

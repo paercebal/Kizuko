@@ -18,6 +18,9 @@ template <typename T>
 constexpr T pi_1_2 = T(3.141592653589793238462643383279502884L / 2);
 
 template <typename T>
+constexpr T pi_3_2 = T(3 * 3.141592653589793238462643383279502884L / 2);
+
+template <typename T>
 constexpr T pi_1_4 = T(3.141592653589793238462643383279502884L / 4);
 
 template <typename T>

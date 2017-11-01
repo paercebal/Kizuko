@@ -17,6 +17,7 @@
   <ItemGroup>
     <ClCompile Include="..\paercebal\GraphicsTests\AverageScenesTests.cpp" />
     <ClCompile Include="..\paercebal\GraphicsTests\main.cpp" />
+    <ClCompile Include="..\paercebal\GraphicsTests\MatrixTests.cpp" />
     <ClCompile Include="..\paercebal\GraphicsTests\ObjectTests.cpp" />
     <ClCompile Include="..\paercebal\GraphicsTests\SimpleScenesTests.cpp" />
   </ItemGroup>

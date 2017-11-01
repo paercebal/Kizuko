@@ -17,13 +17,28 @@ template <typename T>
 bool operator == (const Matrix3D<T> & lhs, const Matrix3D<T> & rhs);
 
 template <typename T>
+Matrix3D<T> & operator += (Matrix3D<T> & lhs, const Matrix3D<T> & rhs);
+
+template <typename T>
 Matrix3D<T> operator + (const Matrix3D<T> & lhs, const Matrix3D<T> & rhs);
 
 template <typename T>
-Matrix3D<T> operator + (const Matrix3D<T> & lhs, const T & rhs);
+Matrix3D<T> operator + (const Matrix3D<T> & rhs);
 
 template <typename T>
-Matrix3D<T> operator + (const T & lhs, const Matrix3D<T> & rhs);
+Matrix3D<T> operator - (const Matrix3D<T> & lhs, const Matrix3D<T> & rhs);
+
+template <typename T>
+Matrix3D<T> & operator -= (Matrix3D<T> & lhs, const Matrix3D<T> & rhs);
+
+template <typename T>
+Matrix3D<T> operator - (const Matrix3D<T> & rhs);
+
+template <typename T>
+Matrix3D<T> & operator *= (Matrix3D<T> & lhs, const Matrix3D<T> & rhs);
+
+template <typename T>
+Matrix3D<T> & operator *= (Matrix3D<T> & lhs, const T & rhs);
 
 template <typename T>
 Matrix3D<T> operator * (const Matrix3D<T> & lhs, const Matrix3D<T> & rhs);
@@ -37,11 +52,42 @@ Matrix3D<T> operator * (const T & lhs, const Matrix3D<T> & rhs);
 template <typename T>
 sf::Vector3<T> operator * (const Matrix3D<T> & lhs, const sf::Vector3<T> & rhs);
 
+//template <typename T>
+//T determinant (const Matrix3D<T> & rhs);
+//
+//template <typename T>
+//Matrix3D<T> transpose(const Matrix3D<T> & rhs);
+//
+//template <typename T>
+//Matrix3D<T> invert(const Matrix3D<T> & rhs);
+//
+//template <typename T>
+//Matrix3D<T> & operator /= (Matrix3D<T> & lhs, const Matrix3D<T> & rhs);
+//
+//template <typename T>
+//Matrix3D<T> & operator /= (Matrix3D<T> & lhs, const T & rhs);
+//
+//template <typename T>
+//Matrix3D<T> operator / (const Matrix3D<T> & lhs, const Matrix3D<T> & rhs);
+//
+//template <typename T>
+//Matrix3D<T> operator / (const Matrix3D<T> & lhs, const T & rhs);
+//
+//template <typename T>
+//Matrix3D<T> operator / (const T & lhs, const Matrix3D<T> & rhs);
+
 template <typename T>
 std::iostream & operator << (std::iostream & str, const Matrix3D<T> & matrix);
 
 
 /// @brief 3D matrix class, complete with operators
+///
+/// The matrix has the following "layout": [xx, xy, yz, yx, yy, yz, zx, zy, zz] which,
+/// put into a familiar matrix notations, is:
+///
+/// | xx  xy  xz |
+/// | yx  yy  yz |
+/// | zx  zy  zz |
 ///
 /// @tparam T the underlying type (usually, float)
 ///
@@ -68,13 +114,26 @@ private:
    std::array<T, 9> values = {};    ///< values of the 3D matrix
 
    friend bool operator == <> (const Matrix3D<T> & lhs, const Matrix3D<T> & rhs);
+   friend Matrix3D<T> & operator += <> (Matrix3D<T> & lhs, const Matrix3D<T> & rhs);
    friend Matrix3D<T> operator + <> (const Matrix3D<T> & lhs, const Matrix3D<T> & rhs);
-   friend Matrix3D<T> operator + <> (const Matrix3D<T> & lhs, const T & rhs);
-   friend Matrix3D<T> operator + <> (const T & lhs, const Matrix3D<T> & rhs);
+   friend Matrix3D<T> operator + <> (const Matrix3D<T> & rhs);
+   friend Matrix3D<T> & operator -= <> (Matrix3D<T> & lhs, const Matrix3D<T> & rhs);
+   friend Matrix3D<T> operator - <> (const Matrix3D<T> & lhs, const Matrix3D<T> & rhs);
+   friend Matrix3D<T> operator - <> (const Matrix3D<T> & rhs);
+   friend Matrix3D<T> & operator *= <> (Matrix3D<T> & lhs, const Matrix3D<T> & rhs);
+   friend Matrix3D<T> & operator *= <> (Matrix3D<T> & lhs, const T & rhs);
    friend Matrix3D<T> operator * <> (const Matrix3D<T> & lhs, const Matrix3D<T> & rhs);
    friend Matrix3D<T> operator * <> (const Matrix3D<T> & lhs, const T & rhs);
    friend Matrix3D<T> operator * <> (const T & lhs, const Matrix3D<T> & rhs);
    friend sf::Vector3<T> operator * <> (const Matrix3D<T> & lhs, const sf::Vector3<T> & rhs);
+   //friend T determinant<>(const Matrix3D<T> & rhs);
+   //friend Matrix3D<T> transpose<>(const Matrix3D<T> & rhs);
+   //friend Matrix3D<T> invert<>(const Matrix3D<T> & rhs);
+   //friend Matrix3D<T> & operator /= <> (Matrix3D<T> & lhs, const Matrix3D<T> & rhs);
+   //friend Matrix3D<T> & operator /= <> (Matrix3D<T> & lhs, const T & rhs);
+   //friend Matrix3D<T> operator / <> (const Matrix3D<T> & lhs, const Matrix3D<T> & rhs);
+   //friend Matrix3D<T> operator / <> (const Matrix3D<T> & lhs, const T & rhs);
+   //friend Matrix3D<T> operator / <> (const T & lhs, const Matrix3D<T> & rhs);
    friend std::iostream & operator << <> (std::iostream & str, const Matrix3D<T> & matrix);
 };
 
@@ -126,7 +185,7 @@ inline bool operator != (const Matrix3D<T> & lhs, const Matrix3D<T> & rhs)
 template <typename T>
 inline std::iostream & operator << (std::iostream & str, const Matrix3D<T> & matrix)
 {
-   str << "[ [" << matrix.value[0] << ", " << matrix.value[1] << ", " << matrix.value[2] << "], [" << matrix.value[3] << ", " << matrix.value[4] << ", " << matrix.value[5] << "], [" << matrix.value[6] << ", " << matrix.value[7] << ", " << matrix.value[8] << "] ]";
+   str << "[ [" << matrix.values[0] << ", " << matrix.values[1] << ", " << matrix.values[2] << "], [" << matrix.values[3] << ", " << matrix.values[4] << ", " << matrix.values[5] << "], [" << matrix.values[6] << ", " << matrix.values[7] << ", " << matrix.values[8] << "] ]";
    return str;
 }
 
@@ -191,7 +250,7 @@ inline T & Matrix3D<T>::operator () (int row, int column)
 {
    if ((row < 0) || (row > 2) || (column < 0) || (column > 2)) throw std::runtime_error("Wrong rows/columns for matrix");
 
-   return this->values.at[row * 3 + column];
+   return this->values[row * 3 + column];
 }
 
 /// @brief cast operator from one type of Matrix3D to another
@@ -215,6 +274,31 @@ Matrix3D<T>::operator Matrix3D<TT>() const
    }
 }
 
+/// @brief addition-assignment operator for the Matrix3D
+///
+/// @tparam T the underlying type of the Matrix3D object
+///
+/// @param lhs the left-hand-side operand (a matrix)
+/// @param rhs the right-hand-side operand (a matrix)
+///
+/// @return the left-hand-side operand
+///
+/// @note exception guarantee: Nothrow
+
+template <typename T>
+inline Matrix3D<T> & operator += (Matrix3D<T> & lhs, const Matrix3D<T> & rhs)
+{
+   lhs.values[0] += rhs.values[0];
+   lhs.values[1] += rhs.values[1];
+   lhs.values[2] += rhs.values[2];
+   lhs.values[3] += rhs.values[3];
+   lhs.values[4] += rhs.values[4];
+   lhs.values[5] += rhs.values[5];
+   lhs.values[6] += rhs.values[6];
+   lhs.values[7] += rhs.values[7];
+   lhs.values[8] += rhs.values[8];
+   return lhs;
+}
 
 /// @brief addition operator for the Matrix3D
 ///
@@ -247,6 +331,131 @@ inline Matrix3D<T> operator + (const Matrix3D<T> & lhs, const Matrix3D<T> & rhs)
 ///
 /// @tparam T the underlying type of the Matrix3D object
 ///
+/// @param rhs the right-hand-side operand (a matrix)
+///
+/// @return the resulting Matrix3D
+///
+/// @note exception guarantee: Nothrow
+
+template <typename T>
+inline Matrix3D<T> operator + (const Matrix3D<T> & rhs)
+{
+   return rhs;
+}
+
+/// @brief subtraction-assignment operator for the Matrix3D
+///
+/// @tparam T the underlying type of the Matrix3D object
+///
+/// @param lhs the left-hand-side operand (a matrix)
+/// @param rhs the right-hand-side operand (a matrix)
+///
+/// @return the left-hand-side operand
+///
+/// @note exception guarantee: Nothrow
+
+template <typename T>
+inline Matrix3D<T> & operator -= (Matrix3D<T> & lhs, const Matrix3D<T> & rhs)
+{
+   lhs.values[0] -= rhs.values[0];
+   lhs.values[1] -= rhs.values[1];
+   lhs.values[2] -= rhs.values[2];
+   lhs.values[3] -= rhs.values[3];
+   lhs.values[4] -= rhs.values[4];
+   lhs.values[5] -= rhs.values[5];
+   lhs.values[6] -= rhs.values[6];
+   lhs.values[7] -= rhs.values[7];
+   lhs.values[8] -= rhs.values[8];
+   return lhs;
+}
+
+/// @brief subtraction operator for the Matrix3D
+///
+/// @tparam T the underlying type of the Matrix3D object
+///
+/// @param lhs the left-hand-side operand (a matrix)
+/// @param rhs the right-hand-side operand (a matrix)
+///
+/// @return the resulting Matrix3D
+///
+/// @note exception guarantee: Nothrow
+
+template <typename T>
+inline Matrix3D<T> operator - (const Matrix3D<T> & lhs, const Matrix3D<T> & rhs)
+{
+   return Matrix3D<T>{
+        lhs.values[0] - rhs.values[0]
+      , lhs.values[1] - rhs.values[1]
+      , lhs.values[2] - rhs.values[2]
+      , lhs.values[3] - rhs.values[3]
+      , lhs.values[4] - rhs.values[4]
+      , lhs.values[5] - rhs.values[5]
+      , lhs.values[6] - rhs.values[6]
+      , lhs.values[7] - rhs.values[7]
+      , lhs.values[8] - rhs.values[8]
+   };
+}
+
+/// @brief subtraction operator for the Matrix3D
+///
+/// @tparam T the underlying type of the Matrix3D object
+///
+/// @param rhs the right-hand-side operand (a matrix)
+///
+/// @return the resulting Matrix3D
+///
+/// @note exception guarantee: Nothrow
+
+template <typename T>
+inline Matrix3D<T> operator - (const Matrix3D<T> & rhs)
+{
+   return Matrix3D<T>{
+        - rhs.values[0]
+      , - rhs.values[1]
+      , - rhs.values[2]
+      , - rhs.values[3]
+      , - rhs.values[4]
+      , - rhs.values[5]
+      , - rhs.values[6]
+      , - rhs.values[7]
+      , - rhs.values[8]
+   };
+}
+
+/// @brief multiplication-assignment operator for the Matrix3D
+///
+/// @tparam T the underlying type of the Matrix3D object
+///
+/// @param lhs the left-hand-side operand (a matrix)
+/// @param lhs the right-hand-side operand (a matrix)
+///
+/// @return the resulting Matrix3D
+///
+/// @note exception guarantee: Nothrow
+
+template <typename T>
+inline Matrix3D<T> & operator *= (Matrix3D<T> & lhs, const Matrix3D<T> & rhs)
+{
+   Matrix3D<T> tmp{
+        lhs.values[0] * rhs.values[0] + lhs.values[1] * rhs.values[3] + lhs.values[2] * rhs.values[6]
+      , lhs.values[0] * rhs.values[1] + lhs.values[1] * rhs.values[4] + lhs.values[2] * rhs.values[7]
+      , lhs.values[0] * rhs.values[2] + lhs.values[1] * rhs.values[5] + lhs.values[2] * rhs.values[8]
+      , lhs.values[3] * rhs.values[0] + lhs.values[4] * rhs.values[3] + lhs.values[5] * rhs.values[6]
+      , lhs.values[3] * rhs.values[1] + lhs.values[4] * rhs.values[4] + lhs.values[5] * rhs.values[7]
+      , lhs.values[3] * rhs.values[2] + lhs.values[4] * rhs.values[5] + lhs.values[5] * rhs.values[8]
+      , lhs.values[6] * rhs.values[0] + lhs.values[7] * rhs.values[3] + lhs.values[8] * rhs.values[6]
+      , lhs.values[6] * rhs.values[1] + lhs.values[7] * rhs.values[4] + lhs.values[8] * rhs.values[7]
+      , lhs.values[6] * rhs.values[2] + lhs.values[7] * rhs.values[5] + lhs.values[8] * rhs.values[8]
+   };
+
+   lhs = tmp;
+   return lhs;
+}
+
+/// @brief multiplication-assignment operator for the Matrix3D
+///
+/// @tparam T the underlying type of the Matrix3D object
+///
 /// @param lhs the left-hand-side operand (a matrix)
 /// @param rhs the right-hand-side operand (a scalar)
 ///
@@ -255,46 +464,18 @@ inline Matrix3D<T> operator + (const Matrix3D<T> & lhs, const Matrix3D<T> & rhs)
 /// @note exception guarantee: Nothrow
 
 template <typename T>
-inline Matrix3D<T> operator + (const Matrix3D<T> & lhs, const T & rhs)
+inline Matrix3D<T> & operator *= (Matrix3D<T> & lhs, const T & rhs)
 {
-   return Matrix3D<T>{
-      lhs.values[0] + rhs
-      , lhs.values[1] + rhs
-      , lhs.values[2] + rhs
-      , lhs.values[3] + rhs
-      , lhs.values[4] + rhs
-      , lhs.values[5] + rhs
-      , lhs.values[6] + rhs
-      , lhs.values[7] + rhs
-      , lhs.values[8] + rhs
-   };
-}
-
-/// @brief addition operator for the Matrix3D
-///
-/// @tparam T the underlying type of the Matrix3D object
-///
-/// @param lhs the left-hand-side operand (a scalar)
-/// @param rhs the right-hand-side operand (a matrix)
-///
-/// @return the resulting Matrix3D
-///
-/// @note exception guarantee: Nothrow
-
-template <typename T>
-inline Matrix3D<T> operator + (const T & lhs, const Matrix3D<T> & rhs)
-{
-   return Matrix3D<T>{
-      rhs.values[0] + lhs
-      , rhs.values[1] + lhs
-      , rhs.values[2] + lhs
-      , rhs.values[3] + lhs
-      , rhs.values[4] + lhs
-      , rhs.values[5] + lhs
-      , rhs.values[6] + lhs
-      , rhs.values[7] + lhs
-      , rhs.values[8] + lhs
-   };
+   lhs.values[0] *= rhs;
+   lhs.values[1] *= rhs;
+   lhs.values[2] *= rhs;
+   lhs.values[3] *= rhs;
+   lhs.values[4] *= rhs;
+   lhs.values[5] *= rhs;
+   lhs.values[6] *= rhs;
+   lhs.values[7] *= rhs;
+   lhs.values[8] *= rhs;
+   return lhs;
 }
 
 /// @brief multiplication operator for the Matrix3D
@@ -398,6 +579,52 @@ inline sf::Vector3<T> operator * (const Matrix3D<T> & lhs, const sf::Vector3<T> 
       , lhs.values[6] * rhs.x + lhs.values[7] * rhs.y + lhs.values[8] * rhs.z
    };
 }
+
+
+//template <typename T>
+//T determinant(const Matrix3D<T> & rhs)
+//{
+//   return T(
+//      (rhs.values[0] * (rhs.values[4] * rhs.values[8] - rhs.values[5] - rhs.values[7]))
+//      - (rhs.values[1] * (rhs.values[3] * rhs.values[8] - rhs.values[5] - rhs.values[6]))
+//      + (rhs.values[2] * (rhs.values[3] * rhs.values[7] - rhs.values[4] - rhs.values[6]))
+//   );
+//}
+//
+//template <typename T>
+//Matrix3D<T> transpose(const Matrix3D<T> & rhs)
+//{
+//   return Matrix3D<T>(
+//        rhs.values[0], rhs.values[3], rhs.values[3]
+//      , rhs.values[1], rhs.values[4], rhs.values[7]
+//      , rhs.values[2], rhs.values[5], rhs.values[8]
+//   );
+//}
+//
+//template <typename T>
+//Matrix3D<T> invert(const Matrix3D<T> & rhs)
+//{
+//
+//}
+//
+//
+//template <typename T>
+//Matrix3D<T> & operator /= (Matrix3D<T> & lhs, const Matrix3D<T> & rhs)
+//{
+//
+//}
+//
+//template <typename T>
+//Matrix3D<T> & operator /= (Matrix3D<T> & lhs, const T & rhs);
+//
+//template <typename T>
+//Matrix3D<T> operator / (const Matrix3D<T> & lhs, const Matrix3D<T> & rhs);
+//
+//template <typename T>
+//Matrix3D<T> operator / (const Matrix3D<T> & lhs, const T & rhs);
+//
+//template <typename T>
+//Matrix3D<T> operator / (const T & lhs, const Matrix3D<T> & rhs);
 
 
 } // namespace paercebal::Graphics::maths
