@@ -7,9 +7,6 @@
     <Filter Include="p.KizukoLib">
       <UniqueIdentifier>{B099B27C-C1E0-4E8C-B290-CFE1FB459D78}</UniqueIdentifier>
     </Filter>
-    <Filter Include="p.KizukoLib.shapes">
-      <UniqueIdentifier>{751f5963-31df-4012-8d1d-8b13f91ff4a7}</UniqueIdentifier>
-    </Filter>
     <Filter Include="p.KizukoLib.clusters">
       <UniqueIdentifier>{e3b1521c-e097-4a98-9bda-a41ee3cb6820}</UniqueIdentifier>
     </Filter>
@@ -18,13 +15,7 @@
     <ClCompile Include="..\paercebal\KizukoLib\dllmain.cpp">
       <Filter>p.KizukoLib</Filter>
     </ClCompile>
-    <ClCompile Include="..\paercebal\KizukoLib\SpaceTime.cpp">
-      <Filter>p.KizukoLib</Filter>
-    </ClCompile>
     <ClCompile Include="..\paercebal\KizukoLib\utilities.cpp">
-      <Filter>p.KizukoLib</Filter>
-    </ClCompile>
-    <ClCompile Include="..\paercebal\KizukoLib\IDrawable.cpp">
       <Filter>p.KizukoLib</Filter>
     </ClCompile>
     <ClCompile Include="..\paercebal\KizukoLib\GlobalResources.cpp">
@@ -56,35 +47,8 @@
     <ClInclude Include="..\paercebal\KizukoLib\dllmain.hpp">
       <Filter>p.KizukoLib</Filter>
     </ClInclude>
-    <ClInclude Include="..\paercebal\KizukoLib\IDrawable.hpp">
-      <Filter>p.KizukoLib</Filter>
-    </ClInclude>
-    <ClInclude Include="..\paercebal\KizukoLib\SpaceTime.hpp">
-      <Filter>p.KizukoLib</Filter>
-    </ClInclude>
     <ClInclude Include="..\paercebal\KizukoLib\utilities.hpp">
       <Filter>p.KizukoLib</Filter>
-    </ClInclude>
-    <ClInclude Include="..\paercebal\KizukoLib\shapes\HeightLine.hpp">
-      <Filter>p.KizukoLib.shapes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\paercebal\KizukoLib\shapes\SpaceTimeLine.hpp">
-      <Filter>p.KizukoLib.shapes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\paercebal\KizukoLib\shapes\Star.hpp">
-      <Filter>p.KizukoLib.shapes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\paercebal\KizukoLib\shapes\AbstractLine.hpp">
-      <Filter>p.KizukoLib.shapes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\paercebal\KizukoLib\shapes\AbstractShape.hpp">
-      <Filter>p.KizukoLib.shapes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\paercebal\KizukoLib\shapes\DistanceLine.hpp">
-      <Filter>p.KizukoLib.shapes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\paercebal\KizukoLib\shapes\DistanceShape.hpp">
-      <Filter>p.KizukoLib.shapes</Filter>
     </ClInclude>
     <ClInclude Include="..\paercebal\KizukoLib\Exception.hpp">
       <Filter>p.KizukoLib</Filter>

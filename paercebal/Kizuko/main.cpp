@@ -1,7 +1,7 @@
 #include <paercebal/Kizuko/main.hpp>
 
+#include <paercebal/KizukoLib/Exception.hpp>
 #include <paercebal/KizukoLib/GlobalResources.hpp>
-#include <paercebal/KizukoLib/SpaceTime.hpp>
 #include <paercebal/KizukoLib/clusters/Cluster.hpp>
 
 #include <SFML/Window.hpp>
@@ -51,14 +51,6 @@ int main(int argc, char * argv[])
    {
       GlobalResources globalResources(argc, argv);
       
-      //SpaceTime spaceTime{ globalResources, 20, 20, 5, sf::Vector3f{ 1000, 1000, 1000 } };
-      //spaceTime.addStar({ globalResources, "Aaaa", sf::Color{ 255, 255, 0, 255 },{ 0.f, 0.f, 0.f }, 5 });
-      //spaceTime.addStar({ globalResources, "Bbbb", sf::Color{ 255, 0, 0, 255 },{ 200.f, -100.f, -100.f }, 7 });
-      //spaceTime.addStar({ globalResources, "Cccc", sf::Color{ 128, 128, 255, 255 },{ 200.f, -300.f, 100.f }, 6 });
-      //spaceTime.addDistance({ globalResources, "Aaaa", "Bbbb" });
-      //spaceTime.addDistance({ globalResources, "Cccc", "Bbbb" });
-      
-      SpaceTime spaceTime{ globalResources };
       clusters::Cluster cluster{ globalResources };
 
       cluster.addStar(clusters::Star{ globalResources, "0", sf::Color{ 255, 0, 0, 255 },{ 0, 0, 0 }, 5.f });
@@ -72,7 +64,7 @@ int main(int argc, char * argv[])
 
       sf::ContextSettings settings;
       settings.antialiasingLevel = 8;
-      sf::RenderWindow sfml_window(sf::VideoMode(windowWidth, windowHeight), "Mass Effect Clusters", sf::Style::Titlebar | sf::Style::Close, settings);
+      sf::RenderWindow sfml_window(sf::VideoMode(windowWidth, windowHeight), "Kizuko", sf::Style::Titlebar | sf::Style::Close, settings);
       sfml_window.setFramerateLimit(60);
       sfml_window.setView(sfml_view);
 

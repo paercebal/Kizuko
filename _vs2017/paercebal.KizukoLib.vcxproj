@@ -23,9 +23,7 @@
     <ClCompile Include="..\paercebal\KizukoLib\clusters\Star.cpp" />
     <ClCompile Include="..\paercebal\KizukoLib\dllmain.cpp" />
     <ClCompile Include="..\paercebal\KizukoLib\GlobalResources.cpp" />
-    <ClCompile Include="..\paercebal\KizukoLib\IDrawable.cpp" />
     <ClCompile Include="..\paercebal\KizukoLib\ProgramOptions.cpp" />
-    <ClCompile Include="..\paercebal\KizukoLib\SpaceTime.cpp" />
     <ClCompile Include="..\paercebal\KizukoLib\utilities.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -38,17 +36,8 @@
     <ClInclude Include="..\paercebal\KizukoLib\dllmain.hpp" />
     <ClInclude Include="..\paercebal\KizukoLib\Exception.hpp" />
     <ClInclude Include="..\paercebal\KizukoLib\GlobalResources.hpp" />
-    <ClInclude Include="..\paercebal\KizukoLib\IDrawable.hpp" />
     <ClInclude Include="..\paercebal\KizukoLib\input\Data.hpp" />
     <ClInclude Include="..\paercebal\KizukoLib\ProgramOptions.hpp" />
-    <ClInclude Include="..\paercebal\KizukoLib\shapes\AbstractLine.hpp" />
-    <ClInclude Include="..\paercebal\KizukoLib\shapes\AbstractShape.hpp" />
-    <ClInclude Include="..\paercebal\KizukoLib\shapes\DistanceLine.hpp" />
-    <ClInclude Include="..\paercebal\KizukoLib\shapes\DistanceShape.hpp" />
-    <ClInclude Include="..\paercebal\KizukoLib\shapes\HeightLine.hpp" />
-    <ClInclude Include="..\paercebal\KizukoLib\shapes\SpaceTimeLine.hpp" />
-    <ClInclude Include="..\paercebal\KizukoLib\shapes\Star.hpp" />
-    <ClInclude Include="..\paercebal\KizukoLib\SpaceTime.hpp" />
     <ClInclude Include="..\paercebal\KizukoLib\utilities.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
