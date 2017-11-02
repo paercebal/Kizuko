@@ -15,6 +15,12 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\paercebal\KizukoLib\clusters\AltitudeLine.cpp" />
+    <ClCompile Include="..\paercebal\KizukoLib\clusters\Cluster.cpp" />
+    <ClCompile Include="..\paercebal\KizukoLib\clusters\ClusterLine.cpp" />
+    <ClCompile Include="..\paercebal\KizukoLib\clusters\DistanceShape.cpp" />
+    <ClCompile Include="..\paercebal\KizukoLib\clusters\Object.cpp" />
+    <ClCompile Include="..\paercebal\KizukoLib\clusters\Star.cpp" />
     <ClCompile Include="..\paercebal\KizukoLib\dllmain.cpp" />
     <ClCompile Include="..\paercebal\KizukoLib\GlobalResources.cpp" />
     <ClCompile Include="..\paercebal\KizukoLib\IDrawable.cpp" />
@@ -23,6 +29,12 @@
     <ClCompile Include="..\paercebal\KizukoLib\utilities.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\paercebal\KizukoLib\clusters\AltitudeLine.hpp" />
+    <ClInclude Include="..\paercebal\KizukoLib\clusters\Cluster.hpp" />
+    <ClInclude Include="..\paercebal\KizukoLib\clusters\ClusterLine.hpp" />
+    <ClInclude Include="..\paercebal\KizukoLib\clusters\DistanceShape.hpp" />
+    <ClInclude Include="..\paercebal\KizukoLib\clusters\Object.hpp" />
+    <ClInclude Include="..\paercebal\KizukoLib\clusters\Star.hpp" />
     <ClInclude Include="..\paercebal\KizukoLib\dllmain.hpp" />
     <ClInclude Include="..\paercebal\KizukoLib\Exception.hpp" />
     <ClInclude Include="..\paercebal\KizukoLib\GlobalResources.hpp" />

@@ -234,11 +234,14 @@ GlobalResources::GlobalResources(int argc, char * argv[])
 
       extractValue(document, "cluster-name", data.clusterName);
       extractValue(document, "ly-pixels", data.lightYearsPixels);
-      extractValue(document, "increment-pixels", data.incrementPixels);
-      extractValue(document, "major-increment-pixels", data.majorIncrementPixels);
-      extractValue(document, "size-x-pixels", data.size.x);
-      extractValue(document, "size-y-pixels", data.size.y);
-      extractValue(document, "size-z-pixels", data.size.z);
+      extractValue(document, "increment", data.increment);
+      extractValue(document, "major-increment", data.majorIncrement);
+      data.incrementPixels = data.increment;
+      data.majorIncrementPixels = data.majorIncrement;
+      extractValue(document, "zoom-pixels", data.zoom);
+      extractValue(document, "size-x", data.size.x);
+      extractValue(document, "size-y", data.size.y);
+      extractValue(document, "size-z", data.size.z);
 
       expectTrue(document.HasMember("stars"), "cluster file json content has no \"stars\" property");
       expectTrue(document.HasMember("distances"), "cluster file json content has no \"distances\" property");

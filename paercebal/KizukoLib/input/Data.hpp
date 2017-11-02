@@ -33,9 +33,12 @@ struct Distance
 struct Data
 {
    std::string                clusterName;
-   float                      lightYearsPixels;
-   float                      incrementPixels;
-   float                      majorIncrementPixels;
+   float                      lightYearsPixels = 0.f;
+   float                      incrementPixels = 0.f;
+   float                      majorIncrementPixels = 0.f;
+   float                      increment = 0.f;
+   float                      majorIncrement = 0.f;
+   float                      zoom = 0;
    sf::Vector3f               size;
    std::vector<Star>          stars;
    std::vector<Distance>      distances;

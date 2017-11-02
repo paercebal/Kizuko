@@ -27,6 +27,8 @@ namespace paercebal::Graphics::world
 /// before doing anything else (e.g. create 2D isometric positions)
 ///
 /// @note the encapsulation could be overkill. There are no real invariants, there. Or are there?
+///
+/// @todo write the "isDirty" feature, to make calculations easier to automate while keeping a minimum of efficiency
 
 class PAERCEBAL_x_GRAPHICS_x_API Object
 {
