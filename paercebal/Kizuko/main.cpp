@@ -2,6 +2,7 @@
 
 #include <paercebal/KizukoLib/GlobalResources.hpp>
 #include <paercebal/KizukoLib/SpaceTime.hpp>
+#include <paercebal/KizukoLib/clusters/Cluster.hpp>
 
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
@@ -56,8 +57,16 @@ int main(int argc, char * argv[])
       //spaceTime.addStar({ globalResources, "Cccc", sf::Color{ 128, 128, 255, 255 },{ 200.f, -300.f, 100.f }, 6 });
       //spaceTime.addDistance({ globalResources, "Aaaa", "Bbbb" });
       //spaceTime.addDistance({ globalResources, "Cccc", "Bbbb" });
-
+      
       SpaceTime spaceTime{ globalResources };
+      clusters::Cluster cluster{ globalResources };
+
+      cluster.addStar(clusters::Star{ globalResources, "0", sf::Color{ 255, 0, 0, 255 },{ 0, 0, 0 }, 5.f });
+      cluster.addStar(clusters::Star{ globalResources, "10x", sf::Color{ 255, 0, 0, 255 },{ 10, 0, 0 }, 5.f });
+      cluster.addStar(clusters::Star{ globalResources, "10y", sf::Color{ 255, 0, 0, 255 },{ 0, 10, 0 }, 5.f });
+      cluster.addStar(clusters::Star{ globalResources, "10z", sf::Color{ 255, 0, 0, 255 },{ 0, 0, 10 }, 5.f });
+
+      calculateAbsolutePositionThenShapes2DRecursive(cluster);
 
       sf::View sfml_view(sf::Vector2f(0, 0), sf::Vector2f(static_cast<float>(windowWidth), static_cast<float>(windowHeight)));
 
@@ -110,7 +119,8 @@ int main(int argc, char * argv[])
             }
          }
 
-         spaceTime.drawInto(sfml_window);
+         //spaceTime.drawInto(sfml_window);
+         cluster.drawInto(sfml_window);
 
          sfml_window.display();
       }

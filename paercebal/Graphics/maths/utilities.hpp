@@ -52,6 +52,12 @@ inline Matrix3D<T> createRotationMatrixAroundZ(const T angle)
 }
 
 template <typename T>
+inline Matrix3D<T> createIdentityMatrix()
+{
+   return { 1, 0, 0, 0, 1, 0, 0, 0, 1 };
+}
+
+template <typename T>
 inline Matrix3D<T> createMirrorMatrixAroundX()
 {
    return { -1, 0, 0, 0, 1, 0, 0, 0, 1 };

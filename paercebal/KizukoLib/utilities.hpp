@@ -52,24 +52,30 @@ void assertResourceLoading(T & t, const std::string & path, const std::string & 
    }
 }
 
-inline sf::Vector2<long double> convert_3D_to_iso2D(const sf::Vector3<long double> value)
+template <typename T>
+inline Graphics::maths::Matrix3D<T> createRotationToIsometricMatrix()
 {
-   static const long double pi = Graphics::maths::utilities::pi<long double>;
+   static const T pi = Graphics::maths::utilities::pi<T>;
    static const auto firstAngle = pi / 4;
    static const auto secondAngle = pi / 3;
 
-   static const auto mirrorMatrix = Graphics::maths::utilities::createMirrorMatrixAroundZ<long double>();
+   static const auto identity = Graphics::maths::utilities::createIdentityMatrix<T>();
+   static const auto mirrorMatrix = Graphics::maths::utilities::createMirrorMatrixAroundY<T>();
    static const auto firstMatrix = Graphics::maths::utilities::createRotationMatrixAroundZ(firstAngle);
    static const auto secondMatrix = Graphics::maths::utilities::createRotationMatrixAroundX(secondAngle);
-   static const auto totalMatrix = secondMatrix * firstMatrix;
+   static const auto isoMatrix = secondMatrix * firstMatrix * mirrorMatrix * identity;
 
-   const auto resultDouble = totalMatrix * value;
-   //const auto resultDouble = firstMatrix * value;
-   //const auto resultDouble = value;
+   return isoMatrix;
+}
+
+inline sf::Vector2<long double> convert_3D_to_iso2D(const sf::Vector3<long double> value)
+{
+   static const auto isoMatrix = createRotationToIsometricMatrix<long double>();
+
+   const auto resultDouble = isoMatrix * value;
 
    return { resultDouble.x, resultDouble.y };
 }
-
 
 template <typename T>
 sf::Vector2<T> convert_3D_to_iso2D(const sf::Vector3<T> value)
