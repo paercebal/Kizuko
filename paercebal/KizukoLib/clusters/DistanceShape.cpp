@@ -34,7 +34,7 @@ DistanceShape::DistanceShape(const GlobalResources & globalResources_, sf::Color
    this->polygonShape.setFillColor(this->colorShape);
    this->polygonShape.setOutlineColor(this->colorShape);
 
-   this->distanceLabel.setFont(this->getGlobalResources().getScifiFont());
+   this->distanceLabel.setFont(this->getGlobalResources().getMassEffectFont());
    this->distanceLabel.setCharacterSize(15);
    this->distanceLabel.setStyle(sf::Text::Regular);
    this->distanceLabel.setFillColor(sf::Color::White);

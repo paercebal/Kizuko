@@ -1,11 +1,13 @@
 #include <paercebal/Kizuko/main.hpp>
 
+#include <paercebal/KizukoLib/clusters/View.hpp>
 #include <paercebal/KizukoLib/Exception.hpp>
 #include <paercebal/KizukoLib/GlobalResources.hpp>
-#include <paercebal/KizukoLib/clusters/View.hpp>
+#include <paercebal/KizukoLib/utilities.hpp>
 
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 
 #include <vector>
 #include <algorithm>
@@ -74,6 +76,10 @@ int main(int argc, char * argv[])
 
       try
       {
+         sf::Music music;
+         PAERCEBAL_x_KIZUKOLIB_x_ASSERT_RESOURCE_LOADING(music, "./copyrighted/uncharted_worlds.ogg", "./resources/bensound-relaxing.ogg");
+         music.play();
+
          while (sfml_window.isOpen())
          {
             sf::Event event;

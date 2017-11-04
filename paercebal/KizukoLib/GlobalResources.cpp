@@ -254,6 +254,7 @@ GlobalResources::GlobalResources(int argc, char * argv[])
 
    PAERCEBAL_x_KIZUKOLIB_x_ASSERT_RESOURCE_LOADING(this->neutralFont, "./resources/OpenSans-Regular.ttf");
    PAERCEBAL_x_KIZUKOLIB_x_ASSERT_RESOURCE_LOADING(this->scifiFont, "./resources/Formation Sans Regular.ttf", "./resources/OpenSans-Regular.ttf");
+   PAERCEBAL_x_KIZUKOLIB_x_ASSERT_RESOURCE_LOADING(this->massEffectFont, "./copyrighted/MassEffect.ttf", "./resources/Formation Sans Regular.ttf", "./resources/OpenSans-Regular.ttf");
 }
 
 GlobalResources::~GlobalResources() = default;
@@ -267,6 +268,11 @@ const sf::Font & GlobalResources::getNeutralFont() const noexcept
 const sf::Font & GlobalResources::getScifiFont() const noexcept
 {
    return this->scifiFont;
+}
+
+const sf::Font & GlobalResources::getMassEffectFont() const noexcept
+{
+   return this->massEffectFont;
 }
 
 const input::Data & GlobalResources::getData() const noexcept
