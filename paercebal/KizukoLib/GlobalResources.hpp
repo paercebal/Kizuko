@@ -27,11 +27,13 @@ public:
 
    const sf::Font &        getNeutralFont()              const noexcept;
    const sf::Font &        getScifiFont()                const noexcept;
+   const sf::Font &        getMassEffectFont()           const noexcept;
    const input::Data &     getData()                     const noexcept;
 
 private:
    sf::Font                neutralFont;
    sf::Font                scifiFont;
+   sf::Font                massEffectFont;
    input::Data             data;
 };
 

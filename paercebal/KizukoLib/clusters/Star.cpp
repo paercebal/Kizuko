@@ -32,7 +32,7 @@ void Star::createShapes2D()
       this->shape.setPosition({ position.x - this->size, position.y - this->size });
 
       this->nameLabel.setString(this->name);
-      this->nameLabel.setFont(this->getGlobalResources().getScifiFont());
+      this->nameLabel.setFont(this->getGlobalResources().getMassEffectFont());
       this->nameLabel.setCharacterSize(20);
       this->nameLabel.setStyle(sf::Text::Regular);
       this->nameLabel.setFillColor(sf::Color::White);
