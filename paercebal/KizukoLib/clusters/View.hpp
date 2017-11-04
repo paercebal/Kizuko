@@ -46,7 +46,7 @@ private:
    int                           translationX         = 0;
    int                           translationY         = 0;
    int                           zoomPosition         = 0;
-   int                           zoom                 = 100;
+   float                         zoom                 = 100.f;
 
    sf::Text                      debugLabel;
    std::string                   debugText;

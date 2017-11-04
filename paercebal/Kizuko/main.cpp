@@ -172,7 +172,7 @@ int main(int argc, char * argv[])
             sfml_window.display();
          }
       }
-      catch (const AskedToQuitException & e)
+      catch (const AskedToQuitException & )
       {
       }
    }
