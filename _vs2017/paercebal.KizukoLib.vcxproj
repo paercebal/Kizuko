@@ -21,6 +21,7 @@
     <ClCompile Include="..\paercebal\KizukoLib\clusters\DistanceShape.cpp" />
     <ClCompile Include="..\paercebal\KizukoLib\clusters\Object.cpp" />
     <ClCompile Include="..\paercebal\KizukoLib\clusters\Star.cpp" />
+    <ClCompile Include="..\paercebal\KizukoLib\clusters\View.cpp" />
     <ClCompile Include="..\paercebal\KizukoLib\dllmain.cpp" />
     <ClCompile Include="..\paercebal\KizukoLib\GlobalResources.cpp" />
     <ClCompile Include="..\paercebal\KizukoLib\ProgramOptions.cpp" />
@@ -33,6 +34,7 @@
     <ClInclude Include="..\paercebal\KizukoLib\clusters\DistanceShape.hpp" />
     <ClInclude Include="..\paercebal\KizukoLib\clusters\Object.hpp" />
     <ClInclude Include="..\paercebal\KizukoLib\clusters\Star.hpp" />
+    <ClInclude Include="..\paercebal\KizukoLib\clusters\View.hpp" />
     <ClInclude Include="..\paercebal\KizukoLib\dllmain.hpp" />
     <ClInclude Include="..\paercebal\KizukoLib\Exception.hpp" />
     <ClInclude Include="..\paercebal\KizukoLib\GlobalResources.hpp" />
