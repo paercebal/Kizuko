@@ -4,17 +4,21 @@
    , "increment" : 2
    , "major-increment" : 5
    , "zoom-pixels" : 10
-   , "size-x" : 100
-   , "size-y" : 100
-   , "size-z" : 100
+   , "size-x" : 300
+   , "size-y" : 300
+   , "size-z" : 300
    , "stars" :
       [
-           { "name" : "Balor"   , "x" : 0    , "y" : 0   , "z" : 0      , "size" : 5    , "r" : 255 , "g" : 0   , "b" : 0   , "a" : 255  , "relay" : true }
-         , { "name" : "Ogami"   , "x" : 30   , "y" : -10 , "z" : -25    , "size" : 5    , "r" : 255 , "g" : 0   , "b" : 0   , "a" : 255  , "relay" : false }
-         , { "name" : "Talava"  , "x" : -20  , "y" : -10 , "z" : 15     , "size" : 5    , "r" : 255 , "g" : 128 , "b" : 0   , "a" : 255  , "relay" : false }
-         , { "name" : "Solveig" , "x" : -40  , "y" : 65  , "z" : -17.5  , "size" : 5    , "r" : 255 , "g" : 128 , "b" : 0   , "a" : 255  , "relay" : false }
-         , { "name" : "Yakawa"  , "x" : 25   , "y" : 75  , "z" : 22.5   , "size" : 5    , "r" : 255 , "g" : 128 , "b" : 0   , "a" : 255  , "relay" : false }
-         , { "name" : "Aysur"   , "x" : 50   , "y" : 60  , "z" : 25     , "size" : 5    , "r" : 255 , "g" : 128 , "b" : 0   , "a" : 255  , "relay" : false }
+           { "name" : "Balor"       , "x" : 0    , "y" : 0   , "z" : 0      , "size" : 5    , "r" : 255 , "g" : 0   , "b" : 0   , "a" : 255  , "relay" : true }
+         , { "name" : "Ogami"       , "x" : 30   , "y" : -10 , "z" : -25    , "size" : 5    , "r" : 255 , "g" : 0   , "b" : 0   , "a" : 255  , "relay" : false }
+         , { "name" : "Talava"      , "x" : -20  , "y" : -10 , "z" : 15     , "size" : 5    , "r" : 255 , "g" : 128 , "b" : 0   , "a" : 255  , "relay" : false }
+         , { "name" : "Solveig"     , "x" : -40  , "y" : 65  , "z" : -17.5  , "size" : 5    , "r" : 255 , "g" : 128 , "b" : 0   , "a" : 255  , "relay" : false }
+         , { "name" : "Yakawa"      , "x" : 25   , "y" : 75  , "z" : 22.5   , "size" : 5    , "r" : 255 , "g" : 128 , "b" : 0   , "a" : 255  , "relay" : false }
+         , { "name" : "Aysur"       , "x" : 50   , "y" : 60  , "z" : 25     , "size" : 5    , "r" : 255 , "g" : 128 , "b" : 0   , "a" : 255  , "relay" : false }
+
+         , { "name" : "X"           , "x" : 10   , "y" : 0   , "z" : 0      , "size" : 5    , "r" : 255 , "g" : 0   , "b" : 0   , "a" : 255  , "relay" : false }
+         , { "name" : "Y"           , "x" : 0    , "y" : 10  , "z" : 0      , "size" : 5    , "r" : 255 , "g" : 0   , "b" : 0   , "a" : 255  , "relay" : false }
+         , { "name" : "Z"           , "x" : 0    , "y" : 0   , "z" : 10     , "size" : 5    , "r" : 255 , "g" : 0   , "b" : 0   , "a" : 255  , "relay" : false }
       ]
 
    , "distances" :
