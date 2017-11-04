@@ -291,21 +291,20 @@ Object * Object::cloneImpl() const
    return new Object(*this);
 }
 
-/// @brief calculate the absolute position assuming the current object is the origin
-///
-/// This is recursive, first working on the children, then on the object itself
-
-Object & Object::calculateAbsolutePositions()
-{
-   return *this;
-}
-
 namespace private_
 {
 
 PAERCEBAL_x_GRAPHICS_x_API void initializeAbsolutePositions(Object & o)
 {
-   o.getAbsolutePositions() = o.getRelativePositions();
+   if (o.getRelativePositions().empty())
+   {
+      static const Object::Positions nothing = { maths::utilities::createTranslationVector<float>(0, 0, 0) };
+      o.getAbsolutePositions() = nothing;
+   }
+   else
+   {
+      o.getAbsolutePositions() = o.getRelativePositions();
+   }
 }
 
 PAERCEBAL_x_GRAPHICS_x_API void rotateAbsolutePositionsAroundOrigin(const Object & origin, Object & o)

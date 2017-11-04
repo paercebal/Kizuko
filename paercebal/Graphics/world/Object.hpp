@@ -74,9 +74,6 @@ public:
    const Children &                    getChildren()                                                                    const noexcept;
    Children &                          getChildren()                                                                          noexcept;
 
-protected:
-   Object &                            calculateAbsolutePositions();
-
 private:
    virtual Object *                    cloneImpl()                                                                      const;
 
