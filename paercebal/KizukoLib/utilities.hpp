@@ -31,92 +31,84 @@ void assertPointIsNotNull(const T * t, SeparatorTypeForMacros, const char * func
    }
 }
 
+namespace private_
+{
+
+template <typename T>
+bool loadResourceFromFile(T & t, const std::string & path)
+{
+   return t.loadFromFile(path);
+}
+
+inline bool loadResourceFromFile(sf::Music & t, const std::string & path)
+{
+   return t.openFromFile(path);
+}
+
+template <typename T>
+void initializeResourceWithDefaultParameters(T & t)
+{
+}
+
+inline void initializeResourceWithDefaultParameters(sf::Music & t)
+{
+   t.setPosition(0, 0, 0);    // change its 3D position
+   t.setPitch(1);             // increase the pitch
+   t.setVolume(50);           // reduce the volume
+   t.setLoop(true);           // make it loop
+}
+
+}
+
 template <typename T>
 void assertResourceLoading(T & t, const std::string & path, SeparatorTypeForMacros, const char * function, const char * file, const int line)
 {
-   if (!t.loadFromFile(path))
+   using private_::loadResourceFromFile;
+   using private_::initializeResourceWithDefaultParameters;
+
+   if (!loadResourceFromFile(t, path))
    {
       throw ResourceLoadingException() << "Failed to load resource\"" << path << "\" at file " << file << " (line: " << line << ")";
    }
+
+   initializeResourceWithDefaultParameters(t);
 }
 
 template <typename T>
 void assertResourceLoading(T & t, const std::string & path, const std::string & pathForError, SeparatorTypeForMacros, const char * function, const char * file, const int line)
 {
-   if (!t.loadFromFile(path))
+   using private_::loadResourceFromFile;
+   using private_::initializeResourceWithDefaultParameters;
+
+   if (!loadResourceFromFile(t, path))
    {
-      if (!t.loadFromFile(pathForError))
+      if (!loadResourceFromFile(t, pathForError))
       {
          throw ResourceLoadingException() << "Failed to load resource\"" << path << "\", and even its replacement \"" << pathForError << "\" at file " << file << " (line: " << line << ")";
-         //throw ResourceLoadingException();
       }
    }
+
+   initializeResourceWithDefaultParameters(t);
 }
 
 template <typename T>
 void assertResourceLoading(T & t, const std::string & copyrightedPath, const std::string & path, const std::string & pathForError, SeparatorTypeForMacros, const char * function, const char * file, const int line)
 {
-   if (!t.loadFromFile(copyrightedPath))
+   using private_::loadResourceFromFile;
+   using private_::initializeResourceWithDefaultParameters;
+
+   if (!loadResourceFromFile(t, copyrightedPath))
    {
-      if (!t.loadFromFile(path))
+      if (!loadResourceFromFile(t, path))
       {
-         if (!t.loadFromFile(pathForError))
+         if (!loadResourceFromFile(t, pathForError))
          {
             throw ResourceLoadingException() << "Failed to load copyrighted resource\"" << copyrightedPath << "\", its free resource\"" << path << "\", and even its replacement \"" << pathForError << "\" at file " << file << " (line: " << line << ")";
-            //throw ResourceLoadingException();
-         }
-      }
-   }
-}
-
-inline void assertResourceLoading(sf::Music & t, const std::string & path, SeparatorTypeForMacros, const char * function, const char * file, const int line)
-{
-   if (!t.openFromFile(path))
-   {
-      throw ResourceLoadingException() << "Failed to load resource\"" << path << "\" at file " << file << " (line: " << line << ")";
-   }
-
-   t.setPosition(0, 0, 0);    // change its 3D position
-   t.setPitch(1);             // increase the pitch
-   t.setVolume(50);           // reduce the volume
-   t.setLoop(true);           // make it loop
-}
-
-inline void assertResourceLoading(sf::Music & t, const std::string & path, const std::string & pathForError, SeparatorTypeForMacros, const char * function, const char * file, const int line)
-{
-   if (!t.openFromFile(path))
-   {
-      if (!t.openFromFile(pathForError))
-      {
-         throw ResourceLoadingException() << "Failed to load resource\"" << path << "\", and even its replacement \"" << pathForError << "\" at file " << file << " (line: " << line << ")";
-         //throw ResourceLoadingException();
-      }
-   }
-
-   t.setPosition(0, 0, 0);    // change its 3D position
-   t.setPitch(1);             // increase the pitch
-   t.setVolume(50);           // reduce the volume
-   t.setLoop(true);           // make it loop
-}
-
-inline void assertResourceLoading(sf::Music & t, const std::string & copyrightedPath, const std::string & path, const std::string & pathForError, SeparatorTypeForMacros, const char * function, const char * file, const int line)
-{
-   if (!t.openFromFile(copyrightedPath))
-   {
-      if (!t.openFromFile(path))
-      {
-         if (!t.openFromFile(pathForError))
-         {
-            throw ResourceLoadingException() << "Failed to load copyrighted resource\"" << copyrightedPath << "\", its free resource\"" << path << "\", and even its replacement \"" << pathForError << "\" at file " << file << " (line: " << line << ")";
-            //throw ResourceLoadingException();
          }
       }
    }
 
-   t.setPosition(0, 0, 0);    // change its 3D position
-   t.setPitch(1);             // increase the pitch
-   t.setVolume(50);           // reduce the volume
-   t.setLoop(true);           // make it loop
+   initializeResourceWithDefaultParameters(t);
 }
 
 template <typename T>

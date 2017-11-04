@@ -4,9 +4,9 @@
    , "increment" : 2
    , "major-increment" : 5
    , "zoom-pixels" : 10
-   , "size-x" : 300
-   , "size-y" : 300
-   , "size-z" : 300
+   , "size-x" : 400
+   , "size-y" : 400
+   , "size-z" : 400
    , "stars" :
       [
            { "name" : "Balor"       , "x" : 0    , "y" : 0   , "z" : 0      , "size" : 5    , "r" : 255 , "g" : 0   , "b" : 0   , "a" : 255  , "relay" : true }
