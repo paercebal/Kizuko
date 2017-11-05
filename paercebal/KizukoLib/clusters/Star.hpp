@@ -2,7 +2,7 @@
 #define PAERCEBAL_x_KIZUKOLIB_x_CLUSTERS_x_STAR_x_HPP
 
 #include <paercebal/KizukoLib/GlobalResources.hpp>
-#include <paercebal/KizukoLib/clusters/Object.hpp>
+#include <paercebal/KizukoLib/objects/Object.hpp>
 
 #include <SFML/Graphics.hpp>
 
@@ -14,9 +14,9 @@ namespace paercebal::KizukoLib::clusters
 {
 
 
-class PAERCEBAL_x_KIZUKOLIB_x_API Star : public Object
+class PAERCEBAL_x_KIZUKOLIB_x_API Star : public objects::Object
 {
-   using super = Object;
+   using super = objects::Object;
 public:
 
    Star(const GlobalResources & globalResources, const std::string & name_, sf::Color color_, sf::Vector3f center_, float size_);

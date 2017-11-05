@@ -2,7 +2,7 @@
 #define PAERCEBAL_x_KIZUKOLIB_x_CLUSTERS_x_CLUSTER_x_HPP
 
 #include <paercebal/KizukoLib/GlobalResources.hpp>
-#include <paercebal/KizukoLib/clusters/Object.hpp>
+#include <paercebal/KizukoLib/objects/Object.hpp>
 #include <paercebal/KizukoLib/clusters/AltitudeLine.hpp>
 #include <paercebal/KizukoLib/clusters/ClusterLine.hpp>
 #include <paercebal/KizukoLib/clusters/DistanceShape.hpp>
@@ -18,9 +18,9 @@ namespace paercebal::KizukoLib::clusters
 {
 
 
-class PAERCEBAL_x_KIZUKOLIB_x_API Cluster : public Object
+class PAERCEBAL_x_KIZUKOLIB_x_API Cluster : public objects::Object
 {
-   using super = Object;
+   using super = objects::Object;
 public:
 
    Cluster(const GlobalResources & globalResources);

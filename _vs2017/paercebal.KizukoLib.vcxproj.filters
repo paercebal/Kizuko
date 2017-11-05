@@ -13,6 +13,9 @@
     <Filter Include="p.KizukoLib.gui">
       <UniqueIdentifier>{a14c3c9a-5e9a-44b2-840c-d9c6e6582dc4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="p.KizukoLib.objects">
+      <UniqueIdentifier>{a25e4c54-6ad8-4c1d-b68d-c0e884507c7d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\paercebal\KizukoLib\dllmain.cpp">
@@ -26,9 +29,6 @@
     </ClCompile>
     <ClCompile Include="..\paercebal\KizukoLib\ProgramOptions.cpp">
       <Filter>p.KizukoLib</Filter>
-    </ClCompile>
-    <ClCompile Include="..\paercebal\KizukoLib\clusters\Object.cpp">
-      <Filter>p.KizukoLib.clusters</Filter>
     </ClCompile>
     <ClCompile Include="..\paercebal\KizukoLib\clusters\Star.cpp">
       <Filter>p.KizukoLib.clusters</Filter>
@@ -50,6 +50,9 @@
     </ClCompile>
     <ClCompile Include="..\paercebal\KizukoLib\gui\View.cpp">
       <Filter>p.KizukoLib.gui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\paercebal\KizukoLib\objects\Object.cpp">
+      <Filter>p.KizukoLib.objects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -74,9 +77,6 @@
     <ClInclude Include="..\paercebal\KizukoLib\clusters\Star.hpp">
       <Filter>p.KizukoLib.clusters</Filter>
     </ClInclude>
-    <ClInclude Include="..\paercebal\KizukoLib\clusters\Object.hpp">
-      <Filter>p.KizukoLib.clusters</Filter>
-    </ClInclude>
     <ClInclude Include="..\paercebal\KizukoLib\clusters\Cluster.hpp">
       <Filter>p.KizukoLib.clusters</Filter>
     </ClInclude>
@@ -91,6 +91,9 @@
     </ClInclude>
     <ClInclude Include="..\paercebal\KizukoLib\gui\View.hpp">
       <Filter>p.KizukoLib.gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\paercebal\KizukoLib\objects\Object.hpp">
+      <Filter>p.KizukoLib.objects</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

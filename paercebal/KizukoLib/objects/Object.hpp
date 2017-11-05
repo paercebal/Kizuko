@@ -1,5 +1,5 @@
-#ifndef PAERCEBAL_x_KIZUKOLIB_x_CLUSTERS_x_OBJECT_x_HPP
-#define PAERCEBAL_x_KIZUKOLIB_x_CLUSTERS_x_OBJECT_x_HPP
+#ifndef PAERCEBAL_x_KIZUKOLIB_x_OBJECTS_x_OBJECT_x_HPP
+#define PAERCEBAL_x_KIZUKOLIB_x_OBJECTS_x_OBJECT_x_HPP
 
 #include <paercebal/KizukoLib/GlobalResources.hpp>
 
@@ -10,7 +10,7 @@
 #include <memory>
 #include <string>
 
-namespace paercebal::KizukoLib::clusters
+namespace paercebal::KizukoLib::objects
 {
 
 // IMPORTANT: 3D Units in clusters are in light years.
@@ -43,8 +43,8 @@ PAERCEBAL_x_KIZUKOLIB_x_API void calculateShapes2DRecursive(Object & o);
 
 } // namespace private_
 
-} // namespace paercebal::KizukoLib::clusters
+} // namespace paercebal::KizukoLib::objects
 
 
-#endif // PAERCEBAL_x_KIZUKOLIB_x_CLUSTERS_x_OBJECT_x_HPP
+#endif // PAERCEBAL_x_KIZUKOLIB_x_OBJECTS_x_OBJECT_x_HPP
 

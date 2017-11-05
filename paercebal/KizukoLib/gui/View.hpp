@@ -2,7 +2,7 @@
 #define PAERCEBAL_x_KIZUKOLIB_x_GUI_x_VIEW_x_HPP
 
 #include <paercebal/KizukoLib/GlobalResources.hpp>
-#include <paercebal/KizukoLib/clusters/Object.hpp>
+#include <paercebal/KizukoLib/objects/Object.hpp>
 #include <paercebal/KizukoLib/clusters/Cluster.hpp>
 
 #include <SFML/Graphics.hpp>
@@ -16,9 +16,9 @@ namespace paercebal::KizukoLib::gui
 {
 
 
-class PAERCEBAL_x_KIZUKOLIB_x_API View : public clusters::Object
+class PAERCEBAL_x_KIZUKOLIB_x_API View : public objects::Object
 {
-   using super = Object;
+   using super = objects::Object;
 public:
 
    View(const GlobalResources & globalResources);

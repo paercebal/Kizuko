@@ -2,7 +2,7 @@
 #define PAERCEBAL_x_KIZUKOLIB_x_CLUSTERS_x_DISTANCE_SHAPE_x_HPP
 
 #include <paercebal/KizukoLib/GlobalResources.hpp>
-#include <paercebal/KizukoLib/clusters/Object.hpp>
+#include <paercebal/KizukoLib/objects/Object.hpp>
 
 #include <SFML/Graphics.hpp>
 
@@ -13,9 +13,9 @@
 namespace paercebal::KizukoLib::clusters
 {
 
-class PAERCEBAL_x_KIZUKOLIB_x_API DistanceShape : public Object
+class PAERCEBAL_x_KIZUKOLIB_x_API DistanceShape : public objects::Object
 {
-   using super = Object;
+   using super = objects::Object;
 public:
 
    DistanceShape(const GlobalResources & globalResources_, const std::string & beginName_, const std::string & endName_);
