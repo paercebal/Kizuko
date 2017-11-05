@@ -1,3 +1,12 @@
+Kizuko is a project containing three kind of data, each with their own type of license:
+- code : MIT License (see below)
+- media resource : Each media resource (font, music, image, etc.) has its own license
+  (a license for each media resource can be found in the ./resources/licenses directory)
+- map and miscellaneous information from the Mass Effect universe, owned by Electronic
+  Arts/Bioware (see below)
+
+
+
 MIT License
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
@@ -20,16 +29,14 @@ SOFTWARE.
 
 
 
-
-
-
-ABOUT MASS EFFECT
+ABOUT THE USE OF MASS EFFECT INFORMATION
 
 Mass Effect is probably copyrighted/trademarked by BioWare/Electronic Arts.
 This program does not intend to challenge the copyright/trademark, or infringe
 on it.
 
-To be clear: Everything "Mass Effect" is owned by BioWare/Electronic Arts.
+To be clear: Everything "Mass Effect", implicitly or explicitly, is owned by
+BioWare/Electronic Arts.
 
 Some of the maps reproduce maps from the Mass Effect games, and sometimes extend
 them. Again, this is not intended as a challenge or infringement.
