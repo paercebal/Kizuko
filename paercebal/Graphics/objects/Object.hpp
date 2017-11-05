@@ -1,5 +1,5 @@
-#ifndef PAERCEBAL_x_GRAPHICS_x_WORLD_x_OBJECT_x_HPP
-#define PAERCEBAL_x_GRAPHICS_x_WORLD_x_OBJECT_x_HPP
+#ifndef PAERCEBAL_x_GRAPHICS_x_OBJECTS_x_OBJECT_x_HPP
+#define PAERCEBAL_x_GRAPHICS_x_OBJECTS_x_OBJECT_x_HPP
 
 
 #include <paercebal/Graphics/dllmain.hpp>
@@ -12,7 +12,7 @@
 #include <memory>
 
 
-namespace paercebal::Graphics::world
+namespace paercebal::Graphics::objects
 {
 
 /// @brief Object is the base class of every object in the 3D world
@@ -104,9 +104,9 @@ PAERCEBAL_x_GRAPHICS_x_API void RotateAndScaleAndTranslateAbsolutePositionsOfDes
 
 } // namespace private_
 
-} // namespace paercebal::Graphics::world
+} // namespace paercebal::Graphics::objects
 
 
-#endif // PAERCEBAL_x_GRAPHICS_x_WORLD_x_OBJECT_x_HPP
+#endif // PAERCEBAL_x_GRAPHICS_x_OBJECTS_x_OBJECT_x_HPP
 
 

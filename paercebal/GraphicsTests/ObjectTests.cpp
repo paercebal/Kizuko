@@ -1,8 +1,8 @@
-#include <paercebal/Graphics/world/DefaultObject.hpp>
+#include <paercebal/Graphics/objects/DefaultObject.hpp>
 
 #include <gtest/gtest.h>
 
-namespace paercebal::Graphics::world::tests
+namespace paercebal::Graphics::objects::tests
 {
 
 

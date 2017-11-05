@@ -1,13 +1,13 @@
-#ifndef PAERCEBAL_x_GRAPHICS_x_WORLD_x_WORLD_x_HPP
-#define PAERCEBAL_x_GRAPHICS_x_WORLD_x_WORLD_x_HPP
+#ifndef PAERCEBAL_x_GRAPHICS_x_OBJECTS_x_WORLD_x_HPP
+#define PAERCEBAL_x_GRAPHICS_x_OBJECTS_x_WORLD_x_HPP
 
 
-#include <paercebal/Graphics/world/Object.hpp>
+#include <paercebal/Graphics/objects/Object.hpp>
 
 #include <memory>
 
 
-namespace paercebal::Graphics::world
+namespace paercebal::Graphics::objects
 {
 
 /// @brief DefaultObject is an instantiable Object, wit no added features
@@ -25,9 +25,9 @@ private:
 };
 
 
-} // namespace paercebal::Graphics::world
+} // namespace paercebal::Graphics::objects
 
 
-#endif // PAERCEBAL_x_GRAPHICS_x_WORLD_x_WORLD_x_HPP
+#endif // PAERCEBAL_x_GRAPHICS_x_OBJECTS_x_WORLD_x_HPP
 
 

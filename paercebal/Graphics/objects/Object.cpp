@@ -1,7 +1,7 @@
-#include <paercebal/Graphics/world/Object.hpp>
+#include <paercebal/Graphics/objects/Object.hpp>
 
 
-namespace paercebal::Graphics::world
+namespace paercebal::Graphics::objects
 {
 
 namespace

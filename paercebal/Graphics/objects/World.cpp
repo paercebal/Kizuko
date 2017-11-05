@@ -1,7 +1,7 @@
-#include <paercebal/Graphics/world/DefaultObject.hpp>
+#include <paercebal/Graphics/objects/World.hpp>
 
 
-namespace paercebal::Graphics::world
+namespace paercebal::Graphics::objects
 {
 
 /// @brief clones the current object
@@ -10,9 +10,9 @@ namespace paercebal::Graphics::world
 ///
 /// @note Exception guarantee: Strong
 
-std::unique_ptr<DefaultObject> DefaultObject::clone() const
+std::unique_ptr<World> World::clone() const
 {
-   return std::unique_ptr<DefaultObject>(this->cloneImpl());
+   return std::unique_ptr<World>(this->cloneImpl());
 }
 
 /// @brief implementation of cloneing the current object
@@ -23,10 +23,10 @@ std::unique_ptr<DefaultObject> DefaultObject::clone() const
 ///
 /// @warning this functions does a transfer of ownership. You are supposed to *immediately* put that pointer into a smart pointer.
 
-DefaultObject * DefaultObject::cloneImpl() const
+World * World::cloneImpl() const
 {
-   return new DefaultObject(*this);
+   return new World(*this);
 }
 
 
-} // namespace paercebal::Graphics::world
+} // namespace paercebal::Graphics::objects

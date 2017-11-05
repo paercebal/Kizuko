@@ -1,7 +1,7 @@
 #ifndef PAERCEBAL_x_GRAPHICSTESTS_x_MAIN_x_HPP
 #define PAERCEBAL_x_GRAPHICSTESTS_x_MAIN_x_HPP
 
-#include <paercebal/Graphics/world/DefaultObject.hpp>
+#include <paercebal/Graphics/objects/DefaultObject.hpp>
 #include <paercebal/Graphics/maths/utilities.hpp>
 
 #include <cstdlib>
@@ -31,7 +31,7 @@ template <typename T>
 
 }
 
-namespace paercebal::Graphics::world
+namespace paercebal::Graphics::objects
 {
 
 template <typename T>
@@ -70,7 +70,7 @@ inline ::std::ostream & operator << (::std::ostream & os, const Object::Position
 
 }
 
-namespace paercebal::Graphics::world::tests
+namespace paercebal::Graphics::objects::tests
 {
 
 inline bool is_mostly_equal(float lhs, float rhs)
