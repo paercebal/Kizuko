@@ -62,7 +62,7 @@ std::vector<std::unique_ptr<ClusterLine>> createClusterGrid(const GlobalResource
 }
 
 Cluster::Cluster(const GlobalResources & globalResources)
-   : Cluster(globalResources, globalResources.getData().increment, static_cast<int>(globalResources.getData().majorIncrement), 1.f, globalResources.getData().size)
+   : Cluster(globalResources, globalResources.getData().clusters.at(0).increment, static_cast<int>(globalResources.getData().clusters.at(0).majorIncrement), 1.f, globalResources.getData().clusters.at(0).size)
 {
 }
 
@@ -90,12 +90,12 @@ Cluster::Cluster(const GlobalResources & globalResources, float gridIncrement_, 
       this->clusterLines.push_back(pp);
    }
 
-   for (const auto & star : this->getGlobalResources().getData().stars)
+   for (const auto & star : this->getGlobalResources().getData().clusters.at(0).stars)
    {
       this->addStar({ this->getGlobalResources(), star.name, sf::Color{ star.r, star.g, star.b, star.a },{ star.x, star.y, star.z }, star.size });
    }
 
-   for (const auto & distance : this->getGlobalResources().getData().distances)
+   for (const auto & distance : this->getGlobalResources().getData().clusters.at(0).distances)
    {
       this->addDistance({ this->getGlobalResources(), distance.begin, distance.end });
    }
