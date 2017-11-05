@@ -2,7 +2,7 @@
 #define PAERCEBAL_x_KIZUKOLIB_x_CLUSTERS_x_CLUSTER_LINE_x_HPP
 
 #include <paercebal/KizukoLib/GlobalResources.hpp>
-#include <paercebal/KizukoLib/clusters/Object.hpp>
+#include <paercebal/KizukoLib/objects/Object.hpp>
 
 #include <SFML/Graphics.hpp>
 
@@ -22,9 +22,9 @@ enum class ClusterLineStyle
 };
 
 
-class PAERCEBAL_x_KIZUKOLIB_x_API ClusterLine : public Object
+class PAERCEBAL_x_KIZUKOLIB_x_API ClusterLine : public objects::Object
 {
-   using super = Object;
+   using super = objects::Object;
 public:
 
    ClusterLine(const GlobalResources & globalResources, ClusterLineStyle style_, sf::Vector3f begin_, sf::Vector3f end_);

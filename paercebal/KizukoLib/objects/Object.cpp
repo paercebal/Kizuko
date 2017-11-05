@@ -1,4 +1,4 @@
-#include <paercebal/KizukoLib/clusters/Object.hpp>
+#include <paercebal/KizukoLib/objects/Object.hpp>
 #include <paercebal/KizukoLib/utilities.hpp>
 
 #include <SFML/Graphics.hpp>
@@ -6,7 +6,7 @@
 #include <memory>
 #include <string>
 
-namespace paercebal::KizukoLib::clusters
+namespace paercebal::KizukoLib::objects
 {
 
 Object::Object(const GlobalResources & globalResources_)
@@ -53,4 +53,4 @@ PAERCEBAL_x_KIZUKOLIB_x_API void calculateShapes2DRecursive(Object & o)
 } // namespace private_
 
 
-} // namespace paercebal::KizukoLib::clusters
+} // namespace paercebal::KizukoLib::objects
