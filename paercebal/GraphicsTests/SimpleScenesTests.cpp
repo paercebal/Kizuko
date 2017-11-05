@@ -1,6 +1,6 @@
 #include <paercebal/GraphicsTests/main.hpp>
 
-#include <paercebal/Graphics/world/DefaultObject.hpp>
+#include <paercebal/Graphics/objects/DefaultObject.hpp>
 #include <paercebal/Graphics/maths/utilities.hpp>
 
 #include <cstdlib>
@@ -10,7 +10,7 @@
 #include <gtest/gtest.h>
 
 
-namespace paercebal::Graphics::world::tests
+namespace paercebal::Graphics::objects::tests
 {
 
 TEST(SimpleScenesTests, SimpleInitialization)

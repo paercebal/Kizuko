@@ -29,7 +29,7 @@ std::unique_ptr<Object> Object::clone() const
 
 PAERCEBAL_x_KIZUKOLIB_x_API void calculateAbsolutePositionThenShapes2DRecursive(Object & o)
 {
-   Graphics::world::calculateAbsolutePositionRecursive(o);
+   Graphics::objects::calculateAbsolutePositionRecursive(o);
    private_::calculateShapes2DRecursive(o);
 }
 

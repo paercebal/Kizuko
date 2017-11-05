@@ -3,7 +3,7 @@
 
 #include <paercebal/KizukoLib/GlobalResources.hpp>
 
-#include <paercebal/Graphics/world/Object.hpp>
+#include <paercebal/Graphics/objects/Object.hpp>
 
 #include <SFML/Graphics.hpp>
 
@@ -15,8 +15,9 @@ namespace paercebal::KizukoLib::objects
 
 // IMPORTANT: 3D Units in clusters are in light years.
 
-class PAERCEBAL_x_KIZUKOLIB_x_API Object : public Graphics::world::Object
+class PAERCEBAL_x_KIZUKOLIB_x_API Object : public Graphics::objects::Object
 {
+   using super = Graphics::objects::Object;
 public:
    Object(const GlobalResources & globalResources_);
    virtual ~Object();

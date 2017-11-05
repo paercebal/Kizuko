@@ -18,17 +18,17 @@
     <ClCompile Include="..\paercebal\Graphics\dllmain.cpp" />
     <ClCompile Include="..\paercebal\Graphics\maths\Matrix3D.cpp" />
     <ClCompile Include="..\paercebal\Graphics\maths\utilities.cpp" />
-    <ClCompile Include="..\paercebal\Graphics\world\DefaultObject.cpp" />
-    <ClCompile Include="..\paercebal\Graphics\world\Object.cpp" />
-    <ClCompile Include="..\paercebal\Graphics\world\World.cpp" />
+    <ClCompile Include="..\paercebal\Graphics\objects\DefaultObject.cpp" />
+    <ClCompile Include="..\paercebal\Graphics\objects\Object.cpp" />
+    <ClCompile Include="..\paercebal\Graphics\objects\World.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\paercebal\Graphics\dllmain.hpp" />
     <ClInclude Include="..\paercebal\Graphics\maths\Matrix3D.hpp" />
     <ClInclude Include="..\paercebal\Graphics\maths\utilities.hpp" />
-    <ClInclude Include="..\paercebal\Graphics\world\DefaultObject.hpp" />
-    <ClInclude Include="..\paercebal\Graphics\world\Object.hpp" />
-    <ClInclude Include="..\paercebal\Graphics\world\World.hpp" />
+    <ClInclude Include="..\paercebal\Graphics\objects\DefaultObject.hpp" />
+    <ClInclude Include="..\paercebal\Graphics\objects\Object.hpp" />
+    <ClInclude Include="..\paercebal\Graphics\objects\World.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{E5F09D4D-0235-495E-9939-9312EF0503E2}</ProjectGuid>
