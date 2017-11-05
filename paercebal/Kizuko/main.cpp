@@ -70,7 +70,7 @@ int main(int argc, char * argv[])
 
       sf::ContextSettings settings;
       settings.antialiasingLevel = 8;
-      sf::RenderWindow sfml_window(sf::VideoMode(windowWidth, windowHeight), "Kizuko", sf::Style::Titlebar | sf::Style::Close, settings);
+      sf::RenderWindow sfml_window(sf::VideoMode(windowWidth, windowHeight), "Kizuko", sf::Style::Titlebar | sf::Style::Resize | sf::Style::Close, settings);
       sfml_window.setFramerateLimit(60);
       sfml_window.setView(sfml_view);
 
@@ -142,8 +142,12 @@ int main(int argc, char * argv[])
                   }
                }
             }
-
-            if (event.type == sf::Event::MouseWheelScrolled)
+            else if(event.type == sf::Event::Resized)
+            {
+               sfml_view.setSize({ static_cast<float>(event.size.width), static_cast<float>(event.size.height) });
+               sfml_window.setView(sfml_view);
+            }
+            else if (event.type == sf::Event::MouseWheelScrolled)
             {
                //if (event.mouseWheelScroll.wheel == sf::Mouse::VerticalWheel)
                //   std::cout << "wheel type: vertical" << std::endl;

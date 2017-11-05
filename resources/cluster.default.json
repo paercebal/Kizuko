@@ -1,9 +1,7 @@
 {
      "cluster-name" : "Caleston Rift"
-   , "ly-pixels" : 10
    , "increment" : 2
    , "major-increment" : 5
-   , "zoom-pixels" : 10
    , "size-x" : 400
    , "size-y" : 400
    , "size-z" : 400
