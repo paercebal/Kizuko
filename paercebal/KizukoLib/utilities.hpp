@@ -61,10 +61,12 @@ inline void initializeResourceWithDefaultParameters(sf::Music & t)
 }
 
 template <typename T>
-void assertResourceLoading(T & t, const std::string & path, SeparatorTypeForMacros, const char * function, const char * file, const int line)
+size_t assertResourceLoading(T & t, const std::string & path, SeparatorTypeForMacros, const char * function, const char * file, const int line)
 {
    using private_::loadResourceFromFile;
    using private_::initializeResourceWithDefaultParameters;
+
+   size_t index = 0;
 
    if (!loadResourceFromFile(t, path))
    {
@@ -72,16 +74,22 @@ void assertResourceLoading(T & t, const std::string & path, SeparatorTypeForMacr
    }
 
    initializeResourceWithDefaultParameters(t);
+
+   return index;
 }
 
 template <typename T>
-void assertResourceLoading(T & t, const std::string & path, const std::string & pathForError, SeparatorTypeForMacros, const char * function, const char * file, const int line)
+size_t assertResourceLoading(T & t, const std::string & path, const std::string & pathForError, SeparatorTypeForMacros, const char * function, const char * file, const int line)
 {
    using private_::loadResourceFromFile;
    using private_::initializeResourceWithDefaultParameters;
 
+   size_t index = 0;
+
    if (!loadResourceFromFile(t, path))
    {
+      ++index;
+
       if (!loadResourceFromFile(t, pathForError))
       {
          throw ResourceLoadingException() << "Failed to load resource\"" << path << "\", and even its replacement \"" << pathForError << "\" at file " << file << " (line: " << line << ")";
@@ -89,18 +97,26 @@ void assertResourceLoading(T & t, const std::string & path, const std::string & 
    }
 
    initializeResourceWithDefaultParameters(t);
+
+   return index;
 }
 
 template <typename T>
-void assertResourceLoading(T & t, const std::string & copyrightedPath, const std::string & path, const std::string & pathForError, SeparatorTypeForMacros, const char * function, const char * file, const int line)
+size_t assertResourceLoading(T & t, const std::string & copyrightedPath, const std::string & path, const std::string & pathForError, SeparatorTypeForMacros, const char * function, const char * file, const int line)
 {
    using private_::loadResourceFromFile;
    using private_::initializeResourceWithDefaultParameters;
 
+   size_t index = 0;
+
    if (!loadResourceFromFile(t, copyrightedPath))
    {
+      ++index;
+
       if (!loadResourceFromFile(t, path))
       {
+         ++index;
+
          if (!loadResourceFromFile(t, pathForError))
          {
             throw ResourceLoadingException() << "Failed to load copyrighted resource\"" << copyrightedPath << "\", its free resource\"" << path << "\", and even its replacement \"" << pathForError << "\" at file " << file << " (line: " << line << ")";
@@ -109,6 +125,49 @@ void assertResourceLoading(T & t, const std::string & copyrightedPath, const std
    }
 
    initializeResourceWithDefaultParameters(t);
+
+   return index;
+}
+
+template <typename T>
+size_t assertResourceLoading(T & t, const std::vector<std::string> & paths, SeparatorTypeForMacros, const char * function, const char * file, const int line)
+{
+   using private_::loadResourceFromFile;
+   using private_::initializeResourceWithDefaultParameters;
+
+   size_t index = 0;
+   bool found = false;
+
+   for (const auto & path : paths)
+   {
+      if (loadResourceFromFile(t, path))
+      {
+         found = true;
+         break;
+      }
+
+      ++index;
+   }
+
+   if (!found)
+   {
+      ResourceLoadingException e;
+
+      e << "Failed to load resources among the following:\n";
+
+      for (const auto & path : paths)
+      {
+         e << "  - \"" << path << "\"\n";
+      }
+
+      e << " at file " << file << " (line: " << line << ")\n";
+
+      throw e;
+   }
+
+   initializeResourceWithDefaultParameters(t);
+
+   return index;
 }
 
 template <typename T>
@@ -181,6 +240,7 @@ inline std::string loadFile(const std::string & filename)
 {
    std::fstream file(filename, std::ios_base::in);
    std::string content;
+   file.unsetf(std::ios::skipws);
    std::istream_iterator<char> it(file), itEnd;
    std::copy(it, itEnd, std::insert_iterator<std::string>(content, content.end()));
    return content;

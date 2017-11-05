@@ -22,27 +22,36 @@ GlobalResources::GlobalResources(int argc, char * argv[])
    std::string jsonText = utilities::loadFile(o.getClusterFileName());
    this->data = input::extractDatafromJSon(jsonText);
 
-   PAERCEBAL_x_KIZUKOLIB_x_ASSERT_RESOURCE_LOADING(this->neutralFont, "./resources/OpenSans-Regular.ttf");
-   PAERCEBAL_x_KIZUKOLIB_x_ASSERT_RESOURCE_LOADING(this->scifiFont, "./resources/Formation Sans Regular.ttf", "./resources/OpenSans-Regular.ttf");
-   PAERCEBAL_x_KIZUKOLIB_x_ASSERT_RESOURCE_LOADING(this->massEffectFont, "./copyrighted/MassEffect.ttf", "./resources/Formation Sans Regular.ttf", "./resources/OpenSans-Regular.ttf");
+   const size_t foundFontNormalIndex = PAERCEBAL_x_KIZUKOLIB_x_ASSERT_RESOURCE_LOADING(this->fontNormal.font, generateResourceList(this->data.style.fontNormal));
+   this->fontNormal.size = this->data.style.fontNormal.at(foundFontNormalIndex).size;
+   const size_t foundFontScifiIndex = PAERCEBAL_x_KIZUKOLIB_x_ASSERT_RESOURCE_LOADING(this->fontScifi.font, generateResourceList(this->data.style.fontSciFi));
+   this->fontScifi.size = this->data.style.fontSciFi.at(foundFontScifiIndex).size;
+
+   PAERCEBAL_x_KIZUKOLIB_x_ASSERT_RESOURCE_LOADING(this->musicCluster.music, generateResourceList(this->data.style.musicCluster));
+   PAERCEBAL_x_KIZUKOLIB_x_ASSERT_RESOURCE_LOADING(this->musicGalaxy.music, generateResourceList(this->data.style.musicGalaxy));
 }
 
 GlobalResources::~GlobalResources() = default;
 
 
-const sf::Font & GlobalResources::getNeutralFont() const noexcept
+const GlobalFont & GlobalResources::getFontNormal() const noexcept
 {
-   return this->neutralFont;
+   return this->fontNormal;
 }
 
-const sf::Font & GlobalResources::getScifiFont() const noexcept
+const GlobalFont & GlobalResources::getFontScifi() const noexcept
 {
-   return this->scifiFont;
+   return this->fontScifi;
 }
 
-const sf::Font & GlobalResources::getMassEffectFont() const noexcept
+const GlobalMusic & GlobalResources::getMusicCluster() const noexcept
 {
-   return this->massEffectFont;
+   return this->musicCluster;
+}
+
+const GlobalMusic & GlobalResources::getMusicGalaxy() const noexcept
+{
+   return this->musicGalaxy;
 }
 
 const input::Data & GlobalResources::getData() const noexcept

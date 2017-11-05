@@ -5,8 +5,9 @@
 
 #include <paercebal/KizukoLib/input/Data.hpp>
 
-#include <SFML/Window.hpp>
+#include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
+#include <SFML/Window.hpp>
 
 #include <string>
 #include <memory>
@@ -14,6 +15,16 @@
 namespace paercebal::KizukoLib
 {
 
+struct GlobalFont
+{
+   sf::Font    font;
+   int         size = 20;
+};
+
+struct GlobalMusic
+{
+   mutable sf::Music   music;    ///< @todo this "mutable" is a problem. See if we can change the design to accomodate constness and need to play the music
+};
 
 class PAERCEBAL_x_KIZUKOLIB_x_API GlobalResources
 {
@@ -25,15 +36,18 @@ public:
    GlobalResources(const GlobalResources &) = delete;
    GlobalResources &       operator = (const GlobalResources &) = delete;
 
-   const sf::Font &        getNeutralFont()              const noexcept;
-   const sf::Font &        getScifiFont()                const noexcept;
-   const sf::Font &        getMassEffectFont()           const noexcept;
+   const GlobalFont &      getFontNormal()               const noexcept;
+   const GlobalFont &      getFontScifi()                const noexcept;
+   const GlobalMusic &     getMusicCluster()             const noexcept;
+   const GlobalMusic &     getMusicGalaxy()              const noexcept;
+
    const input::Data &     getData()                     const noexcept;
 
 private:
-   sf::Font                neutralFont;
-   sf::Font                scifiFont;
-   sf::Font                massEffectFont;
+   GlobalFont              fontNormal;
+   GlobalFont              fontScifi;
+   GlobalMusic             musicCluster;
+   GlobalMusic             musicGalaxy;
    input::Data             data;
 };
 

@@ -10,6 +10,49 @@
 namespace paercebal::KizukoLib::input
 {
 
+struct Font
+{
+   std::string                filename;
+   int                        size = 20;
+};
+
+struct Music
+{
+   std::string                filename;
+};
+
+struct Style
+{
+   std::vector<Font>          fontSciFi;
+   std::vector<Font>          fontNormal;
+   std::vector<Music>         musicGalaxy;
+   std::vector<Music>         musicCluster;
+};
+
+template <typename T>
+std::vector<std::string> generateResourceList(const std::vector<T> & resources)
+{
+   std::vector<std::string> v;
+   for (const auto & r : resources)
+   {
+      v.push_back(r.filename);
+   }
+   return v;
+}
+
+struct ClusterData
+{
+   std::string                name;
+   float                      x = 0;
+   float                      y = 0;
+};
+
+struct Galaxy
+{
+   sf::Vector2f               size;
+   std::vector<ClusterData>   clusterDataList;
+};
+
 struct Star
 {
    std::string                name;
@@ -26,18 +69,25 @@ struct Star
 
 struct Distance
 {
-   std::string begin;
-   std::string end;
+   std::string                begin;
+   std::string                end;
 };
 
-struct Data
+struct Cluster
 {
-   std::string                clusterName;                     // Not used currently
+   std::string                name;                         // Not used currently
    float                      increment = 0.f;
    float                      majorIncrement = 0.f;
    sf::Vector3f               size;
    std::vector<Star>          stars;
    std::vector<Distance>      distances;
+};
+
+struct Data
+{
+   Style                      style;
+   Galaxy                     galaxy;
+   std::vector<Cluster>       clusters;
 };
 
 Data extractDatafromJSon(const std::string & jsonText);

@@ -76,9 +76,7 @@ int main(int argc, char * argv[])
 
       try
       {
-         sf::Music music;
-         PAERCEBAL_x_KIZUKOLIB_x_ASSERT_RESOURCE_LOADING(music, "./copyrighted/uncharted_worlds.ogg", "./resources/bensound-relaxing.ogg");
-         music.play();
+         view.getGlobalResources().getMusicCluster().music.play();
 
          while (sfml_window.isOpen())
          {

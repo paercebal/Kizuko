@@ -16,6 +16,12 @@ namespace paercebal::KizukoLib::input
 
 namespace {
 
+///////////////////////////////////////////////////////////////////////////////
+//
+// Utils
+//
+///////////////////////////////////////////////////////////////////////////////
+
 void expectTrue(bool b, const std::string & msg)
 {
    if (b != true)
@@ -53,6 +59,11 @@ std::string concat(Args... args)
    return str.str();
 }
 
+///////////////////////////////////////////////////////////////////////////////
+//
+// Generic
+//
+///////////////////////////////////////////////////////////////////////////////
 
 template <typename T>
 void extractValue(T & t, const std::string & name, std::string & value)
@@ -141,6 +152,130 @@ void extractValue(T & t, const std::string & name, double & value)
    }
 }
 
+///////////////////////////////////////////////////////////////////////////////
+//
+// Specific: Style
+//
+///////////////////////////////////////////////////////////////////////////////
+
+input::Font extractStyleFont(const rapidjson::Value & t)
+{
+   input::Font value;
+
+   expectTrue(t.IsObject(), "json 'font' is not an object");
+   extractValue(t, "filename", value.filename);
+   extractValue(t, "size", value.size);
+
+   return value;
+}
+
+std::vector<input::Font> extractStyleFonts(const rapidjson::Value & t)
+{
+   std::vector<input::Font> fonts;
+
+   expectTrue(t.IsArray(), "json 'fonts' is not an array");
+   for (rapidjson::SizeType i = 0; i < t.Size(); ++i)
+   {
+      fonts.push_back(extractStyleFont(t[i]));
+   }
+
+   return fonts;
+}
+
+input::Music extractStyleMusic(const rapidjson::Value & t)
+{
+   input::Music value;
+
+   expectTrue(t.IsObject(), "json 'music' is not an object");
+   extractValue(t, "filename", value.filename);
+
+   return value;
+}
+
+std::vector<input::Music> extractStyleMusics(const rapidjson::Value & t)
+{
+   std::vector<input::Music> musics;
+
+   expectTrue(t.IsArray(), "json 'musics' is not an array");
+   for (rapidjson::SizeType i = 0; i < t.Size(); ++i)
+   {
+      musics.push_back(extractStyleMusic(t[i]));
+   }
+
+   return musics;
+}
+
+input::Style extractStyle(const rapidjson::Value & t)
+{
+   expectTrue(t.IsObject(), "json 'style' is not an object");
+
+   expectTrue(t.HasMember("font-sci-fi"), "cluster file json content has no \"font-sci-fi\" property");
+   expectTrue(t.HasMember("font-normal"), "cluster file json content has no \"font-normal\" property");
+   expectTrue(t.HasMember("music-cluster"), "cluster file json content has no \"music-cluster\" property");
+   expectTrue(t.HasMember("music-galaxy"), "cluster file json content has no \"music-galaxy\" property");
+
+   input::Style style;
+
+   style.fontSciFi = extractStyleFonts(t["font-sci-fi"]);
+   style.fontNormal = extractStyleFonts(t["font-normal"]);
+   style.musicCluster = extractStyleMusics(t["music-cluster"]);
+   style.musicGalaxy = extractStyleMusics(t["music-galaxy"]);
+
+   return style;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// Specific: Galaxy
+//
+///////////////////////////////////////////////////////////////////////////////
+
+input::ClusterData extractClusterData(const rapidjson::Value & t)
+{
+   input::ClusterData value;
+
+   expectTrue(t.IsObject(), "json 'cluster-data' is not an object");
+   extractValue(t, "name", value.name);
+   extractValue(t, "x", value.x);
+   extractValue(t, "y", value.y);
+
+   return value;
+}
+
+std::vector<input::ClusterData> extractClusterDatas(const rapidjson::Value & t)
+{
+   std::vector<input::ClusterData> clusterDatas;
+
+   expectTrue(t.IsArray(), "json 'cluster-data-list' is not an array");
+   for (rapidjson::SizeType i = 0; i < t.Size(); ++i)
+   {
+      clusterDatas.push_back(extractClusterData(t[i]));
+   }
+
+   return clusterDatas;
+}
+
+input::Galaxy extractGalaxy(const rapidjson::Value & t)
+{
+   input::Galaxy galaxy;
+
+   expectTrue(t.IsObject(), "json 'galaxy' is not an object");
+
+   extractValue(t, "size-x", galaxy.size.x);
+   extractValue(t, "size-y", galaxy.size.y);
+
+   expectTrue(t.HasMember("cluster-data-list"), "cluster file json content has no \"cluster-data-list\" property");
+   galaxy.clusterDataList = extractClusterDatas(t["cluster-data-list"]);
+
+   return galaxy;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// Specific: Clusters
+//
+///////////////////////////////////////////////////////////////////////////////
+
 input::Star extractStar(const rapidjson::Value & t)
 {
    input::Star value;
@@ -188,7 +323,7 @@ std::vector<input::Distance> extractDistances(const rapidjson::Value & t)
 {
    std::vector<input::Distance> distances;
 
-   expectTrue(t.IsArray(), "json data is not an array");
+   expectTrue(t.IsArray(), "json 'distances' is not an array");
    for (rapidjson::SizeType i = 0; i < t.Size(); ++i)
    {
       distances.push_back(extractDistance(t[i]));
@@ -197,7 +332,49 @@ std::vector<input::Distance> extractDistances(const rapidjson::Value & t)
    return distances;
 }
 
+input::Cluster extractCluster(const rapidjson::Value & t)
+{
+   input::Cluster value;
+
+   expectTrue(t.IsObject(), "json 'cluster' is not an object");
+
+   extractValue(t, "name", value.name);
+   extractValue(t, "increment", value.increment);
+   extractValue(t, "major-increment", value.majorIncrement);
+   extractValue(t, "size-x", value.size.x);
+   extractValue(t, "size-y", value.size.y);
+   extractValue(t, "size-z", value.size.z);
+
+   expectTrue(t.HasMember("stars"), "cluster file json content has no \"stars\" property");
+   expectTrue(t.HasMember("distances"), "cluster file json content has no \"distances\" property");
+
+   value.stars = extractStars(t["stars"]);
+   value.distances = extractDistances(t["distances"]);
+
+   return value;
+}
+
+std::vector<input::Cluster> extractClusters(const rapidjson::Value & t)
+{
+   std::vector<input::Cluster> clusters;
+
+   expectTrue(t.IsArray(), "json 'clusters' is not an array");
+   for (rapidjson::SizeType i = 0; i < t.Size(); ++i)
+   {
+      clusters.push_back(extractCluster(t[i]));
+   }
+
+   return clusters;
+}
+
+
 } // anonymous namespace
+
+///////////////////////////////////////////////////////////////////////////////
+//
+//
+//
+///////////////////////////////////////////////////////////////////////////////
 
 Data extractDatafromJSon(const std::string & jsonText)
 {
@@ -220,18 +397,17 @@ Data extractDatafromJSon(const std::string & jsonText)
 
    input::Data data;
 
-   extractValue(document, "cluster-name", data.clusterName);
-   extractValue(document, "increment", data.increment);
-   extractValue(document, "major-increment", data.majorIncrement);
-   extractValue(document, "size-x", data.size.x);
-   extractValue(document, "size-y", data.size.y);
-   extractValue(document, "size-z", data.size.z);
+   // Style
+   expectTrue(document.HasMember("style"), "cluster file json content has no \"style\" property");
+   data.style = extractStyle(document["style"]);
 
-   expectTrue(document.HasMember("stars"), "cluster file json content has no \"stars\" property");
-   expectTrue(document.HasMember("distances"), "cluster file json content has no \"distances\" property");
+   // Galaxy
+   expectTrue(document.HasMember("galaxy"), "cluster file json content has no \"galaxy\" property");
+   data.galaxy = extractGalaxy(document["galaxy"]);
 
-   data.stars = extractStars(document["stars"]);
-   data.distances = extractDistances(document["distances"]);
+   // Clusters
+   expectTrue(document.HasMember("clusters"), "cluster file json content has no \"style\" property");
+   data.clusters = extractClusters(document["clusters"]);
 
    return data;
 }

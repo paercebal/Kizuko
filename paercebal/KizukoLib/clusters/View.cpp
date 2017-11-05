@@ -38,8 +38,8 @@ View::View(const GlobalResources & globalResources, float translationIncrement_)
 void View::createShapes2D()
 {
    this->debugLabel.setString(this->debugText);
-   this->debugLabel.setFont(this->getGlobalResources().getNeutralFont());
-   this->debugLabel.setCharacterSize(20);
+   this->debugLabel.setFont(this->getGlobalResources().getFontNormal().font);
+   this->debugLabel.setCharacterSize(this->getGlobalResources().getFontNormal().size);
    this->debugLabel.setStyle(sf::Text::Regular);
    this->debugLabel.setFillColor(sf::Color::White);
    this->debugLabel.setPosition({ 20, 20 });
