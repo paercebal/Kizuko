@@ -1,5 +1,5 @@
-#ifndef PAERCEBAL_x_KIZUKOLIB_x_CLUSTERS_x_VIEW_x_HPP
-#define PAERCEBAL_x_KIZUKOLIB_x_CLUSTERS_x_VIEW_x_HPP
+#ifndef PAERCEBAL_x_KIZUKOLIB_x_GUI_x_VIEW_x_HPP
+#define PAERCEBAL_x_KIZUKOLIB_x_GUI_x_VIEW_x_HPP
 
 #include <paercebal/KizukoLib/GlobalResources.hpp>
 #include <paercebal/KizukoLib/clusters/Object.hpp>
@@ -12,11 +12,11 @@
 #include <sstream>
 
 
-namespace paercebal::KizukoLib::clusters
+namespace paercebal::KizukoLib::gui
 {
 
 
-class PAERCEBAL_x_KIZUKOLIB_x_API View : public Object
+class PAERCEBAL_x_KIZUKOLIB_x_API View : public clusters::Object
 {
    using super = Object;
 public:
@@ -48,7 +48,7 @@ private:
    View &                        updateTranslation();
    View &                        updateZoom();
 
-   Cluster *                     cluster                 = nullptr;
+   clusters::Cluster *           cluster                 = nullptr;
    float                         translationIncrement    = 10.f;
    int                           translationIncrementX   = 0;
    int                           translationIncrementY   = 0;
@@ -63,11 +63,11 @@ private:
 
 
 
-} // namespace paercebal::KizukoLib::clusters
+} // namespace paercebal::KizukoLib::gui
 
 
 
 
 
-#endif // PAERCEBAL_x_KIZUKOLIB_x_CLUSTERS_x_VIEW_x_HPP
+#endif // PAERCEBAL_x_KIZUKOLIB_x_GUI_x_VIEW_x_HPP
 

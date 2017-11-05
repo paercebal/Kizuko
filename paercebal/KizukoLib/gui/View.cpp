@@ -1,4 +1,4 @@
-#include <paercebal/KizukoLib/clusters/View.hpp>
+#include <paercebal/KizukoLib/gui/View.hpp>
 
 #include <paercebal/KizukoLib/clusters/Cluster.hpp>
 #include <paercebal/Graphics/maths/Matrix3D.hpp>
@@ -12,7 +12,7 @@
 #include <sstream>
 #include <cmath>
 
-namespace paercebal::KizukoLib::clusters
+namespace paercebal::KizukoLib::gui
 {
 
 namespace {
@@ -28,7 +28,7 @@ View::View(const GlobalResources & globalResources, float translationIncrement_)
    : super(globalResources)
    , translationIncrement(translationIncrement_)
 {
-   auto cluster = std::make_unique<Cluster>(globalResources);
+   auto cluster = std::make_unique<clusters::Cluster>(globalResources);
    this->cluster = cluster.get();
    this->getChildren().push_back(std::move(cluster));
    this->updateTranslation();
@@ -183,4 +183,4 @@ View & View::zoomOutByWheel()
 }
 
 
-} // namespace paercebal::KizukoLib::clusters
+} // namespace paercebal::KizukoLib::gui

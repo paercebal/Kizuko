@@ -1,6 +1,6 @@
 #include <paercebal/Kizuko/main.hpp>
 
-#include <paercebal/KizukoLib/clusters/View.hpp>
+#include <paercebal/KizukoLib/gui/View.hpp>
 #include <paercebal/KizukoLib/Exception.hpp>
 #include <paercebal/KizukoLib/GlobalResources.hpp>
 #include <paercebal/KizukoLib/utilities.hpp>
@@ -62,7 +62,7 @@ int main(int argc, char * argv[])
       //cluster.addStar(clusters::Star{ globalResources, "10y", sf::Color{ 255, 0, 0, 255 },{ 0, 10, 0 }, 5.f });
       //cluster.addStar(clusters::Star{ globalResources, "10z", sf::Color{ 255, 0, 0, 255 },{ 0, 0, 10 }, 5.f });
 
-      clusters::View view{ globalResources };
+      gui::View view{ globalResources };
 
       calculateAbsolutePositionThenShapes2DRecursive(view);
 
