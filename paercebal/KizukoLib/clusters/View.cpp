@@ -61,13 +61,25 @@ View * View::cloneImpl() const
    return new View(*this);
 }
 
+View & View::setDebugText(const std::string & debugText_)
+{
+   this->debugText = debugText_;
+   return *this;
+}
+
+View & View::setDebugText(std::string && debugText_)
+{
+   this->debugText = std::move(debugText_);
+   return *this;
+}
+
 View & View::updateTranslation()
 {
-   auto v = Graphics::maths::utilities::createTranslationVector<float>(this->translationX * this->translationIncrement, translationY * this->translationIncrement, 0);
+   auto v = Graphics::maths::utilities::createTranslationVector<float>(static_cast<float>(this->translationX), static_cast<float>(this->translationY), 0);
    this->cluster->setCenter(v);
 
    //std::stringstream str;
-   //str << "Translation: " << this->translationX << "x, " << this->translationY << "y | ZoomPosition: " << this->zoomPosition << "| Zoom: " << this->zoom << "x";
+   //str << "Translation: " << this->translationIncrementX << "x, " << this->translationIncrementY << "y | ZoomPosition: " << this->zoomPosition << "| Zoom: " << this->zoom << "x";
    //this->debugText = str.str();
 
    return *this;
@@ -81,15 +93,31 @@ View & View::updateZoom()
    this->cluster->setRelativeScaling(m);
 
    //std::stringstream str;
-   //str << "Translation: " << this->translationX << "x, " << this->translationY << "y | ZoomPosition: " << this->zoomPosition << "| Zoom: " << this->zoom << "x";
+   //str << "Translation: " << this->translationIncrementX << "x, " << this->translationIncrementY << "y | ZoomPosition: " << this->zoomPosition << "| Zoom: " << this->zoom << "x";
    //this->debugText = str.str();
 
    return *this;
 }
 
+View & View::translateByPixels(int x, int y)
+{
+   if ((x != 0) || (y != 0))
+   {
+      this->translationX += x;
+      this->translationY += y;
+      this->translationIncrementX = static_cast<int>(this->translationX / this->translationIncrement);
+      this->translationIncrementY = static_cast<int>(this->translationY / this->translationIncrement);
+      this->updateTranslation();
+   }
+
+   return *this;
+}
+
+
 View & View::translateXPositive()
 {
-   this->translationX += 1;
+   this->translationIncrementX += 1;
+   this->translationX = static_cast<int>(this->translationIncrementX * this->translationIncrement);
    this->updateTranslation();
 
    return *this;
@@ -97,7 +125,8 @@ View & View::translateXPositive()
 
 View & View::translateYPositive()
 {
-   this->translationY += 1;
+   this->translationIncrementY += 1;
+   this->translationY = static_cast<int>(this->translationIncrementY * this->translationIncrement);
    this->updateTranslation();
 
    return *this;
@@ -105,7 +134,8 @@ View & View::translateYPositive()
 
 View & View::translateXNegative()
 {
-   this->translationX -= 1;
+   this->translationIncrementX -= 1;
+   this->translationX = static_cast<int>(this->translationIncrementX * this->translationIncrement);
    this->updateTranslation();
 
    return *this;
@@ -113,7 +143,8 @@ View & View::translateXNegative()
 
 View & View::translateYNegative()
 {
-   this->translationY -= 1;
+   this->translationIncrementY -= 1;
+   this->translationY = static_cast<int>(this->translationIncrementY * this->translationIncrement);
    this->updateTranslation();
 
    return *this;
@@ -135,7 +166,21 @@ View & View::zoomOut()
    return *this;
 }
 
+View & View::zoomInByWheel()
+{
+   this->zoomPosition += 5;
+   this->updateZoom();
 
+   return *this;
+}
+
+View & View::zoomOutByWheel()
+{
+   this->zoomPosition -= 5;
+   this->updateZoom();
+
+   return *this;
+}
 
 
 } // namespace paercebal::KizukoLib::clusters

@@ -78,6 +78,18 @@ int main(int argc, char * argv[])
       {
          view.getGlobalResources().getMusicCluster().music.play();
 
+         struct DragData
+         {
+            using Move = sf::Event::MouseMoveEvent;
+
+            bool isMouseLeftButtonPressed = false;
+            bool isMouseRightButtonPressed = false;
+            sf::Event::MouseMoveEvent old;
+            sf::Event::MouseMoveEvent now;
+         };
+
+         DragData dragData;
+
          while (sfml_window.isOpen())
          {
             sf::Event event;
@@ -145,27 +157,82 @@ int main(int argc, char * argv[])
                sfml_view.setSize({ static_cast<float>(event.size.width), static_cast<float>(event.size.height) });
                sfml_window.setView(sfml_view);
             }
+            else if (event.type == sf::Event::MouseButtonPressed)
+            {
+               if (event.mouseButton.button == sf::Mouse::Right)
+               {
+                  if (!dragData.isMouseRightButtonPressed)
+                  {
+                     dragData.isMouseRightButtonPressed = true;
+                     dragData.old = DragData::Move();
+                     dragData.now.x = event.mouseButton.x;
+                     dragData.now.y = event.mouseButton.y;
+                  }
+               }
+            }
+            else if (event.type == sf::Event::MouseButtonReleased)
+            {
+               if (event.mouseButton.button == sf::Mouse::Right)
+               {
+                  dragData.isMouseRightButtonPressed = false;
+                  dragData.old = DragData::Move();
+                  dragData.now = DragData::Move();
+               }
+
+               //view.setDebugText("");
+
+               calculateAbsolutePositionThenShapes2DRecursive(view);
+            }
+            else if (event.type == sf::Event::MouseMoved)
+            {
+               if (dragData.isMouseRightButtonPressed)
+               {
+                  // Dragging around
+                  dragData.old = dragData.now;
+                  dragData.now = event.mouseMove;
+                  view.translateByPixels(dragData.now.x - dragData.old.x, dragData.now.y - dragData.old.y);
+
+                  //std::stringstream str;
+                  //str << "Mouse: " << event.mouseMove.x << "x " << event.mouseMove.y << "y\n";
+                  //str << "Drag: " << (dragData.now.x - dragData.old.x) << "x " << (dragData.now.y - dragData.old.y) << "y\n";
+                  //str << "DragData:\n"; 
+                  //str << "   .isMouseLeftButtonPressed: " << dragData.isMouseLeftButtonPressed << "\n";
+                  //str << "   .isMouseRightButtonPressed: " << dragData.isMouseRightButtonPressed << "\n";
+                  //str << "   .now: " << dragData.now.x << "x " << dragData.now.y << "y\n";
+                  //str << "   .old: " << dragData.old.x << "x " << dragData.old.y << "y\n";
+                  //view.setDebugText(str.str());
+
+                  calculateAbsolutePositionThenShapes2DRecursive(view);
+               }
+            }
             else if (event.type == sf::Event::MouseWheelScrolled)
             {
-               //if (event.mouseWheelScroll.wheel == sf::Mouse::VerticalWheel)
-               //   std::cout << "wheel type: vertical" << std::endl;
-               //else if (event.mouseWheelScroll.wheel == sf::Mouse::HorizontalWheel)
-               //   std::cout << "wheel type: horizontal" << std::endl;
-               //else
-               //   std::cout << "wheel type: unknown" << std::endl;
-               //std::cout << "wheel movement: " << event.mouseWheelScroll.delta << std::endl;
-               //std::cout << "mouse x: " << event.mouseWheelScroll.x << std::endl;
-               //std::cout << "mouse y: " << event.mouseWheelScroll.y << std::endl;
-               //if (event.mouseWheelScroll.delta > 0)
-               //{
-               //   sfml_view.zoom(1.01f);
-               //   sfml_window.setView(sfml_view);
-               //}
-               //else if (event.mouseWheelScroll.delta < 0)
-               //{
-               //   sfml_view.zoom(1.f / 1.01f);
-               //   sfml_window.setView(sfml_view);
-               //}
+               //static int tutu = 0;
+
+               if (event.mouseWheelScroll.delta > 0)
+               {
+                  //tutu += 1;
+                  //std::stringstream str;
+                  //str << "mouseWheelScroll.delta: " << event.mouseWheelScroll.delta << "\n";
+                  //str << "tutu: " << tutu << "\n";
+                  //view.setDebugText(str.str());
+
+                  view.zoomInByWheel();
+                  calculateAbsolutePositionThenShapes2DRecursive(view);
+                  event.mouseWheelScroll.delta = 0;
+               }
+               else  if (event.mouseWheelScroll.delta < 0)
+               {
+                  //tutu -= 1;
+                  //std::stringstream str;
+                  //str << "mouseWheelScroll.delta: " << event.mouseWheelScroll.delta << "\n";
+                  //str << "tutu: " << tutu << "\n";
+                  //view.setDebugText(str.str());
+
+                  view.zoomOutByWheel();
+                  calculateAbsolutePositionThenShapes2DRecursive(view);
+                  event.mouseWheelScroll.delta = 0;
+               }
             }
 
             //spaceTime.drawInto(sfml_window);

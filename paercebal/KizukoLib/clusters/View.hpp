@@ -9,6 +9,7 @@
 
 #include <memory>
 #include <string>
+#include <sstream>
 
 
 namespace paercebal::KizukoLib::clusters
@@ -30,8 +31,14 @@ public:
    View &                        translateYPositive();
    View &                        translateXNegative();
    View &                        translateYNegative();
+   View &                        translateByPixels(int x, int y);
    View &                        zoomIn();
    View &                        zoomOut();
+   View &                        zoomInByWheel();
+   View &                        zoomOutByWheel();
+
+   View &                        setDebugText(const std::string & debugText_);
+   View &                        setDebugText(std::string && debugText_);
 
 private:
    View(const GlobalResources & globalResources, float translationIncrement_);
@@ -41,12 +48,14 @@ private:
    View &                        updateTranslation();
    View &                        updateZoom();
 
-   Cluster *                     cluster              = nullptr;
-   float                         translationIncrement = 10.f;
-   int                           translationX         = 0;
-   int                           translationY         = 0;
-   int                           zoomPosition         = 0;
-   float                         zoom                 = 100.f;
+   Cluster *                     cluster                 = nullptr;
+   float                         translationIncrement    = 10.f;
+   int                           translationIncrementX   = 0;
+   int                           translationIncrementY   = 0;
+   int                           translationX            = 0;
+   int                           translationY            = 0;
+   int                           zoomPosition            = 0;
+   float                         zoom                    = 100.f;
 
    sf::Text                      debugLabel;
    std::string                   debugText;
