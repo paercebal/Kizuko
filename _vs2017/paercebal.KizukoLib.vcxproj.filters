@@ -45,6 +45,9 @@
     <ClCompile Include="..\paercebal\KizukoLib\clusters\View.cpp">
       <Filter>p.KizukoLib.clusters</Filter>
     </ClCompile>
+    <ClCompile Include="..\paercebal\KizukoLib\input\Data.cpp">
+      <Filter>p.KizukoLib.input</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\paercebal\KizukoLib\dllmain.hpp">

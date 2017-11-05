@@ -32,20 +32,18 @@ struct Distance
 
 struct Data
 {
-   std::string                clusterName;
-   float                      lightYearsPixels = 0.f;
-   float                      incrementPixels = 0.f;
-   float                      majorIncrementPixels = 0.f;
+   std::string                clusterName;                     // Not used currently
    float                      increment = 0.f;
    float                      majorIncrement = 0.f;
-   float                      zoom = 0;
    sf::Vector3f               size;
    std::vector<Star>          stars;
    std::vector<Distance>      distances;
 };
 
-}
+Data extractDatafromJSon(const std::string & jsonText);
 
+
+} // namespace paercebal::KizukoLib::input
 
 
 #endif // PAERCEBAL_x_KIZUKOLIB_x_INPUT_x_DATA_x_HPP

@@ -75,8 +75,8 @@ View & View::updateTranslation()
 
 View & View::updateZoom()
 {
-   this->zoomPosition = std::clamp(this->zoomPosition, -50, +100);
-   this->zoom = std::pow(10., (this->zoomPosition / 100.) + 1.);
+   this->zoomPosition = std::clamp(this->zoomPosition, -100, +100);
+   this->zoom = static_cast<float>(std::pow(10., (this->zoomPosition / 100.) + 1.));
    auto m = Graphics::maths::utilities::createScaleMatrix<float>(this->zoom);
    this->cluster->setRelativeScaling(m);
 
