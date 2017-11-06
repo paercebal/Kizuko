@@ -12,7 +12,7 @@ namespace paercebal::KizukoLib::clusters
 {
 
 DistanceShape::DistanceShape(const GlobalResources & globalResources_, const std::string & beginName_, const std::string & endName_)
-   : DistanceShape(globalResources_, sf::Color{ 192, 0, 192, 128 }, sf::Color{ 192, 0, 192, 64 }, sf::Color{ 128, 0, 128, 24 }, beginName_, endName_)
+   : DistanceShape(globalResources_, sf::Color{ 192, 0, 192, 96 }, sf::Color{ 192, 0, 192, 48 }, sf::Color{ 128, 0, 128, 18 }, beginName_, endName_)
 {
 }
 
@@ -37,7 +37,7 @@ DistanceShape::DistanceShape(const GlobalResources & globalResources_, sf::Color
    this->distanceLabel.setFont(this->getGlobalResources().getFontScifi().font);
    this->distanceLabel.setCharacterSize((this->getGlobalResources().getFontScifi().size * 3) / 4);
    this->distanceLabel.setStyle(sf::Text::Regular);
-   this->distanceLabel.setFillColor(sf::Color::White);
+   this->distanceLabel.setFillColor(sf::Color{ 192, 0, 192, 255 });
 }
 
 void DistanceShape::createShapes2D()
@@ -58,7 +58,7 @@ void DistanceShape::createShapes2D()
       this->polygonShape.setPoint(3, this->polygon2D[3].position);
 
       std::stringstream str;
-      str << std::fixed << std::setprecision(2) << this->lightYearsLength << "  LY";
+      str << std::fixed << std::setprecision(0) << this->lightYearsLength << "  LY";
       this->distanceText = str.str();
       this->distanceLabel.setString(this->distanceText);
       this->distanceLabel.setPosition({ this->center2D.x + 20, this->center2D.y - 20 });
