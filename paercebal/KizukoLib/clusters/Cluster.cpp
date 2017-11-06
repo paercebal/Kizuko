@@ -18,40 +18,87 @@ std::vector<std::unique_ptr<ClusterLine>> createClusterGrid(const GlobalResource
 {
    std::vector<std::unique_ptr<ClusterLine>> v;
 
-   // Y lines
+   if (size3D.x == size3D.y)
    {
-      int Increment = 0;
-
-      for (float x = 0, xEnd = size3D.x; x <= xEnd; x += gridIncrement_, ++Increment)
+      // Y lines
       {
-         if (Increment == 0)
+         int Increment = 0;
+
+         for (float x = 0, xEnd = size3D.x; x <= xEnd; x += gridIncrement_, ++Increment)
          {
-            v.push_back(std::make_unique<ClusterLine>(globalResources, ClusterLineStyle::AxisY, sf::Vector3f{ x, size3D.y, 0 }, sf::Vector3f{ x, -size3D.y, 0 }));
+            if (Increment == 0)
+            {
+               v.push_back(std::make_unique<ClusterLine>(globalResources, ClusterLineStyle::AxisY, sf::Vector3f{ x, size3D.y, 0 }, sf::Vector3f{ x, -size3D.y, 0 }));
+            }
+            else
+            {
+               const float halfLength = std::pow(std::pow(size3D.x, 2.f) - std::pow(x, 2.f), 0.5f);
+
+               const ClusterLineStyle style = ((Increment % gridMajorIncrement_) == 0) ? ClusterLineStyle::Major : ClusterLineStyle::Minor;
+               v.push_back(std::make_unique<ClusterLine>(globalResources, style, sf::Vector3f{ x, halfLength, 0 }, sf::Vector3f{ x, -halfLength, 0 }));
+               v.push_back(std::make_unique<ClusterLine>(globalResources, style, sf::Vector3f{ -x, halfLength, 0 }, sf::Vector3f{ -x, -halfLength, 0 }));
+            }
          }
-         else
+      }
+
+      // X lines
+      {
+         int Increment = 0;
+
+         for (float y = 0, yEnd = size3D.y; y <= yEnd; y += gridIncrement_, ++Increment)
          {
-            const ClusterLineStyle style = ((Increment % gridMajorIncrement_) == 0) ? ClusterLineStyle::Major : ClusterLineStyle::Minor;
-            v.push_back(std::make_unique<ClusterLine>(globalResources, style, sf::Vector3f{ x, size3D.y, 0 }, sf::Vector3f{ x, -size3D.y, 0 }));
-            v.push_back(std::make_unique<ClusterLine>(globalResources, style, sf::Vector3f{ -x, size3D.y, 0 }, sf::Vector3f{ -x, -size3D.y, 0 }));
+            if (Increment == 0)
+            {
+               v.push_back(std::make_unique<ClusterLine>(globalResources, ClusterLineStyle::AxisX, sf::Vector3f{ size3D.x, y, 0 }, sf::Vector3f{ -size3D.x, y, 0 }));
+            }
+            else
+            {
+               const float halfLength = std::pow(std::pow(size3D.y, 2.f) - std::pow(y, 2.f), 0.5f);
+
+               const ClusterLineStyle style = ((Increment % gridMajorIncrement_) == 0) ? ClusterLineStyle::Major : ClusterLineStyle::Minor;
+               v.push_back(std::make_unique<ClusterLine>(globalResources, style, sf::Vector3f{ halfLength, y, 0 }, sf::Vector3f{ -halfLength, y, 0 }));
+               v.push_back(std::make_unique<ClusterLine>(globalResources, style, sf::Vector3f{ halfLength, -y, 0 }, sf::Vector3f{ -halfLength, -y, 0 }));
+            }
          }
       }
    }
-
-   // X lines
+   else
    {
-      int Increment = 0;
-
-      for (float y = 0, yEnd = size3D.y; y <= yEnd; y += gridIncrement_, ++Increment)
+      // Y lines
       {
-         if (Increment == 0)
+         int Increment = 0;
+
+         for (float x = 0, xEnd = size3D.x; x <= xEnd; x += gridIncrement_, ++Increment)
          {
-            v.push_back(std::make_unique<ClusterLine>(globalResources, ClusterLineStyle::AxisX, sf::Vector3f{ size3D.x, y, 0 }, sf::Vector3f{ -size3D.x, y, 0 }));
+            if (Increment == 0)
+            {
+               v.push_back(std::make_unique<ClusterLine>(globalResources, ClusterLineStyle::AxisY, sf::Vector3f{ x, size3D.y, 0 }, sf::Vector3f{ x, -size3D.y, 0 }));
+            }
+            else
+            {
+               const ClusterLineStyle style = ((Increment % gridMajorIncrement_) == 0) ? ClusterLineStyle::Major : ClusterLineStyle::Minor;
+               v.push_back(std::make_unique<ClusterLine>(globalResources, style, sf::Vector3f{ x, size3D.y, 0 }, sf::Vector3f{ x, -size3D.y, 0 }));
+               v.push_back(std::make_unique<ClusterLine>(globalResources, style, sf::Vector3f{ -x, size3D.y, 0 }, sf::Vector3f{ -x, -size3D.y, 0 }));
+            }
          }
-         else
+      }
+
+      // X lines
+      {
+         int Increment = 0;
+
+         for (float y = 0, yEnd = size3D.y; y <= yEnd; y += gridIncrement_, ++Increment)
          {
-            const ClusterLineStyle style = ((Increment % gridMajorIncrement_) == 0) ? ClusterLineStyle::Major : ClusterLineStyle::Minor;
-            v.push_back(std::make_unique<ClusterLine>(globalResources, style, sf::Vector3f{ size3D.x, y, 0 }, sf::Vector3f{ -size3D.x, y, 0 }));
-            v.push_back(std::make_unique<ClusterLine>(globalResources, style, sf::Vector3f{ size3D.x, -y, 0 }, sf::Vector3f{ -size3D.x, -y, 0 }));
+            if (Increment == 0)
+            {
+               v.push_back(std::make_unique<ClusterLine>(globalResources, ClusterLineStyle::AxisX, sf::Vector3f{ size3D.x, y, 0 }, sf::Vector3f{ -size3D.x, y, 0 }));
+            }
+            else
+            {
+               const ClusterLineStyle style = ((Increment % gridMajorIncrement_) == 0) ? ClusterLineStyle::Major : ClusterLineStyle::Minor;
+               v.push_back(std::make_unique<ClusterLine>(globalResources, style, sf::Vector3f{ size3D.x, y, 0 }, sf::Vector3f{ -size3D.x, y, 0 }));
+               v.push_back(std::make_unique<ClusterLine>(globalResources, style, sf::Vector3f{ size3D.x, -y, 0 }, sf::Vector3f{ -size3D.x, -y, 0 }));
+            }
          }
       }
    }
