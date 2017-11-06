@@ -96,9 +96,143 @@ int main(int argc, char * argv[])
 
             while (sfml_window.pollEvent(event))
             {
-               if (event.type == sf::Event::Closed)
+               switch (event.type)
                {
-                  sfml_window.close();
+                  case sf::Event::Closed:
+                  {
+                     sfml_window.close();
+                     break;
+                  }
+                  case sf::Event::KeyPressed:
+                  {
+                     switch (event.key.code)
+                     {
+                        case sf::Keyboard::Key::Left:
+                        {
+                           view.translateXPositive();
+                           calculateAbsolutePositionThenShapes2DRecursive(view);
+                           break;
+                        }
+                        case sf::Keyboard::Key::Right:
+                        {
+                           view.translateXNegative();
+                           calculateAbsolutePositionThenShapes2DRecursive(view);
+                           break;
+                        }
+                        case sf::Keyboard::Key::Up:
+                        {
+                           view.translateYPositive();
+                           calculateAbsolutePositionThenShapes2DRecursive(view);
+                           break;
+                        }
+                        case sf::Keyboard::Key::Down:
+                        {
+                           view.translateYNegative();
+                           calculateAbsolutePositionThenShapes2DRecursive(view);
+                           break;
+                        }
+                        case sf::Keyboard::Key::PageUp:
+                        {
+                           view.zoomIn();
+                           calculateAbsolutePositionThenShapes2DRecursive(view);
+                           break;
+                        }
+                        case sf::Keyboard::Key::PageDown:
+                        {
+                           view.zoomOut();
+                           calculateAbsolutePositionThenShapes2DRecursive(view);
+                           break;
+                        }
+                     }
+                     break;
+                  }
+                  case sf::Event::Resized:
+                  {
+                     sfml_view.setSize({ static_cast<float>(event.size.width), static_cast<float>(event.size.height) });
+                     sfml_window.setView(sfml_view);
+                     break;
+                  }
+                  case sf::Event::MouseButtonPressed:
+                  {
+                     if (event.mouseButton.button == sf::Mouse::Right)
+                     {
+                        if (!dragData.isMouseRightButtonPressed)
+                        {
+                           dragData.isMouseRightButtonPressed = true;
+                           dragData.old = DragData::Move();
+                           dragData.now.x = event.mouseButton.x;
+                           dragData.now.y = event.mouseButton.y;
+                        }
+                     }
+                     break;
+                  }
+                  case sf::Event::MouseButtonReleased:
+                  {
+                     if (event.mouseButton.button == sf::Mouse::Right)
+                     {
+                        dragData.isMouseRightButtonPressed = false;
+                        dragData.old = DragData::Move();
+                        dragData.now = DragData::Move();
+                     }
+
+                     //view.setDebugText("");
+
+                     calculateAbsolutePositionThenShapes2DRecursive(view);
+                     break;
+                  }
+                  case sf::Event::MouseMoved:
+                  {
+                     if (dragData.isMouseRightButtonPressed)
+                     {
+                        // Dragging around
+                        dragData.old = dragData.now;
+                        dragData.now = event.mouseMove;
+                        view.translateByPixels(dragData.now.x - dragData.old.x, dragData.now.y - dragData.old.y);
+
+                        //std::stringstream str;
+                        //str << "Mouse: " << event.mouseMove.x << "x " << event.mouseMove.y << "y\n";
+                        //str << "Drag: " << (dragData.now.x - dragData.old.x) << "x " << (dragData.now.y - dragData.old.y) << "y\n";
+                        //str << "DragData:\n"; 
+                        //str << "   .isMouseLeftButtonPressed: " << dragData.isMouseLeftButtonPressed << "\n";
+                        //str << "   .isMouseRightButtonPressed: " << dragData.isMouseRightButtonPressed << "\n";
+                        //str << "   .now: " << dragData.now.x << "x " << dragData.now.y << "y\n";
+                        //str << "   .old: " << dragData.old.x << "x " << dragData.old.y << "y\n";
+                        //view.setDebugText(str.str());
+
+                        calculateAbsolutePositionThenShapes2DRecursive(view);
+                     }
+                     break;
+                  }
+                  case sf::Event::MouseWheelScrolled:
+                  {
+                     //static int tutu = 0;
+
+                     if (event.mouseWheelScroll.delta > 0)
+                     {
+                        //tutu += 1;
+                        //std::stringstream str;
+                        //str << "mouseWheelScroll.delta: " << event.mouseWheelScroll.delta << "\n";
+                        //str << "tutu: " << tutu << "\n";
+                        //view.setDebugText(str.str());
+
+                        view.zoomInByWheel();
+                        calculateAbsolutePositionThenShapes2DRecursive(view);
+                        event.mouseWheelScroll.delta = 0;
+                     }
+                     else  if (event.mouseWheelScroll.delta < 0)
+                     {
+                        //tutu -= 1;
+                        //std::stringstream str;
+                        //str << "mouseWheelScroll.delta: " << event.mouseWheelScroll.delta << "\n";
+                        //str << "tutu: " << tutu << "\n";
+                        //view.setDebugText(str.str());
+
+                        view.zoomOutByWheel();
+                        calculateAbsolutePositionThenShapes2DRecursive(view);
+                        event.mouseWheelScroll.delta = 0;
+                     }
+                     break;
+                  }
                }
             }
 
@@ -109,131 +243,6 @@ int main(int argc, char * argv[])
             }
 
             sfml_window.clear(sf::Color::Black);
-
-            if (event.type == sf::Event::KeyPressed)
-            {
-               switch (event.key.code)
-               {
-                  case sf::Keyboard::Key::Left:
-                  {
-                     view.translateXPositive();
-                     calculateAbsolutePositionThenShapes2DRecursive(view);
-                     break;
-                  }
-                  case sf::Keyboard::Key::Right:
-                  {
-                     view.translateXNegative();
-                     calculateAbsolutePositionThenShapes2DRecursive(view);
-                     break;
-                  }
-                  case sf::Keyboard::Key::Up:
-                  {
-                     view.translateYPositive();
-                     calculateAbsolutePositionThenShapes2DRecursive(view);
-                     break;
-                  }
-                  case sf::Keyboard::Key::Down:
-                  {
-                     view.translateYNegative();
-                     calculateAbsolutePositionThenShapes2DRecursive(view);
-                     break;
-                  }
-                  case sf::Keyboard::Key::PageUp:
-                  {
-                     view.zoomIn();
-                     calculateAbsolutePositionThenShapes2DRecursive(view);
-                     break;
-                  }
-                  case sf::Keyboard::Key::PageDown:
-                  {
-                     view.zoomOut();
-                     calculateAbsolutePositionThenShapes2DRecursive(view);
-                     break;
-                  }
-               }
-            }
-            else if(event.type == sf::Event::Resized)
-            {
-               sfml_view.setSize({ static_cast<float>(event.size.width), static_cast<float>(event.size.height) });
-               sfml_window.setView(sfml_view);
-            }
-            else if (event.type == sf::Event::MouseButtonPressed)
-            {
-               if (event.mouseButton.button == sf::Mouse::Right)
-               {
-                  if (!dragData.isMouseRightButtonPressed)
-                  {
-                     dragData.isMouseRightButtonPressed = true;
-                     dragData.old = DragData::Move();
-                     dragData.now.x = event.mouseButton.x;
-                     dragData.now.y = event.mouseButton.y;
-                  }
-               }
-            }
-            else if (event.type == sf::Event::MouseButtonReleased)
-            {
-               if (event.mouseButton.button == sf::Mouse::Right)
-               {
-                  dragData.isMouseRightButtonPressed = false;
-                  dragData.old = DragData::Move();
-                  dragData.now = DragData::Move();
-               }
-
-               //view.setDebugText("");
-
-               calculateAbsolutePositionThenShapes2DRecursive(view);
-            }
-            else if (event.type == sf::Event::MouseMoved)
-            {
-               if (dragData.isMouseRightButtonPressed)
-               {
-                  // Dragging around
-                  dragData.old = dragData.now;
-                  dragData.now = event.mouseMove;
-                  view.translateByPixels(dragData.now.x - dragData.old.x, dragData.now.y - dragData.old.y);
-
-                  //std::stringstream str;
-                  //str << "Mouse: " << event.mouseMove.x << "x " << event.mouseMove.y << "y\n";
-                  //str << "Drag: " << (dragData.now.x - dragData.old.x) << "x " << (dragData.now.y - dragData.old.y) << "y\n";
-                  //str << "DragData:\n"; 
-                  //str << "   .isMouseLeftButtonPressed: " << dragData.isMouseLeftButtonPressed << "\n";
-                  //str << "   .isMouseRightButtonPressed: " << dragData.isMouseRightButtonPressed << "\n";
-                  //str << "   .now: " << dragData.now.x << "x " << dragData.now.y << "y\n";
-                  //str << "   .old: " << dragData.old.x << "x " << dragData.old.y << "y\n";
-                  //view.setDebugText(str.str());
-
-                  calculateAbsolutePositionThenShapes2DRecursive(view);
-               }
-            }
-            else if (event.type == sf::Event::MouseWheelScrolled)
-            {
-               //static int tutu = 0;
-
-               if (event.mouseWheelScroll.delta > 0)
-               {
-                  //tutu += 1;
-                  //std::stringstream str;
-                  //str << "mouseWheelScroll.delta: " << event.mouseWheelScroll.delta << "\n";
-                  //str << "tutu: " << tutu << "\n";
-                  //view.setDebugText(str.str());
-
-                  view.zoomInByWheel();
-                  calculateAbsolutePositionThenShapes2DRecursive(view);
-                  event.mouseWheelScroll.delta = 0;
-               }
-               else  if (event.mouseWheelScroll.delta < 0)
-               {
-                  //tutu -= 1;
-                  //std::stringstream str;
-                  //str << "mouseWheelScroll.delta: " << event.mouseWheelScroll.delta << "\n";
-                  //str << "tutu: " << tutu << "\n";
-                  //view.setDebugText(str.str());
-
-                  view.zoomOutByWheel();
-                  calculateAbsolutePositionThenShapes2DRecursive(view);
-                  event.mouseWheelScroll.delta = 0;
-               }
-            }
 
             //spaceTime.drawInto(sfml_window);
             view.drawInto(sfml_window);
