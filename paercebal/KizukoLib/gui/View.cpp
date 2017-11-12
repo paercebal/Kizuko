@@ -48,7 +48,7 @@ void View::createShapes2D()
 void View::drawInto(sf::RenderTarget & renderTarget) const
 {
    this->cluster->drawInto(renderTarget);
-   renderTarget.draw(this->debugLabel);
+   renderTarget.draw(this->debugLabel); 
 }
 
 std::unique_ptr<View> View::clone() const
@@ -82,6 +82,8 @@ View & View::updateTranslation()
    //str << "Translation: " << this->translationIncrementX << "x, " << this->translationIncrementY << "y | ZoomPosition: " << this->zoomPosition << "| Zoom: " << this->zoom << "x";
    //this->debugText = str.str();
 
+   this->setChanged(true);
+
    return *this;
 }
 
@@ -95,6 +97,8 @@ View & View::updateZoom()
    //std::stringstream str;
    //str << "Translation: " << this->translationIncrementX << "x, " << this->translationIncrementY << "y | ZoomPosition: " << this->zoomPosition << "| Zoom: " << this->zoom << "x";
    //this->debugText = str.str();
+
+   this->setChanged(true);
 
    return *this;
 }
@@ -180,6 +184,26 @@ View & View::zoomOutByWheel()
    this->updateZoom();
 
    return *this;
+}
+
+View & View::setChanged(bool isChanged_)
+{
+   this->isChanged_ = isChanged_;
+   return *this;
+}
+
+bool View::isChanged() const
+{
+   return this->isChanged_;
+}
+
+PAERCEBAL_x_KIZUKOLIB_x_API void calculateAbsolutePositionThenShapes2DRecursiveIfNeeded(View & view)
+{
+   if (view.isChanged())
+   {
+      calculateAbsolutePositionThenShapes2DRecursive(view);
+      view.setChanged(false);
+   }
 }
 
 

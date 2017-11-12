@@ -40,6 +40,9 @@ public:
    View &                        setDebugText(const std::string & debugText_);
    View &                        setDebugText(std::string && debugText_);
 
+   View &                        setChanged(bool isChanged);
+   bool                          isChanged()                                     const;
+
 private:
    View(const GlobalResources & globalResources, float translationIncrement_);
 
@@ -48,6 +51,7 @@ private:
    View &                        updateTranslation();
    View &                        updateZoom();
 
+   bool                          isChanged_              = true;
    clusters::Cluster *           cluster                 = nullptr;
    float                         translationIncrement    = 10.f;
    int                           translationIncrementX   = 0;
@@ -61,6 +65,7 @@ private:
    std::string                   debugText;
 };
 
+PAERCEBAL_x_KIZUKOLIB_x_API void calculateAbsolutePositionThenShapes2DRecursiveIfNeeded(View & view);
 
 
 } // namespace paercebal::KizukoLib::gui
