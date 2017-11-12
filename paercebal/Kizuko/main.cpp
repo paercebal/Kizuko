@@ -11,6 +11,8 @@
 
 #include <vector>
 #include <algorithm>
+#include <fstream>
+#include <ios>
 
 // VC++2010: Disable  warning C4482: nonstandard extension used: enum 'xyz' used in qualified name
 #pragma warning(disable: 4482)
@@ -47,6 +49,281 @@ const unsigned int   windowHeight      = 800;
 
 struct AskedToQuitException {};
 
+bool clearLog()
+{
+   std::fstream f("__log.txt", std::ios_base::out);
+   f << "\n";
+   return true;
+}
+
+void doLog(const std::stringstream & str)
+{
+   static bool dummy = clearLog();
+
+   std::fstream f("__log.txt", std::ios_base::app);
+   if (f.is_open())
+   {
+      f << str.str() << "\n";
+   }
+}
+
+#ifdef DO_LOG_ACTIVE
+
+#define DO_LOG(m_str)                                          \
+{                                                              \
+   std::stringstream str;                                      \
+   str << m_str;                                               \
+   doLog(str);                                                 \
+}                                                              \
+
+#else // DO_LOG_ACTIVE
+
+#define DO_LOG(m_str)
+
+#endif // DO_LOG_ACTIVE
+
+
+template <typename Derived>
+class ApplicationBase
+{
+public:
+   ApplicationBase(sf::RenderWindow & sfml_window_, sf::View & sfml_view_)
+      : sfml_window(sfml_window_)
+      , sfml_view(sfml_view_)
+   {
+   }
+
+   void processEvents()
+   {
+      sf::Event event;
+
+      while (this->sfml_window.pollEvent(event))
+      {
+         this->onEvent(event);
+      }
+   }
+
+   void onEvent(const sf::Event & event)
+   {
+      Derived * derived = static_cast<Derived *>(this);
+
+      switch (event.type)
+      {
+         case sf::Event::Closed: derived->onWindowClose(); break;
+         case sf::Event::Resized: derived->onWindowResize(event.size); break;
+         case sf::Event::KeyPressed: this->onKeyPressUpdateState(event.key); derived->onKeyPress(event.key); break;
+         case sf::Event::KeyReleased: this->onKeyReleaseUpdateState(event.key); derived->onKeyRelease(event.key); break;
+         case sf::Event::MouseButtonPressed: derived->onMouseButtonPress(event.mouseButton); break;
+         case sf::Event::MouseButtonReleased: derived->onMouseButtonRelease(event.mouseButton); break;
+         case sf::Event::MouseMoved: derived->onMouseMove(event.mouseMove); break;
+         case sf::Event::MouseWheelScrolled: derived->onMouseWheelScroll(event.mouseWheelScroll); break;
+      }
+   }
+
+   void onWindowClose()
+   {
+      this->sfml_window.close();
+   }
+
+   void onWindowResize(const sf::Event::SizeEvent & event)
+   {
+   }
+
+   void onKeyPressUpdateState(const sf::Event::KeyEvent & event)
+   {
+      if (event.code >= 0 && event.code < sf::Keyboard::Key::KeyCount)
+      {
+         DO_LOG("Event: KeyPress : " << event.code);
+         this->keyboard[event.code] = true;
+      }
+   }
+
+   void onKeyReleaseUpdateState(const sf::Event::KeyEvent & event)
+   {
+      if (event.code >= 0 && event.code < sf::Keyboard::Key::KeyCount)
+      {
+         DO_LOG("Event: KeyRelease : " << event.code);
+         this->keyboard[event.code] = false;
+      }
+   }
+
+   void onKeyPress(const sf::Event::KeyEvent & event)
+   {
+   }
+
+   void onKeyRelease(const sf::Event::KeyEvent & event)
+   {
+   }
+
+   void onMouseButtonPress(const sf::Event::MouseButtonEvent & event)
+   {
+   }
+
+   void onMouseButtonRelease(const sf::Event::MouseButtonEvent & event)
+   {
+   }
+
+   void onMouseMove(const sf::Event::MouseMoveEvent & event)
+   {
+   }
+
+   void onMouseWheelScroll(const sf::Event::MouseWheelScrollEvent & event)
+   {
+   }
+
+   bool isKeyPressed(sf::Keyboard::Key key) const
+   {
+      if (key >= 0 && key < sf::Keyboard::Key::KeyCount)
+      {
+         return this->keyboard[key];
+      }
+
+      return false;
+   }
+
+   template <sf::Keyboard::Key key>
+   bool isKeyPressed() const
+   {
+      if (key >= 0 && key < sf::Keyboard::Key::KeyCount)
+      {
+         return this->keyboard[key];
+      }
+
+      return false;
+   }
+
+protected:
+   sf::RenderWindow & sfml_window;
+   sf::View & sfml_view;
+
+   std::array<bool, sf::Keyboard::Key::KeyCount> keyboard = {};
+};
+
+class Application : public ApplicationBase<Application>
+{
+   using super = ApplicationBase<Application>;
+public:
+   Application(paercebal::KizukoLib::gui::View & view_, sf::RenderWindow & sfml_window_, sf::View & sfml_view_)
+      : super(sfml_window_, sfml_view_)
+      , view(view_)
+   {
+   }
+
+   void onWindowResize(const sf::Event::SizeEvent & event)
+   {
+      this->sfml_view.setSize({ static_cast<float>(event.width), static_cast<float>(event.height) });
+      this->sfml_window.setView(this->sfml_view);
+   }
+
+   struct DragData
+   {
+      using Move = sf::Event::MouseMoveEvent;
+
+      bool isMouseLeftButtonPressed = false;
+      bool isMouseRightButtonPressed = false;
+      sf::Event::MouseMoveEvent old = Move();
+      sf::Event::MouseMoveEvent now = Move();
+   };
+
+   void onMouseButtonPress(const sf::Event::MouseButtonEvent & event)
+   {
+      if (event.button == sf::Mouse::Right)
+      {
+         if (!dragData.isMouseRightButtonPressed)
+         {
+            dragData.isMouseRightButtonPressed = true;
+            dragData.old = DragData::Move();
+            dragData.now.x = event.x;
+            dragData.now.y = event.y;
+         }
+      }
+   }
+
+   void onMouseButtonRelease(const sf::Event::MouseButtonEvent & event)
+   {
+      if (event.button == sf::Mouse::Right)
+      {
+         dragData.isMouseRightButtonPressed = false;
+         dragData.old = DragData::Move();
+         dragData.now = DragData::Move();
+      }
+   }
+
+   void onMouseMove(const sf::Event::MouseMoveEvent & event)
+   {
+      if (dragData.isMouseRightButtonPressed)
+      {
+         dragData.old = dragData.now;
+         dragData.now = event;
+         view.translateByPixels(dragData.now.x - dragData.old.x, dragData.now.y - dragData.old.y);
+      }
+   }
+
+   void onMouseWheelScroll(const sf::Event::MouseWheelScrollEvent & event)
+   {
+      if (event.delta > 0)
+      {
+         view.zoomInByWheel();
+      }
+      else  if (event.delta < 0)
+      {
+         view.zoomOutByWheel();
+      }
+   }
+
+   void processState()
+   {
+      if (this->isKeyPressed<sf::Keyboard::Key::Escape>())
+      {
+         this->sfml_window.close();
+         throw AskedToQuitException();
+      }
+
+      if (this->isKeyPressed<sf::Keyboard::Key::Left>())
+      {
+         this->view.translateXPositive();
+      }
+      if (this->isKeyPressed<sf::Keyboard::Key::Right>())
+      {
+         this->view.translateXNegative();
+      }
+      if (this->isKeyPressed<sf::Keyboard::Key::Up>())
+      {
+         this->view.translateYPositive();
+      }
+      if (this->isKeyPressed<sf::Keyboard::Key::Down>())
+      {
+         this->view.translateYNegative();
+      }
+      if (this->isKeyPressed<sf::Keyboard::Key::PageUp>())
+      {
+         this->view.zoomIn();
+      }
+      if (this->isKeyPressed<sf::Keyboard::Key::PageDown>())
+      {
+         this->view.zoomOut();
+      }
+
+      calculateAbsolutePositionThenShapes2DRecursiveIfNeeded(view);
+   }
+
+   void display()
+   {
+      sfml_window.clear(sf::Color::Black);
+
+      view.drawInto(sfml_window);
+
+      //sfml_window.setView(sfml_view);
+      sfml_window.display();
+   }
+
+private:
+   paercebal::KizukoLib::gui::View & view;
+
+   DragData dragData;
+};
+
+
 int main(int argc, char * argv[])
 {
    using namespace paercebal::KizukoLib;
@@ -55,13 +332,6 @@ int main(int argc, char * argv[])
    {
       GlobalResources globalResources(argc, argv);
       
-      //clusters::Cluster cluster{ globalResources };
-
-      //cluster.addStar(clusters::Star{ globalResources, "0", sf::Color{ 255, 0, 0, 255 },{ 0, 0, 0 }, 5.f });
-      //cluster.addStar(clusters::Star{ globalResources, "10x", sf::Color{ 255, 0, 0, 255 },{ 10, 0, 0 }, 5.f });
-      //cluster.addStar(clusters::Star{ globalResources, "10y", sf::Color{ 255, 0, 0, 255 },{ 0, 10, 0 }, 5.f });
-      //cluster.addStar(clusters::Star{ globalResources, "10z", sf::Color{ 255, 0, 0, 255 },{ 0, 0, 10 }, 5.f });
-
       gui::View view{ globalResources };
 
       calculateAbsolutePositionThenShapes2DRecursive(view);
@@ -74,180 +344,18 @@ int main(int argc, char * argv[])
       sfml_window.setFramerateLimit(60);
       sfml_window.setView(sfml_view);
 
+      Application application(view, sfml_window, sfml_view);
+
       try
       {
          view.getGlobalResources().getMusicCluster().music.play();
 
-         struct DragData
-         {
-            using Move = sf::Event::MouseMoveEvent;
-
-            bool isMouseLeftButtonPressed = false;
-            bool isMouseRightButtonPressed = false;
-            sf::Event::MouseMoveEvent old;
-            sf::Event::MouseMoveEvent now;
-         };
-
-         DragData dragData;
 
          while (sfml_window.isOpen())
          {
-            sf::Event event;
-
-            while (sfml_window.pollEvent(event))
-            {
-               switch (event.type)
-               {
-                  case sf::Event::Closed:
-                  {
-                     sfml_window.close();
-                     break;
-                  }
-                  case sf::Event::KeyPressed:
-                  {
-                     switch (event.key.code)
-                     {
-                        case sf::Keyboard::Key::Left:
-                        {
-                           view.translateXPositive();
-                           calculateAbsolutePositionThenShapes2DRecursive(view);
-                           break;
-                        }
-                        case sf::Keyboard::Key::Right:
-                        {
-                           view.translateXNegative();
-                           calculateAbsolutePositionThenShapes2DRecursive(view);
-                           break;
-                        }
-                        case sf::Keyboard::Key::Up:
-                        {
-                           view.translateYPositive();
-                           calculateAbsolutePositionThenShapes2DRecursive(view);
-                           break;
-                        }
-                        case sf::Keyboard::Key::Down:
-                        {
-                           view.translateYNegative();
-                           calculateAbsolutePositionThenShapes2DRecursive(view);
-                           break;
-                        }
-                        case sf::Keyboard::Key::PageUp:
-                        {
-                           view.zoomIn();
-                           calculateAbsolutePositionThenShapes2DRecursive(view);
-                           break;
-                        }
-                        case sf::Keyboard::Key::PageDown:
-                        {
-                           view.zoomOut();
-                           calculateAbsolutePositionThenShapes2DRecursive(view);
-                           break;
-                        }
-                     }
-                     break;
-                  }
-                  case sf::Event::Resized:
-                  {
-                     sfml_view.setSize({ static_cast<float>(event.size.width), static_cast<float>(event.size.height) });
-                     sfml_window.setView(sfml_view);
-                     break;
-                  }
-                  case sf::Event::MouseButtonPressed:
-                  {
-                     if (event.mouseButton.button == sf::Mouse::Right)
-                     {
-                        if (!dragData.isMouseRightButtonPressed)
-                        {
-                           dragData.isMouseRightButtonPressed = true;
-                           dragData.old = DragData::Move();
-                           dragData.now.x = event.mouseButton.x;
-                           dragData.now.y = event.mouseButton.y;
-                        }
-                     }
-                     break;
-                  }
-                  case sf::Event::MouseButtonReleased:
-                  {
-                     if (event.mouseButton.button == sf::Mouse::Right)
-                     {
-                        dragData.isMouseRightButtonPressed = false;
-                        dragData.old = DragData::Move();
-                        dragData.now = DragData::Move();
-                     }
-
-                     //view.setDebugText("");
-
-                     calculateAbsolutePositionThenShapes2DRecursive(view);
-                     break;
-                  }
-                  case sf::Event::MouseMoved:
-                  {
-                     if (dragData.isMouseRightButtonPressed)
-                     {
-                        // Dragging around
-                        dragData.old = dragData.now;
-                        dragData.now = event.mouseMove;
-                        view.translateByPixels(dragData.now.x - dragData.old.x, dragData.now.y - dragData.old.y);
-
-                        //std::stringstream str;
-                        //str << "Mouse: " << event.mouseMove.x << "x " << event.mouseMove.y << "y\n";
-                        //str << "Drag: " << (dragData.now.x - dragData.old.x) << "x " << (dragData.now.y - dragData.old.y) << "y\n";
-                        //str << "DragData:\n"; 
-                        //str << "   .isMouseLeftButtonPressed: " << dragData.isMouseLeftButtonPressed << "\n";
-                        //str << "   .isMouseRightButtonPressed: " << dragData.isMouseRightButtonPressed << "\n";
-                        //str << "   .now: " << dragData.now.x << "x " << dragData.now.y << "y\n";
-                        //str << "   .old: " << dragData.old.x << "x " << dragData.old.y << "y\n";
-                        //view.setDebugText(str.str());
-
-                        calculateAbsolutePositionThenShapes2DRecursive(view);
-                     }
-                     break;
-                  }
-                  case sf::Event::MouseWheelScrolled:
-                  {
-                     //static int tutu = 0;
-
-                     if (event.mouseWheelScroll.delta > 0)
-                     {
-                        //tutu += 1;
-                        //std::stringstream str;
-                        //str << "mouseWheelScroll.delta: " << event.mouseWheelScroll.delta << "\n";
-                        //str << "tutu: " << tutu << "\n";
-                        //view.setDebugText(str.str());
-
-                        view.zoomInByWheel();
-                        calculateAbsolutePositionThenShapes2DRecursive(view);
-                        event.mouseWheelScroll.delta = 0;
-                     }
-                     else  if (event.mouseWheelScroll.delta < 0)
-                     {
-                        //tutu -= 1;
-                        //std::stringstream str;
-                        //str << "mouseWheelScroll.delta: " << event.mouseWheelScroll.delta << "\n";
-                        //str << "tutu: " << tutu << "\n";
-                        //view.setDebugText(str.str());
-
-                        view.zoomOutByWheel();
-                        calculateAbsolutePositionThenShapes2DRecursive(view);
-                        event.mouseWheelScroll.delta = 0;
-                     }
-                     break;
-                  }
-               }
-            }
-
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape))
-            {
-               sfml_window.close();
-               throw AskedToQuitException();
-            }
-
-            sfml_window.clear(sf::Color::Black);
-
-            //spaceTime.drawInto(sfml_window);
-            view.drawInto(sfml_window);
-
-            sfml_window.display();
+            application.processEvents();
+            application.processState();
+            application.display();
          }
       }
       catch (const AskedToQuitException & )
