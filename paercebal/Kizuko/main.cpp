@@ -87,9 +87,64 @@ template <typename Derived>
 class ApplicationBase
 {
 public:
+
+   struct DragData
+   {
+      DragData(ApplicationBase & applicationBase_)
+         : applicationBase(applicationBase_)
+      {
+      }
+
+      using Move = sf::Event::MouseMoveEvent;
+
+      ApplicationBase & applicationBase;
+      bool isDraggingActive = false;
+      bool isMouseButtonPressed = false;
+      sf::Event::MouseMoveEvent old = Move();
+      sf::Event::MouseMoveEvent now = Move();
+
+      void onMouseButtonPress(const sf::Event::MouseButtonEvent & event)
+      {
+         if (this->isDraggingActive)
+         {
+            this->isMouseButtonPressed = true;
+            this->old = DragData::Move();
+            this->now.x = event.x;
+            this->now.y = event.y;
+         }
+      }
+
+      void onMouseButtonRelease(const sf::Event::MouseButtonEvent & event)
+      {
+         if (this->isDraggingActive)
+         {
+            this->isMouseButtonPressed = false;
+            this->old = DragData::Move();
+            this->now = DragData::Move();
+         }
+      }
+
+      void onMouseMove(const sf::Event::MouseMoveEvent & event)
+      {
+         if (this->isDraggingActive)
+         {
+            if (this->isMouseButtonPressed)
+            {
+               this->old = this->now;
+               this->now = event;
+               static_cast<Derived &>(this->applicationBase).onMouseDrag(this->now, this->old);
+            }
+         }
+      }
+   };
+
+public:
    ApplicationBase(sf::RenderWindow & sfml_window_, sf::View & sfml_view_)
       : sfml_window(sfml_window_)
       , sfml_view(sfml_view_)
+      , dragDataLeft(*this)
+      , dragDataMiddle(*this)
+      , dragDataRight(*this)
    {
    }
 
@@ -103,23 +158,6 @@ public:
       }
    }
 
-   void onEvent(const sf::Event & event)
-   {
-      Derived * derived = static_cast<Derived *>(this);
-
-      switch (event.type)
-      {
-         case sf::Event::Closed: derived->onWindowClose(); break;
-         case sf::Event::Resized: derived->onWindowResize(event.size); break;
-         case sf::Event::KeyPressed: this->onKeyPressUpdateState(event.key); derived->onKeyPress(event.key); break;
-         case sf::Event::KeyReleased: this->onKeyReleaseUpdateState(event.key); derived->onKeyRelease(event.key); break;
-         case sf::Event::MouseButtonPressed: derived->onMouseButtonPress(event.mouseButton); break;
-         case sf::Event::MouseButtonReleased: derived->onMouseButtonRelease(event.mouseButton); break;
-         case sf::Event::MouseMoved: derived->onMouseMove(event.mouseMove); break;
-         case sf::Event::MouseWheelScrolled: derived->onMouseWheelScroll(event.mouseWheelScroll); break;
-      }
-   }
-
    void onWindowClose()
    {
       this->sfml_window.close();
@@ -127,24 +165,6 @@ public:
 
    void onWindowResize(const sf::Event::SizeEvent & event)
    {
-   }
-
-   void onKeyPressUpdateState(const sf::Event::KeyEvent & event)
-   {
-      if (event.code >= 0 && event.code < sf::Keyboard::Key::KeyCount)
-      {
-         DO_LOG("Event: KeyPress : " << event.code);
-         this->keyboard[event.code] = true;
-      }
-   }
-
-   void onKeyReleaseUpdateState(const sf::Event::KeyEvent & event)
-   {
-      if (event.code >= 0 && event.code < sf::Keyboard::Key::KeyCount)
-      {
-         DO_LOG("Event: KeyRelease : " << event.code);
-         this->keyboard[event.code] = false;
-      }
    }
 
    void onKeyPress(const sf::Event::KeyEvent & event)
@@ -164,6 +184,10 @@ public:
    }
 
    void onMouseMove(const sf::Event::MouseMoveEvent & event)
+   {
+   }
+
+   void onMouseDrag(const sf::Event::MouseMoveEvent & eventNow, const sf::Event::MouseMoveEvent & eventOld)
    {
    }
 
@@ -192,12 +216,82 @@ public:
       return false;
    }
 
+private:
+
+   void onEvent(const sf::Event & event)
+   {
+      Derived * derived = static_cast<Derived *>(this);
+
+      switch (event.type)
+      {
+         case sf::Event::Closed: derived->onWindowClose(); break;
+         case sf::Event::Resized: derived->onWindowResize(event.size); break;
+         case sf::Event::KeyPressed: this->onKeyPressUpdateState(event.key); derived->onKeyPress(event.key); break;
+         case sf::Event::KeyReleased: this->onKeyReleaseUpdateState(event.key); derived->onKeyRelease(event.key); break;
+         case sf::Event::MouseButtonPressed: this->onMouseButtonPressUpdateState(event.mouseButton); derived->onMouseButtonPress(event.mouseButton); break;
+         case sf::Event::MouseButtonReleased: this->onMouseButtonReleaseUpdateState(event.mouseButton); derived->onMouseButtonRelease(event.mouseButton); break;
+         case sf::Event::MouseMoved: this->onMouseMoveUpdateState(event.mouseMove); derived->onMouseMove(event.mouseMove); break;
+         case sf::Event::MouseWheelScrolled: derived->onMouseWheelScroll(event.mouseWheelScroll); break;
+      }
+   }
+
+   void onKeyPressUpdateState(const sf::Event::KeyEvent & event)
+   {
+      if (event.code >= 0 && event.code < sf::Keyboard::Key::KeyCount)
+      {
+         DO_LOG("Event: KeyPress : " << event.code);
+         this->keyboard[event.code] = true;
+      }
+   }
+
+   void onKeyReleaseUpdateState(const sf::Event::KeyEvent & event)
+   {
+      if (event.code >= 0 && event.code < sf::Keyboard::Key::KeyCount)
+      {
+         DO_LOG("Event: KeyRelease : " << event.code);
+         this->keyboard[event.code] = false;
+      }
+   }
+
+   void onMouseButtonPressUpdateState(const sf::Event::MouseButtonEvent & event)
+   {
+      switch (event.button)
+      {
+         case sf::Mouse::Left: dragDataLeft.onMouseButtonPress(event); break;
+         case sf::Mouse::Middle: dragDataMiddle.onMouseButtonPress(event); break;
+         case sf::Mouse::Right: dragDataRight.onMouseButtonPress(event); break;
+      }
+   }
+
+   void onMouseButtonReleaseUpdateState(const sf::Event::MouseButtonEvent & event)
+   {
+      switch (event.button)
+      {
+         case sf::Mouse::Left: dragDataLeft.onMouseButtonRelease(event); break;
+         case sf::Mouse::Middle: dragDataMiddle.onMouseButtonRelease(event); break;
+         case sf::Mouse::Right: dragDataRight.onMouseButtonRelease(event); break;
+      }
+   }
+
+   void onMouseMoveUpdateState(const sf::Event::MouseMoveEvent & event)
+   {
+      dragDataLeft.onMouseMove(event);
+      dragDataMiddle.onMouseMove(event);
+      dragDataRight.onMouseMove(event);
+   }
+
 protected:
    sf::RenderWindow & sfml_window;
    sf::View & sfml_view;
 
    std::array<bool, sf::Keyboard::Key::KeyCount> keyboard = {};
+   DragData dragDataLeft;
+   DragData dragDataMiddle;
+   DragData dragDataRight;
 };
+
+
+
 
 class Application : public ApplicationBase<Application>
 {
@@ -207,56 +301,13 @@ public:
       : super(sfml_window_, sfml_view_)
       , view(view_)
    {
+      this->dragDataRight.isDraggingActive = true;
    }
 
    void onWindowResize(const sf::Event::SizeEvent & event)
    {
       this->sfml_view.setSize({ static_cast<float>(event.width), static_cast<float>(event.height) });
       this->sfml_window.setView(this->sfml_view);
-   }
-
-   struct DragData
-   {
-      using Move = sf::Event::MouseMoveEvent;
-
-      bool isMouseLeftButtonPressed = false;
-      bool isMouseRightButtonPressed = false;
-      sf::Event::MouseMoveEvent old = Move();
-      sf::Event::MouseMoveEvent now = Move();
-   };
-
-   void onMouseButtonPress(const sf::Event::MouseButtonEvent & event)
-   {
-      if (event.button == sf::Mouse::Right)
-      {
-         if (!dragData.isMouseRightButtonPressed)
-         {
-            dragData.isMouseRightButtonPressed = true;
-            dragData.old = DragData::Move();
-            dragData.now.x = event.x;
-            dragData.now.y = event.y;
-         }
-      }
-   }
-
-   void onMouseButtonRelease(const sf::Event::MouseButtonEvent & event)
-   {
-      if (event.button == sf::Mouse::Right)
-      {
-         dragData.isMouseRightButtonPressed = false;
-         dragData.old = DragData::Move();
-         dragData.now = DragData::Move();
-      }
-   }
-
-   void onMouseMove(const sf::Event::MouseMoveEvent & event)
-   {
-      if (dragData.isMouseRightButtonPressed)
-      {
-         dragData.old = dragData.now;
-         dragData.now = event;
-         view.translateByPixels(dragData.now.x - dragData.old.x, dragData.now.y - dragData.old.y);
-      }
    }
 
    void onMouseWheelScroll(const sf::Event::MouseWheelScrollEvent & event)
@@ -269,6 +320,11 @@ public:
       {
          view.zoomOutByWheel();
       }
+   }
+
+   void onMouseDrag(const sf::Event::MouseMoveEvent & eventNow, const sf::Event::MouseMoveEvent & eventOld)
+   {
+      view.translateByPixels(eventNow.x - eventOld.x, eventNow.y - eventOld.y);
    }
 
    void processState()
@@ -319,8 +375,6 @@ public:
 
 private:
    paercebal::KizukoLib::gui::View & view;
-
-   DragData dragData;
 };
 
 
