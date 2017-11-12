@@ -1,6 +1,7 @@
 #ifndef PAERCEBAL_x_KIZUKOLIB_x_GUI_x_VIEW_x_HPP
 #define PAERCEBAL_x_KIZUKOLIB_x_GUI_x_VIEW_x_HPP
 
+#include <paercebal/KizukoLib/dllmain.hpp>
 #include <paercebal/KizukoLib/GlobalResources.hpp>
 #include <paercebal/KizukoLib/objects/Object.hpp>
 #include <paercebal/KizukoLib/clusters/Cluster.hpp>
@@ -8,6 +9,7 @@
 #include <SFML/Graphics.hpp>
 
 #include <memory>
+#include <vector>
 #include <string>
 #include <sstream>
 
@@ -43,6 +45,11 @@ public:
    View &                        setChanged(bool isChanged);
    bool                          isChanged()                                     const;
 
+   View &                        setView(const sf::View & view);
+
+   void                          warnMouseHovering(int x, int y);
+   void                          warnMouseClicking(sf::Vector2i pressed, sf::Vector2i released);
+
 private:
    View(const GlobalResources & globalResources, float translationIncrement_);
 
@@ -61,8 +68,15 @@ private:
    int                           zoomPosition            = 0;
    float                         zoom                    = 100.f;
 
+   sf::Vector2f                  viewSize;
+   sf::Vector2f                  viewCenter;
+   sf::Vector2i                  viewMousePosition;
+
    sf::Text                      debugLabel;
    std::string                   debugText;
+
+   sf::RectangleShape            button;
+   sf::Text                      buttonLabel;
 };
 
 PAERCEBAL_x_KIZUKOLIB_x_API void calculateAbsolutePositionThenShapes2DRecursiveIfNeeded(View & view);

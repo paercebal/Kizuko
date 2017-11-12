@@ -35,6 +35,15 @@ View::View(const GlobalResources & globalResources, float translationIncrement_)
    this->updateZoom();
 }
 
+View & View::setView(const sf::View & view)
+{
+   this->viewSize = view.getSize();
+   this->viewCenter = view.getCenter();
+   this->setChanged(true);
+
+   return *this;
+}
+
 void View::createShapes2D()
 {
    this->debugLabel.setString(this->debugText);
@@ -42,13 +51,91 @@ void View::createShapes2D()
    this->debugLabel.setCharacterSize(this->getGlobalResources().getFontNormal().size);
    this->debugLabel.setStyle(sf::Text::Regular);
    this->debugLabel.setFillColor(sf::Color::White);
-   this->debugLabel.setPosition({ 20, 20 });
+   this->debugLabel.setPosition({ 0, 0 });
+
+   {
+      // left-bottom Button position
+      const float xPos = this->viewCenter.x - (this->viewSize.x / 2.f) + 20;
+      const float yPos = this->viewCenter.y - (this->viewSize.y / 2.f) + (this->viewSize.y) - 60;
+
+      // Button size
+      const float xSize = 200;
+      const float ySize = 40;
+
+      this->button.setSize({ xSize, ySize });
+      this->button.setPosition({ xPos, yPos });
+
+      sf::FloatRect buttonBounds = this->button.getGlobalBounds();
+      bool isHoveringOnButton = ((this->viewMousePosition.x >= buttonBounds.left) && (this->viewMousePosition.x <= buttonBounds.left + buttonBounds.width) && (this->viewMousePosition.y >= buttonBounds.top) && (this->viewMousePosition.y <= buttonBounds.top + buttonBounds.height));
+
+      sf::Color fillColor = isHoveringOnButton ? sf::Color{ 0, 128, 255, 192 } : sf::Color{ 0, 128, 255, 128 };
+      sf::Color outlineColor = isHoveringOnButton ? sf::Color{ 0, 128, 255, 255 } : sf::Color{ 0, 128, 255, 192 };
+
+      this->button.setFillColor(fillColor);
+      this->button.setOutlineColor(outlineColor);
+      this->button.setOutlineThickness(2.f);
+
+      this->buttonLabel.setString("Hello");
+      this->buttonLabel.setFont(this->getGlobalResources().getFontScifi().font);
+      this->buttonLabel.setCharacterSize(this->getGlobalResources().getFontScifi().size);
+      this->buttonLabel.setStyle(sf::Text::Regular);
+      this->buttonLabel.setFillColor(sf::Color::White);
+
+      const sf::FloatRect labelBounds = this->buttonLabel.getLocalBounds();
+      this->buttonLabel.setPosition({ xPos + (xSize - labelBounds.width) / 2.f, yPos + (ySize - labelBounds.height) / 2.f }); /// @todo there's a bug, somewhere near. The label is too low.
+   }
+}
+
+void View::warnMouseHovering(int x, int y)
+{
+   const float xPos = this->viewCenter.x - (this->viewSize.x / 2.f) + x;
+   const float yPos = this->viewCenter.y - (this->viewSize.y / 2.f) + y;
+
+   this->viewMousePosition = { static_cast<int>(xPos), static_cast<int>(yPos) };
+
+   //sf::FloatRect buttonBounds = this->button.getGlobalBounds();
+   //const bool isHoveringOnButton = ((this->viewMousePosition.x >= buttonBounds.left) && (this->viewMousePosition.x <= buttonBounds.left + buttonBounds.width) && (this->viewMousePosition.y >= buttonBounds.top) && (this->viewMousePosition.y <= buttonBounds.top + buttonBounds.height));
+
+   //std::stringstream str;
+   //str << "Hover: " << x << "x " << y << "y, " << this->viewMousePosition.x << "xPos " << this->viewMousePosition.y << "yPos" << "\n";
+   //str << "buttonBounds: " << buttonBounds.left << "left " << buttonBounds.top << "top " << buttonBounds.width << "width " << buttonBounds.height << "height";
+   //this->setDebugText(str.str());
+}
+
+void View::warnMouseClicking(sf::Vector2i pressed, sf::Vector2i released)
+{
+   auto convertToViewCoordinates = [this](sf::Vector2i pos) ->sf::Vector2i
+   {
+      return { static_cast<int>(this->viewCenter.x - (this->viewSize.x / 2.f) + pos.x), static_cast<int>(this->viewCenter.y - (this->viewSize.y / 2.f) + pos.y) };
+   };
+
+   auto realPressed = convertToViewCoordinates(pressed);
+   auto realReleased = convertToViewCoordinates(released);
+
+   auto isWithinButtonBounds = [this](sf::Vector2i mouse) ->bool
+   {
+      sf::FloatRect buttonBounds = this->button.getGlobalBounds();
+      return ((mouse.x >= buttonBounds.left) && (mouse.x <= buttonBounds.left + buttonBounds.width) && (mouse.y >= buttonBounds.top) && (mouse.y <= buttonBounds.top + buttonBounds.height));
+   };
+
+   const bool isHoveringOnButton = isWithinButtonBounds(realPressed) && isWithinButtonBounds(realReleased);
+
+   if (isHoveringOnButton)
+   {
+      static int clickCount = 0;
+      ++clickCount;
+      std::stringstream str;
+      str << "Clicked on button: " << clickCount << " time(s)";
+      this->setDebugText(str.str());
+   }
 }
 
 void View::drawInto(sf::RenderTarget & renderTarget) const
 {
    this->cluster->drawInto(renderTarget);
-   renderTarget.draw(this->debugLabel); 
+   renderTarget.draw(this->debugLabel);
+   renderTarget.draw(this->button);
+   renderTarget.draw(this->buttonLabel);
 }
 
 std::unique_ptr<View> View::clone() const

@@ -88,9 +88,9 @@ class ApplicationBase
 {
 public:
 
-   struct DragData
+   struct Drag
    {
-      DragData(ApplicationBase & applicationBase_)
+      Drag(ApplicationBase & applicationBase_)
          : applicationBase(applicationBase_)
       {
       }
@@ -103,12 +103,17 @@ public:
       sf::Event::MouseMoveEvent old = Move();
       sf::Event::MouseMoveEvent now = Move();
 
+      bool isDragging() const
+      {
+         return this->isDraggingActive && this->isMouseButtonPressed;
+      }
+
       void onMouseButtonPress(const sf::Event::MouseButtonEvent & event)
       {
          if (this->isDraggingActive)
          {
             this->isMouseButtonPressed = true;
-            this->old = DragData::Move();
+            this->old = Drag::Move();
             this->now.x = event.x;
             this->now.y = event.y;
          }
@@ -119,8 +124,8 @@ public:
          if (this->isDraggingActive)
          {
             this->isMouseButtonPressed = false;
-            this->old = DragData::Move();
-            this->now = DragData::Move();
+            this->old = Drag::Move();
+            this->now = Drag::Move();
          }
       }
 
@@ -142,9 +147,9 @@ public:
    ApplicationBase(sf::RenderWindow & sfml_window_, sf::View & sfml_view_)
       : sfml_window(sfml_window_)
       , sfml_view(sfml_view_)
-      , dragDataLeft(*this)
-      , dragDataMiddle(*this)
-      , dragDataRight(*this)
+      , dragLeft(*this)
+      , dragMiddle(*this)
+      , dragRight(*this)
    {
    }
 
@@ -216,6 +221,11 @@ public:
       return false;
    }
 
+   bool isDragging() const
+   {
+      return this->dragLeft.isDragging() || this->dragMiddle.isDragging() || this->dragRight.isDragging();
+   }
+
 private:
 
    void onEvent(const sf::Event & event)
@@ -257,9 +267,24 @@ private:
    {
       switch (event.button)
       {
-         case sf::Mouse::Left: dragDataLeft.onMouseButtonPress(event); break;
-         case sf::Mouse::Middle: dragDataMiddle.onMouseButtonPress(event); break;
-         case sf::Mouse::Right: dragDataRight.onMouseButtonPress(event); break;
+         case sf::Mouse::Left: this->dragLeft.onMouseButtonPress(event); break;
+         case sf::Mouse::Middle: this->dragMiddle.onMouseButtonPress(event); break;
+         case sf::Mouse::Right: this->dragRight.onMouseButtonPress(event); break;
+      }
+
+      if (event.button == sf::Mouse::Left)
+      {
+         if (!this->dragLeft.isDragging())
+         {
+            if ((this->leftButtonClicked.size() % 2) == 0)
+            {
+               this->leftButtonClicked.push_back({ event.x, event.y });
+            }
+         }
+         else
+         {
+            this->leftButtonClicked.clear();
+         }
       }
    }
 
@@ -267,17 +292,32 @@ private:
    {
       switch (event.button)
       {
-         case sf::Mouse::Left: dragDataLeft.onMouseButtonRelease(event); break;
-         case sf::Mouse::Middle: dragDataMiddle.onMouseButtonRelease(event); break;
-         case sf::Mouse::Right: dragDataRight.onMouseButtonRelease(event); break;
+         case sf::Mouse::Left: this->dragLeft.onMouseButtonRelease(event); break;
+         case sf::Mouse::Middle: this->dragMiddle.onMouseButtonRelease(event); break;
+         case sf::Mouse::Right: this->dragRight.onMouseButtonRelease(event); break;
+      }
+
+      if (event.button == sf::Mouse::Left)
+      {
+         if (!this->dragLeft.isDragging())
+         {
+            if ((this->leftButtonClicked.size() % 2) == 1)
+            {
+               this->leftButtonClicked.push_back({ event.x, event.y });
+            }
+         }
+         else
+         {
+            this->leftButtonClicked.clear();
+         }
       }
    }
 
    void onMouseMoveUpdateState(const sf::Event::MouseMoveEvent & event)
    {
-      dragDataLeft.onMouseMove(event);
-      dragDataMiddle.onMouseMove(event);
-      dragDataRight.onMouseMove(event);
+      this->dragLeft.onMouseMove(event);
+      this->dragMiddle.onMouseMove(event);
+      this->dragRight.onMouseMove(event);
    }
 
 protected:
@@ -285,9 +325,10 @@ protected:
    sf::View & sfml_view;
 
    std::array<bool, sf::Keyboard::Key::KeyCount> keyboard = {};
-   DragData dragDataLeft;
-   DragData dragDataMiddle;
-   DragData dragDataRight;
+   Drag dragLeft;
+   Drag dragMiddle;
+   Drag dragRight;
+   std::vector<sf::Vector2i> leftButtonClicked;
 };
 
 
@@ -301,12 +342,13 @@ public:
       : super(sfml_window_, sfml_view_)
       , view(view_)
    {
-      this->dragDataRight.isDraggingActive = true;
+      this->dragRight.isDraggingActive = true;
    }
 
    void onWindowResize(const sf::Event::SizeEvent & event)
    {
       this->sfml_view.setSize({ static_cast<float>(event.width), static_cast<float>(event.height) });
+      this->view.setView(this->sfml_view);
       this->sfml_window.setView(this->sfml_view);
    }
 
@@ -360,6 +402,28 @@ public:
          this->view.zoomOut();
       }
 
+      view.warnMouseHovering(sf::Mouse::getPosition(this->sfml_window).x, sf::Mouse::getPosition(this->sfml_window).y);
+      this->view.setChanged(true);
+
+      {
+         size_t steps = this->leftButtonClicked.size() / 2;
+
+         for (size_t i = 0; i < steps; ++i)
+         {
+            view.warnMouseClicking(this->leftButtonClicked[i * 2], this->leftButtonClicked[i * 2 + 1]);
+         }
+
+         if (this->leftButtonClicked.size() % 2 != 0)
+         {
+            this->leftButtonClicked[0] = this->leftButtonClicked[this->leftButtonClicked.size() - 1];
+            this->leftButtonClicked.resize(1);
+         }
+         else
+         {
+            this->leftButtonClicked.clear();
+         }
+      }
+
       calculateAbsolutePositionThenShapes2DRecursiveIfNeeded(view);
    }
 
@@ -391,6 +455,7 @@ int main(int argc, char * argv[])
       calculateAbsolutePositionThenShapes2DRecursive(view);
 
       sf::View sfml_view(sf::Vector2f(0, 0), sf::Vector2f(static_cast<float>(windowWidth), static_cast<float>(windowHeight)));
+      view.setView(sfml_view);
 
       sf::ContextSettings settings;
       settings.antialiasingLevel = 8;
