@@ -19,11 +19,7 @@ class PAERCEBAL_x_KIZUKOLIB_x_API DistanceShape : public objects::Object
 public:
 
    DistanceShape(const GlobalResources & globalResources_, const std::string & beginName_, const std::string & endName_);
-   DistanceShape(const GlobalResources & globalResources_, sf::Color colorLine_, sf::Color colorBaseLine_, sf::Color colorShape_, const std::string & beginName_, const std::string & endName_);
-
-   //sf::Vector3f                     getBegin3D()                                    const noexcept;
-   //sf::Vector3f                     getEnd3D()                                      const noexcept;
-   //sf::Color                        getColor()                                      const noexcept;
+   DistanceShape(const GlobalResources & globalResources_, sf::Color upperColorLine_, sf::Color upperColorBaseLine_, sf::Color upperColorShape_, sf::Color lowerColorLine_, sf::Color lowerColorBaseLine_, sf::Color lowerColorShape_, const std::string & beginName_, const std::string & endName_);
 
    const std::string &              getBeginName() const;
    const std::string &              getEndName() const;
@@ -37,12 +33,21 @@ public:
 private:
    virtual DistanceShape *          cloneImpl()                                     const override;
 
-   sf::ConvexShape                  polygonShape;
-   std::array<sf::Vertex, 4>        polygon2D;
+   sf::ConvexShape                  upperPolygonShape;
+   sf::ConvexShape                  lowerPolygonShape;
+   std::array<sf::Vertex, 2>        upperLineBetweenStars;
+   std::array<sf::Vertex, 2>        upperLineBetweenBases;
+   std::array<sf::Vertex, 2>        lowerLineBetweenStars;
+   std::array<sf::Vertex, 2>        lowerLineBetweenBases;
    sf::Vector2f                     center2D;
-   sf::Color                        colorShape;
-   sf::Color                        colorLine;
-   sf::Color                        colorBaseLine;
+   sf::Color                        upperColorShape;
+   sf::Color                        upperColorLine;
+   sf::Color                        upperColorBaseLine;
+   sf::Color                        lowerColorShape;
+   sf::Color                        lowerColorLine;
+   sf::Color                        lowerColorBaseLine;
+   bool                             isFirstStarUpper = true;
+   bool                             isSecondStarUpper = true;
    float                            lightYearsLength = 0;
    std::string                      distanceText;
    sf::Text                         distanceLabel;
@@ -50,7 +55,6 @@ private:
    std::string                      beginName;
    std::string                      endName;
 };
-
 
 } // namespace paercebal::KizukoLib::clusters
 

@@ -109,6 +109,7 @@
                   , { "begin" : "Balor", "end" : "Yakawa" }
                   , { "begin" : "Balor", "end" : "Aysur" }
                   , { "begin" : "Ogami", "end" : "Aysur" }
+                  , { "begin" : "Yakawa", "end" : "Aysur" }
             ]
          }
       ]
