@@ -77,6 +77,12 @@ private:
 
    sf::RectangleShape            button;
    sf::Text                      buttonLabel;
+
+   sf::Text                      nameLabel;
+
+   sf::Texture                   spaceBackground;
+   sf::Sprite                    spaceBackgroundSprite;
+   bool                          isSpaceBackgroundVisible = false;
 };
 
 PAERCEBAL_x_KIZUKOLIB_x_API void calculateAbsolutePositionThenShapes2DRecursiveIfNeeded(View & view);

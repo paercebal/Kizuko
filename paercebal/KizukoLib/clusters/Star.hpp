@@ -32,7 +32,7 @@ private:
    virtual Star *                cloneImpl()                                     const override;
 
    std::string                   name;
-   sf::CircleShape               shape;
+   std::vector<sf::CircleShape>  shapes;
    float                         size;
    sf::Color                     color;
    sf::Text                      nameLabel;

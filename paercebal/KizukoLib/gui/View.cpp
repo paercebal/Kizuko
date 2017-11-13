@@ -33,6 +33,12 @@ View::View(const GlobalResources & globalResources, float translationIncrement_)
    this->getChildren().push_back(std::move(cluster));
    this->updateTranslation();
    this->updateZoom();
+
+   this->spaceBackground.loadFromFile("./copyrighted/caleston-rift.png");
+   this->spaceBackground.setSmooth(true);
+   this->spaceBackgroundSprite.setTexture(this->spaceBackground);
+   this->spaceBackgroundSprite.setScale(sf::Vector2f(1.0f, 1.0f));
+   this->spaceBackgroundSprite.setColor(sf::Color(255, 255, 255, 96));
 }
 
 View & View::setView(const sf::View & view)
@@ -52,6 +58,27 @@ void View::createShapes2D()
    this->debugLabel.setStyle(sf::Text::Regular);
    this->debugLabel.setFillColor(sf::Color::White);
    this->debugLabel.setPosition({ 0, 0 });
+
+   {
+      this->nameLabel.setString("Caleston Rift");
+      this->nameLabel.setFont(this->getGlobalResources().getFontScifi().font);
+      this->nameLabel.setCharacterSize(this->getGlobalResources().getFontScifi().size * 2);
+      this->nameLabel.setStyle(sf::Text::Regular);
+      this->nameLabel.setFillColor(sf::Color::White);
+
+      // right-bottom Cluster Name position
+      const float xPos = this->viewCenter.x + (this->viewSize.x / 2.f) - (20 + 40);
+      const float yPos = this->viewCenter.y + (this->viewSize.y / 2.f) - (40 + 40);
+
+      const sf::FloatRect labelBounds = this->buttonLabel.getLocalBounds();
+      this->nameLabel.setPosition({ xPos - labelBounds.width * 5, yPos });
+   }
+
+   {
+      const float xPos = this->viewCenter.x - (this->viewSize.x / 2.f);
+      const float yPos = this->viewCenter.y - (this->viewSize.y / 2.f);
+      this->spaceBackgroundSprite.setPosition(sf::Vector2f(xPos, yPos));
+   }
 
    {
       // left-bottom Button position
@@ -122,18 +149,25 @@ void View::warnMouseClicking(sf::Vector2i pressed, sf::Vector2i released)
 
    if (isHoveringOnButton)
    {
-      static int clickCount = 0;
-      ++clickCount;
-      std::stringstream str;
-      str << "Clicked on button: " << clickCount << " time(s)";
-      this->setDebugText(str.str());
+      this->isSpaceBackgroundVisible = !this->isSpaceBackgroundVisible;
+      //static int clickCount = 0;
+      //++clickCount;
+      //std::stringstream str;
+      //str << "Clicked on button: " << clickCount << " time(s)";
+      //this->setDebugText(str.str());
    }
 }
 
 void View::drawInto(sf::RenderTarget & renderTarget) const
 {
+   if (this->isSpaceBackgroundVisible)
+   {
+      renderTarget.draw(this->spaceBackgroundSprite);
+   }
+
    this->cluster->drawInto(renderTarget);
    renderTarget.draw(this->debugLabel);
+   renderTarget.draw(this->nameLabel);
    renderTarget.draw(this->button);
    renderTarget.draw(this->buttonLabel);
 }
