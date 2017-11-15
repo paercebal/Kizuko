@@ -16,78 +16,6 @@ namespace paercebal::KizukoLib::gui
 
 namespace {
 
-/// @todo There's a way to write it in a more concise, less copy-n-paste manner, using a flag enum
-sf::Vector2f calculateAbsolutePosition(const sf::Vector2f & viewCenter, const sf::Vector2f & viewSize, RelativePositionStyle widgetRelativePositionStyle, const sf::Vector2f & widgetPosition, const sf::Vector2f & widgetSize)
-{
-   switch (widgetRelativePositionStyle)
-   {
-      case RelativePositionStyle::CenterLeft:
-         {
-            const float xPos = viewCenter.x - (viewSize.x / 2.f) + widgetPosition.x;
-            const float yPos = viewCenter.y + widgetPosition.y - (widgetSize.y / 2.f);
-            return { xPos, yPos };
-         }
-         break;
-      case RelativePositionStyle::CenterRight:
-         {
-            const float xPos = viewCenter.x + (viewSize.x / 2.f) + widgetPosition.x - widgetSize.x;
-            const float yPos = viewCenter.y + widgetPosition.y - (widgetSize.y / 2.f);
-            return { xPos, yPos };
-         }
-         break;
-      case RelativePositionStyle::TopCenter:
-         {
-            const float xPos = viewCenter.x + widgetPosition.x - (widgetSize.x / 2.f);
-            const float yPos = viewCenter.y - (viewSize.y / 2.f) + widgetPosition.y;
-            return { xPos, yPos };
-         }
-         break;
-      case RelativePositionStyle::BottomCenter:
-         {
-            const float xPos = viewCenter.x + widgetPosition.x - (widgetSize.x / 2.f);
-            const float yPos = viewCenter.y + (viewSize.y / 2.f) + widgetPosition.y - widgetSize.y;
-            return { xPos, yPos };
-         }
-         break;
-      case RelativePositionStyle::TopLeft:
-         {
-            const float xPos = viewCenter.x - (viewSize.x / 2.f) + widgetPosition.x;
-            const float yPos = viewCenter.y - (viewSize.y / 2.f) + widgetPosition.y;
-            return { xPos, yPos };
-         }
-         break;
-      case RelativePositionStyle::TopRight:
-         {
-            const float xPos = viewCenter.x + (viewSize.x / 2.f) + widgetPosition.x - widgetSize.x;
-            const float yPos = viewCenter.y - (viewSize.y / 2.f) + widgetPosition.y;
-            return { xPos, yPos };
-         }
-         break;
-      case RelativePositionStyle::BottomLeft:
-         {
-            const float xPos = viewCenter.x - (viewSize.x / 2.f) + widgetPosition.x;
-            const float yPos = viewCenter.y + (viewSize.y / 2.f) + widgetPosition.y - widgetSize.y;
-            return { xPos, yPos };
-         }
-         break;
-      case RelativePositionStyle::BottomRight:
-         {
-            const float xPos = viewCenter.x + (viewSize.x / 2.f) + widgetPosition.x - widgetSize.x;
-            const float yPos = viewCenter.y + (viewSize.y / 2.f) + widgetPosition.y - widgetSize.y;
-            return { xPos, yPos };
-         }
-         break;
-      case RelativePositionStyle::Center:
-      default:
-         {
-            const float xPos = viewCenter.x + widgetPosition.x - (widgetSize.x / 2.f);
-            const float yPos = viewCenter.y + widgetPosition.y - (widgetSize.y / 2.f);
-            return { xPos, yPos };
-         }
-         break;
-   };
-}
-
 const WidgetStyles ButtonStyles =
 {
    {
@@ -99,7 +27,6 @@ const WidgetStyles ButtonStyles =
       ,{ { 255, 255, 255, 255 },{ 0, 0, 0, 0 }, 0, sf::Text::Regular }
    }
 };
-
 
 } // anonymous namespace
 
@@ -114,42 +41,9 @@ Button::Button(const GlobalResources & globalResources_, RelativePositionStyle r
 }
 
 Button::Button(const GlobalResources & globalResources_, RelativePositionStyle relativePositionStyle_, const sf::Vector2f & relativePosition_, const sf::Vector2f & size_, const WidgetStyles & widgetStyles_, CommandCallback commandCallback_)
-   : globalResources{ globalResources_ }
-   , relativePositionStyle{ relativePositionStyle_ }
-   , relativePosition{ relativePosition_ }
-   , size{ size_ }
-   , styles(widgetStyles_)
-   , commandCallback(commandCallback_)
+   : super(globalResources_, relativePositionStyle_, relativePosition_, widgetStyles_, commandCallback_)
 {
-}
-
-const GlobalResources & Button::getGlobalResources() const
-{
-   return this->globalResources;
-}
-
-Button & Button::setSize(const sf::Vector2f & size)
-{
-   this->size = size;
-   this->setChanged(true);
-   return *this;
-}
-
-Button & Button::setPosition(RelativePositionStyle relativePositionStyle, const sf::Vector2f & relativePosition)
-{
-   this->relativePositionStyle = relativePositionStyle;
-   this->relativePosition = relativePosition;
-   this->setChanged(true);
-   return *this;
-}
-
-Button & Button::setView(const sf::View & view)
-{
-   this->viewSize = view.getSize();
-   this->viewCenter = view.getCenter();
-   this->setChanged(true);
-
-   return *this;
+   this->setSize(size_);
 }
 
 Button & Button::setLabel(const std::string & label)
@@ -159,36 +53,24 @@ Button & Button::setLabel(const std::string & label)
    return *this;
 }
 
-Button & Button::setCommand(CommandCallback commandCallback)
+void Button::createShapes2DFirstWhenChanged()
 {
-   this->commandCallback = commandCallback;
-   this->setChanged(true);
-   return *this;
+   this->calculateAbsolutePosition();
+
+   this->button.setSize(this->size);
+   this->button.setPosition(this->absolutePosition);
+
+   this->buttonLabel.setFont(this->getGlobalResources().getFontScifi().font);
+   this->buttonLabel.setCharacterSize(static_cast<int>(this->getGlobalResources().getFontScifi().size * 1.2));
+
+   const sf::FloatRect labelBounds = this->buttonLabel.getLocalBounds();
+   const sf::Vector2f labelSize = { labelBounds.width + labelBounds.left, labelBounds.height + labelBounds.top }; // for some reason, the size and the local bounds are different. facepalm.
+   this->buttonLabel.setPosition({ this->absolutePosition.x + (this->size.x - labelSize.x) / 2.f, this->absolutePosition.y + (this->size.y - labelSize.y) / 2.f });
 }
 
-void Button::createShapes2D()
+void Button::createShapes2DSecondAlways()
 {
-   if (this->isChanged())
-   {
-      this->absolutePosition = calculateAbsolutePosition(this->viewCenter, this->viewSize, this->relativePositionStyle, this->relativePosition, this->size);
-
-      this->button.setSize(this->size);
-      this->button.setPosition(this->absolutePosition);
-
-      this->buttonLabel.setFont(this->getGlobalResources().getFontScifi().font);
-      this->buttonLabel.setCharacterSize(static_cast<int>(this->getGlobalResources().getFontScifi().size * 1.2));
-
-      const sf::FloatRect labelBounds = this->buttonLabel.getLocalBounds();
-      const sf::Vector2f labelSize = { labelBounds.width + labelBounds.left, labelBounds.height + labelBounds.top }; // for some reason, the size and the local bounds are different. facepalm.
-      this->buttonLabel.setPosition({ this->absolutePosition.x + (this->size.x - labelSize.x) / 2.f, this->absolutePosition.y + (this->size.y - labelSize.y) / 2.f });
-
-      this->setChanged(false);
-   }
-
-   sf::FloatRect buttonBounds = this->button.getGlobalBounds();
-   const bool isHoveringOnButton = ((this->viewMousePosition.x >= buttonBounds.left) && (this->viewMousePosition.x <= buttonBounds.left + buttonBounds.width) && (this->viewMousePosition.y >= buttonBounds.top) && (this->viewMousePosition.y <= buttonBounds.top + buttonBounds.height));
-
-   WidgetStyle style = isHoveringOnButton ? this->styles.hover : this->styles.normal;
+   WidgetStyle style = this->isMouseHovering() ? this->styles.hover : this->styles.normal;
 
    this->button.setFillColor(style.area.background);
    this->button.setOutlineColor(style.area.outline);
@@ -197,38 +79,6 @@ void Button::createShapes2D()
    this->buttonLabel.setStyle(style.font.style);
    this->buttonLabel.setOutlineColor(style.font.outline);
    this->buttonLabel.setOutlineThickness(style.font.outlineThickness);
-}
-
-void Button::warnMouseHovering(int x, int y)
-{
-   const float xPos = this->viewCenter.x - (this->viewSize.x / 2.f) + x;
-   const float yPos = this->viewCenter.y - (this->viewSize.y / 2.f) + y;
-
-   this->viewMousePosition = { static_cast<int>(xPos), static_cast<int>(yPos) };
-}
-
-void Button::warnMouseClicking(sf::Vector2i pressed, sf::Vector2i released)
-{
-   auto convertToViewCoordinates = [this](sf::Vector2i pos) ->sf::Vector2i
-   {
-      return { static_cast<int>(this->viewCenter.x - (this->viewSize.x / 2.f) + pos.x), static_cast<int>(this->viewCenter.y - (this->viewSize.y / 2.f) + pos.y) };
-   };
-
-   auto realPressed = convertToViewCoordinates(pressed);
-   auto realReleased = convertToViewCoordinates(released);
-
-   auto isWithinButtonBounds = [this](sf::Vector2i mouse) ->bool
-   {
-      sf::FloatRect buttonBounds = this->button.getGlobalBounds();
-      return ((mouse.x >= buttonBounds.left) && (mouse.x <= buttonBounds.left + buttonBounds.width) && (mouse.y >= buttonBounds.top) && (mouse.y <= buttonBounds.top + buttonBounds.height));
-   };
-
-   const bool isClickingOnButton = isWithinButtonBounds(realPressed) && isWithinButtonBounds(realReleased);
-
-   if (isClickingOnButton)
-   {
-      this->commandCallback();
-   }
 }
 
 void Button::drawInto(sf::RenderTarget & renderTarget) const
@@ -245,17 +95,6 @@ std::unique_ptr<Button> Button::clone() const
 Button * Button::cloneImpl() const
 {
    return new Button(*this);
-}
-
-Button & Button::setChanged(bool changed)
-{
-   this->changed = changed;
-   return *this;
-}
-
-bool Button::isChanged() const
-{
-   return this->changed;
 }
 
 } // namespace paercebal::KizukoLib::gui

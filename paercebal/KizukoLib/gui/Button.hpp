@@ -3,6 +3,7 @@
 
 #include <paercebal/KizukoLib/dllmain.hpp>
 #include <paercebal/KizukoLib/GlobalResources.hpp>
+#include <paercebal/KizukoLib/gui/Widget.hpp>
 
 #include <SFML/Graphics.hpp>
 
@@ -14,49 +15,9 @@
 namespace paercebal::KizukoLib::gui
 {
 
-enum class RelativePositionStyle
+class PAERCEBAL_x_KIZUKOLIB_x_API Button : public Widget
 {
-   Center
-   , CenterLeft
-   , CenterRight
-   , TopCenter
-   , BottomCenter
-   , TopLeft
-   , TopRight
-   , BottomLeft
-   , BottomRight
-};
-
-struct WidgetStyle
-{
-   struct Area
-   {
-      sf::Color background = {};
-      sf::Color outline = {};
-      float outlineThickness = {};
-   };
-
-   struct Font
-   {
-      sf::Color foreground = {};
-      sf::Color outline = {};
-      float outlineThickness = {};
-      sf::Uint32 style = sf::Text::Regular;
-   };
-
-   Area area;
-   Font font;
-};
-
-struct WidgetStyles
-{
-   WidgetStyle normal;
-   WidgetStyle hover;
-};
-
-
-class PAERCEBAL_x_KIZUKOLIB_x_API Button
-{
+   using super = Widget;
 public:
 
    using CommandCallback = std::function<void(void)>;
@@ -65,41 +26,19 @@ public:
    Button(const GlobalResources & globalResources_, RelativePositionStyle relativePositionStyle, const sf::Vector2f & relativePosition_, const sf::Vector2f & size_, const WidgetStyles & widgetStyles_);
    Button(const GlobalResources & globalResources_, RelativePositionStyle relativePositionStyle, const sf::Vector2f & relativePosition_, const sf::Vector2f & size_, const WidgetStyles & widgetStyles_, CommandCallback commandCallback_);
 
-   virtual void                  createShapes2D();
-   virtual void                  drawInto(sf::RenderTarget & renderTarget)       const;
+   virtual void                  drawInto(sf::RenderTarget & renderTarget)       const override;
    std::unique_ptr<Button>       clone()                                         const;
 
-   const GlobalResources &       getGlobalResources()                            const;
+   using super::setSize;
 
-   Button &                      setCommand(CommandCallback commandCallback);
-   Button &                      setPosition(RelativePositionStyle relativePositionStyle, const sf::Vector2f & relativePosition);
-   Button &                      setSize(const sf::Vector2f & size);
-   Button &                      setColor(const WidgetStyles & widgetColors);
    Button &                      setLabel(const std::string & label);
 
-   Button &                      setChanged(bool isChanged);
-   bool                          isChanged()                                     const;
-
-   Button &                      setView(const sf::View & view);
-
-   void                          warnMouseHovering(int x, int y);
-   void                          warnMouseClicking(sf::Vector2i pressed, sf::Vector2i released);
-
 private:
+
+   virtual void                  createShapes2DFirstWhenChanged()                      override;
+   virtual void                  createShapes2DSecondAlways()                          override;
+
    virtual Button *              cloneImpl()                                     const;
-
-   const GlobalResources &       globalResources;
-   RelativePositionStyle         relativePositionStyle = RelativePositionStyle::Center;
-   sf::Vector2f                  relativePosition = {};
-   sf::Vector2f                  absolutePosition = {};
-   sf::Vector2f                  size = {};
-   bool                          changed = true;
-   WidgetStyles                  styles;
-   CommandCallback               commandCallback;
-
-   sf::Vector2f                  viewSize;
-   sf::Vector2f                  viewCenter;
-   sf::Vector2i                  viewMousePosition;
 
    sf::RectangleShape            button;
    sf::Text                      buttonLabel;

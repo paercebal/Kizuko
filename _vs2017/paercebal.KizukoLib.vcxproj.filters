@@ -60,6 +60,9 @@
     <ClCompile Include="..\paercebal\KizukoLib\gui\Label.cpp">
       <Filter>p.KizukoLib.gui</Filter>
     </ClCompile>
+    <ClCompile Include="..\paercebal\KizukoLib\gui\Widget.cpp">
+      <Filter>p.KizukoLib.gui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\paercebal\KizukoLib\dllmain.hpp">
@@ -105,6 +108,9 @@
       <Filter>p.KizukoLib.gui</Filter>
     </ClInclude>
     <ClInclude Include="..\paercebal\KizukoLib\gui\Label.hpp">
+      <Filter>p.KizukoLib.gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\paercebal\KizukoLib\gui\Widget.hpp">
       <Filter>p.KizukoLib.gui</Filter>
     </ClInclude>
   </ItemGroup>

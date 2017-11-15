@@ -3,7 +3,7 @@
 
 #include <paercebal/KizukoLib/dllmain.hpp>
 #include <paercebal/KizukoLib/GlobalResources.hpp>
-#include <paercebal/KizukoLib/gui/Button.hpp>
+#include <paercebal/KizukoLib/gui/Widget.hpp>
 
 #include <SFML/Graphics.hpp>
 
@@ -15,8 +15,9 @@
 namespace paercebal::KizukoLib::gui
 {
 
-class PAERCEBAL_x_KIZUKOLIB_x_API Label
+class PAERCEBAL_x_KIZUKOLIB_x_API Label : public Widget
 {
+   using super = Widget;
 public:
 
    using CommandCallback = std::function<void(void)>;
@@ -26,42 +27,19 @@ public:
    Label(const GlobalResources & globalResources_, RelativePositionStyle relativePositionStyle, const sf::Vector2f & relativePosition_, float fontScale_, const WidgetStyles & widgetStyles_);
    Label(const GlobalResources & globalResources_, RelativePositionStyle relativePositionStyle, const sf::Vector2f & relativePosition_, float fontScale_, const WidgetStyles & widgetStyles_, CommandCallback commandCallback_);
 
-   virtual void                  createShapes2D();
-   virtual void                  drawInto(sf::RenderTarget & renderTarget)       const;
+   virtual void                  drawInto(sf::RenderTarget & renderTarget)       const override;
    std::unique_ptr<Label>        clone()                                         const;
 
-   const GlobalResources &       getGlobalResources()                            const;
-
-   Label &                       setCommand(CommandCallback commandCallback);
-   Label &                       setPosition(RelativePositionStyle relativePositionStyle, const sf::Vector2f & relativePosition);
    Label &                       setFontScale(float fontScale);
-   Label &                       setColor(const WidgetStyles & widgetColors);
    Label &                       setLabel(const std::string & label);
 
-   Label &                       setChanged(bool isChanged);
-   bool                          isChanged()                                     const;
-
-   Label &                       setView(const sf::View & view);
-
-   void                          warnMouseHovering(int x, int y);
-   void                          warnMouseClicking(sf::Vector2i pressed, sf::Vector2i released);
-
 private:
+   virtual void                  createShapes2DFirstWhenChanged()                      override;
+   virtual void                  createShapes2DSecondAlways()                          override;
+
    virtual Label *               cloneImpl()                                     const;
 
-   const GlobalResources &       globalResources;
-   RelativePositionStyle         relativePositionStyle = RelativePositionStyle::Center;
-   sf::Vector2f                  relativePosition = {};
-   sf::Vector2f                  absolutePosition = {};
-   sf::Vector2f                  size = {};
-   bool                          changed = true;
-   WidgetStyles                  styles;
-   CommandCallback               commandCallback;
    float                         fontScale = 1.f;
-
-   sf::Vector2f                  viewSize;
-   sf::Vector2f                  viewCenter;
-   sf::Vector2i                  viewMousePosition;
 
    sf::Text                      label;
 };
