@@ -54,6 +54,9 @@
     <ClCompile Include="..\paercebal\KizukoLib\objects\Object.cpp">
       <Filter>p.KizukoLib.objects</Filter>
     </ClCompile>
+    <ClCompile Include="..\paercebal\KizukoLib\gui\Button.cpp">
+      <Filter>p.KizukoLib.gui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\paercebal\KizukoLib\dllmain.hpp">
@@ -94,6 +97,9 @@
     </ClInclude>
     <ClInclude Include="..\paercebal\KizukoLib\objects\Object.hpp">
       <Filter>p.KizukoLib.objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\paercebal\KizukoLib\gui\Button.hpp">
+      <Filter>p.KizukoLib.gui</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
