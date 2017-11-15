@@ -5,6 +5,7 @@
 #include <paercebal/KizukoLib/GlobalResources.hpp>
 #include <paercebal/KizukoLib/objects/Object.hpp>
 #include <paercebal/KizukoLib/clusters/Cluster.hpp>
+#include <paercebal/KizukoLib/gui/Button.hpp>
 
 #include <SFML/Graphics.hpp>
 
@@ -75,8 +76,7 @@ private:
    sf::Text                      debugLabel;
    std::string                   debugText;
 
-   sf::RectangleShape            button;
-   sf::Text                      buttonLabel;
+   Button                        button;
 
    sf::Text                      nameLabel;
 

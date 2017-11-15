@@ -22,6 +22,7 @@
     <ClCompile Include="..\paercebal\KizukoLib\clusters\Star.cpp" />
     <ClCompile Include="..\paercebal\KizukoLib\dllmain.cpp" />
     <ClCompile Include="..\paercebal\KizukoLib\GlobalResources.cpp" />
+    <ClCompile Include="..\paercebal\KizukoLib\gui\Button.cpp" />
     <ClCompile Include="..\paercebal\KizukoLib\gui\View.cpp" />
     <ClCompile Include="..\paercebal\KizukoLib\input\Data.cpp" />
     <ClCompile Include="..\paercebal\KizukoLib\objects\Object.cpp" />
@@ -37,6 +38,7 @@
     <ClInclude Include="..\paercebal\KizukoLib\dllmain.hpp" />
     <ClInclude Include="..\paercebal\KizukoLib\Exception.hpp" />
     <ClInclude Include="..\paercebal\KizukoLib\GlobalResources.hpp" />
+    <ClInclude Include="..\paercebal\KizukoLib\gui\Button.hpp" />
     <ClInclude Include="..\paercebal\KizukoLib\gui\View.hpp" />
     <ClInclude Include="..\paercebal\KizukoLib\input\Data.hpp" />
     <ClInclude Include="..\paercebal\KizukoLib\objects\Object.hpp" />
