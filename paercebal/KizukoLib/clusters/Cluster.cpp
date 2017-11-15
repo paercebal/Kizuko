@@ -139,7 +139,7 @@ Cluster::Cluster(const GlobalResources & globalResources, float gridIncrement_, 
 
    for (const auto & star : this->getGlobalResources().getData().clusters.at(0).stars)
    {
-      this->addStar({ this->getGlobalResources(), star.name, sf::Color{ star.r, star.g, star.b, star.a },{ star.x, star.y, star.z }, star.size });
+      this->addStar({ this->getGlobalResources(), star.name, star.color, star.position, star.size });
    }
 
    for (const auto & distance : this->getGlobalResources().getData().clusters.at(0).distances)

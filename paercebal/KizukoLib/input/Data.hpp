@@ -43,8 +43,7 @@ std::vector<std::string> generateResourceList(const std::vector<T> & resources)
 struct ClusterData
 {
    std::string                name;
-   float                      x = 0;
-   float                      y = 0;
+   sf::Vector2f               position = {};
 };
 
 struct Galaxy
@@ -56,14 +55,9 @@ struct Galaxy
 struct Star
 {
    std::string                name;
-   float                      x = 0;
-   float                      y = 0;
-   float                      z = 0;
+   sf::Vector3f               position = {};
    float                      size = 0;
-   unsigned char              r = 0;
-   unsigned char              g = 0;
-   unsigned char              b = 0;
-   unsigned char              a = 0;
+   sf::Color                  color = {};
    bool                       relay = false;
 };
 

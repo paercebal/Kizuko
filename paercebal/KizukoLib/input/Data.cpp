@@ -9,6 +9,8 @@
 
 #include <array>
 #include <iostream>
+#include <sstream>
+#include <string>
 #include <cmath>
 
 namespace paercebal::KizukoLib::input
@@ -61,7 +63,7 @@ std::string concat(Args... args)
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-// Generic
+// Generic: C++
 //
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -154,6 +156,194 @@ void extractValue(T & t, const std::string & name, double & value)
 
 ///////////////////////////////////////////////////////////////////////////////
 //
+// Specific: SFML
+//
+///////////////////////////////////////////////////////////////////////////////
+
+sf::Color parseColorFromString(const std::string & value) // throws std::stringstream::failure
+{
+   using namespace std::string_literals;
+
+   std::stringstream str(value);
+   //auto flags = str.flags();
+   //flags &= ~std::ios::skipws; // Unset the skip white space flag
+   //str.flags(flags);
+   str.exceptions(std::ios::failbit);
+
+   auto extractSeparator = [&str](const char c0)
+   {
+      char c;
+      str >> c;
+      if (c != c0)
+         throw std::stringstream::failure("Bad separator!");
+   };
+
+   auto extractValue = [&str]()
+   {
+      int i;
+      str >> i;
+      if (i < 0 || i > 255)
+         throw std::stringstream::failure("Bad value!");
+      return static_cast<sf::Uint8>(i);
+   };
+
+   sf::Color color = sf::Color::Black;
+
+   color.r = extractValue();
+   extractSeparator(',');
+   color.g = extractValue();
+   extractSeparator(',');
+   color.b = extractValue();
+   extractSeparator(',');
+   color.a = extractValue();
+
+   if ((!str.eof()) || (str.fail()))
+   {
+      throw std::stringstream::failure("Garbage!");
+   }
+
+   return color;
+}
+
+template <typename T>
+void extractValue(T & t, const std::string & name, sf::Color & value)
+{
+   expectTrue(t.IsObject(), "json data is not an object");
+   rapidjson::Value::ConstMemberIterator it = t.FindMember(name.c_str());
+   expectTrue(it != t.MemberEnd(), concat("json data has no \"", name, "\" property"));
+
+   expectTrue(it->value.IsString(), concat("json data's \"", name, "\" property should be at least a String"));
+
+   try
+   {
+      value = parseColorFromString(it->value.GetString());
+   }
+   catch (const std::stringstream::failure & e)
+   {
+      throw Exception() << "json data's \"" << name << "\" property is not a sf::Color: " << e.what();
+   }
+}
+
+sf::Vector2f parse2DDataFromString(const std::string & value) // throws std::stringstream::failure
+{
+   using namespace std::string_literals;
+
+   std::stringstream str(value);
+   //auto flags = str.flags();
+   //flags &= ~std::ios::skipws; // Unset the skip white space flag
+   //str.flags(flags);
+   str.exceptions(std::ios::failbit);
+
+   auto extractSeparator = [&str](const char c0)
+   {
+      char c;
+      str >> c;
+      if (c != c0)
+         throw std::stringstream::failure("Bad separator!");
+   };
+
+   auto extractValue = [&str]()
+   {
+      float f;
+      str >> f;
+      return f;
+   };
+
+   sf::Vector2f data = {};
+
+   data.x = extractValue();
+   extractSeparator(',');
+   data.y = extractValue();
+
+   if ((!str.eof()) || (str.fail()))
+   {
+      throw std::stringstream::failure("Garbage!");
+   }
+
+   return data;
+}
+
+template <typename T>
+void extractValue(T & t, const std::string & name, sf::Vector2f & value)
+{
+   expectTrue(t.IsObject(), "json data is not an object");
+   rapidjson::Value::ConstMemberIterator it = t.FindMember(name.c_str());
+   expectTrue(it != t.MemberEnd(), concat("json data has no \"", name, "\" property"));
+
+   expectTrue(it->value.IsString(), concat("json data's \"", name, "\" property should be at least a String"));
+
+   try
+   {
+      value = parse2DDataFromString(it->value.GetString());
+   }
+   catch (const std::stringstream::failure & e)
+   {
+      throw Exception() << "json data's \"" << name << "\" property is not a sf::Vector2f: " << e.what();
+   }
+}
+
+sf::Vector3f parse3DDataFromString(const std::string & value) // throws std::stringstream::failure
+{
+   using namespace std::string_literals;
+
+   std::stringstream str(value);
+   //auto flags = str.flags();
+   //flags &= ~std::ios::skipws; // Unset the skip white space flag
+   //str.flags(flags);
+   str.exceptions(std::ios::failbit);
+
+   auto extractSeparator = [&str](const char c0)
+   {
+      char c;
+      str >> c;
+      if (c != c0)
+         throw std::stringstream::failure("Bad separator!");
+   };
+
+   auto extractValue = [&str]()
+   {
+      float f;
+      str >> f;
+      return f;
+   };
+
+   sf::Vector3f data = {};
+
+   data.x = extractValue();
+   extractSeparator(',');
+   data.y = extractValue();
+   extractSeparator(',');
+   data.z = extractValue();
+
+   if ((!str.eof()) || (str.fail()))
+   {
+      throw std::stringstream::failure("Garbage!");
+   }
+
+   return data;
+}
+
+template <typename T>
+void extractValue(T & t, const std::string & name, sf::Vector3f & value)
+{
+   expectTrue(t.IsObject(), "json data is not an object");
+   rapidjson::Value::ConstMemberIterator it = t.FindMember(name.c_str());
+   expectTrue(it != t.MemberEnd(), concat("json data has no \"", name, "\" property"));
+
+   expectTrue(it->value.IsString(), concat("json data's \"", name, "\" property should be at least a String"));
+
+   try
+   {
+      value = parse3DDataFromString(it->value.GetString());
+   }
+   catch (const std::stringstream::failure & e)
+   {
+      throw Exception() << "json data's \"" << name << "\" property is not a sf::Vector3f: " << e.what();
+   }
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//
 // Specific: Style
 //
 ///////////////////////////////////////////////////////////////////////////////
@@ -236,8 +426,7 @@ input::ClusterData extractClusterData(const rapidjson::Value & t)
 
    expectTrue(t.IsObject(), "json 'cluster-data' is not an object");
    extractValue(t, "name", value.name);
-   extractValue(t, "x", value.x);
-   extractValue(t, "y", value.y);
+   extractValue(t, "position", value.position);
 
    return value;
 }
@@ -261,8 +450,7 @@ input::Galaxy extractGalaxy(const rapidjson::Value & t)
 
    expectTrue(t.IsObject(), "json 'galaxy' is not an object");
 
-   extractValue(t, "size-x", galaxy.size.x);
-   extractValue(t, "size-y", galaxy.size.y);
+   extractValue(t, "size", galaxy.size);
 
    expectTrue(t.HasMember("cluster-data-list"), "cluster file json content has no \"cluster-data-list\" property");
    galaxy.clusterDataList = extractClusterDatas(t["cluster-data-list"]);
@@ -282,14 +470,9 @@ input::Star extractStar(const rapidjson::Value & t)
 
    expectTrue(t.IsObject(), "json data is not an object");
    extractValue(t, "name", value.name);
-   extractValue(t, "x", value.x);
-   extractValue(t, "y", value.y);
-   extractValue(t, "z", value.z);
+   extractValue(t, "position", value.position);
    extractValue(t, "size", value.size);
-   extractValue(t, "r", value.r);
-   extractValue(t, "g", value.g);
-   extractValue(t, "b", value.b);
-   extractValue(t, "a", value.a);
+   extractValue(t, "color", value.color);
    extractValue(t, "relay", value.relay);
 
    return value;
@@ -341,9 +524,7 @@ input::Cluster extractCluster(const rapidjson::Value & t)
    extractValue(t, "name", value.name);
    extractValue(t, "increment", value.increment);
    extractValue(t, "major-increment", value.majorIncrement);
-   extractValue(t, "size-x", value.size.x);
-   extractValue(t, "size-y", value.size.y);
-   extractValue(t, "size-z", value.size.z);
+   extractValue(t, "size", value.size);
 
    expectTrue(t.HasMember("stars"), "cluster file json content has no \"stars\" property");
    expectTrue(t.HasMember("distances"), "cluster file json content has no \"distances\" property");

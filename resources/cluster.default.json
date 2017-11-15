@@ -23,59 +23,58 @@
       }
    , "galaxy" :
       {
-           "size-x" : 4500
-         , "size-y" : 4500
+           "size" : "4500,4500"
          , "cluster-data-list" :
             [
-                 { "name" : "Shrike Abyssal"             , "x" : 679    , "y" : 901    }
-               , { "name" : "Vallhallan Threshold"       , "x" : 1287   , "y" : 506    }
-               , { "name" : "Titan Nebula"               , "x" : 2004   , "y" : 357    }
-               , { "name" : "Rosetta Nebula"             , "x" : 2837   , "y" : 396    }
-               , { "name" : "Sigurd's Craddle"           , "x" : 2249   , "y" : 754    }
-               , { "name" : "Omega Nebula"               , "x" : 2194   , "y" : 1168   }
-               , { "name" : "Pangaea Expanse"            , "x" : 2648   , "y" : 1358   }
-               , { "name" : "Hawking Eta"                , "x" : 2754   , "y" : 1832   }
-               , { "name" : "Hourglass Nebula"           , "x" : 1310   , "y" : 1100   }
-               , { "name" : "Pylos Nebula"               , "x" : 2854   , "y" : 1196   }
-               , { "name" : "Caleston Rift"              , "x" : 3178   , "y" : 1760   }
-               , { "name" : "Phoenix Massing"            , "x" : 3432   , "y" : 1424   }
-               , { "name" : "Far Rim"                    , "x" : 3960   , "y" : 980    }
-               , { "name" : "Perseus Veil"               , "x" : 4098   , "y" : 1185   }
-               , { "name" : "Sentry Omega"               , "x" : 3735   , "y" : 1842   }
-               , { "name" : "Hades Nexus"                , "x" : 4142   , "y" : 1702   }
-               , { "name" : "Crescent Nebula"            , "x" : 766    , "y" : 1677   }
-               , { "name" : "Eagle Nebula"               , "x" : 1106   , "y" : 2128   }
-               , { "name" : "Ismar Frontier"             , "x" : 246    , "y" : 2038   }
-               , { "name" : "Minos Wasteland"            , "x" : 482    , "y" : 2478   }
-               , { "name" : "Galactic Core"              , "x" : 2250   , "y" : 2250   }
-               , { "name" : "Ninmah Cluster"             , "x" : 2954   , "y" : 2028   }
-               , { "name" : "Kepler Verge"               , "x" : 3436   , "y" : 2240   }
-               , { "name" : "Shadow Sea"                 , "x" : 3024   , "y" : 2496   }
-               , { "name" : "Maroon Sea"                 , "x" : 3174   , "y" : 2806   }
-               , { "name" : "Styx Theta"                 , "x" : 2976   , "y" : 2254   }
-               , { "name" : "Nubian Expanse"             , "x" : 3978   , "y" : 2388   }
-               , { "name" : "Armonstrong Nebula"         , "x" : 3934   , "y" : 2745   }
-               , { "name" : "Attican Beta"               , "x" : 3558   , "y" : 2916   }
-               , { "name" : "Voyager Cluster"            , "x" : 3960   , "y" : 3128   }
-               , { "name" : "Hades Gamma"                , "x" : 3579   , "y" : 3302   }
-               , { "name" : "Argos Rho"                  , "x" : 2919   , "y" : 2979   } 
-               , { "name" : "Gemini Sigma"               , "x" : 3192   , "y" : 3134   }
-               , { "name" : "Artemis Tau"                , "x" : 3406   , "y" : 3608   }
-               , { "name" : "Kite's Nest"                , "x" : 3033   , "y" : 3891   }
-               , { "name" : "Petra Nebula"               , "x" : 2601   , "y" : 3792   }
-               , { "name" : "Horse Head Nebula"          , "x" : 2410   , "y" : 3160   }
-               , { "name" : "Exodus Cluster"             , "x" : 2498   , "y" : 3498   }
-               , { "name" : "Sol Cluster"                , "x" : 2088   , "y" : 3614   }
-               , { "name" : "Arcturus Stream"            , "x" : 2252   , "y" : 3652   }
-               , { "name" : "Viper Nebula"               , "x" : 2758   , "y" : 4140   }
-               , { "name" : "Annos Basin"                , "x" : 1874   , "y" : 3116   }
-               , { "name" : "Aethon Cluster"             , "x" : 1629   , "y" : 3880   }
-               , { "name" : "Apien Crest"                , "x" : 1254   , "y" : 3710   }
-               , { "name" : "Krogan DMZ"                 , "x" : 1383   , "y" : 3176   }
-               , { "name" : "Serpent Nebula"             , "x" : 1281   , "y" : 2859   }
-               , { "name" : "Nimbus Cluster"             , "x" : 387    , "y" : 2838   }
-               , { "name" : "Silean Nebula"              , "x" : 760    , "y" : 3192   }
-               , { "name" : "Athena Nebula"              , "x" : 738    , "y" : 2888   }
+                 { "name" : "Shrike Abyssal"             , "position" : "679,901" }
+               , { "name" : "Vallhallan Threshold"       , "position" : "1287,506" }
+               , { "name" : "Titan Nebula"               , "position" : "2004,357" }
+               , { "name" : "Rosetta Nebula"             , "position" : "2837,396" }
+               , { "name" : "Sigurd's Craddle"           , "position" : "2249,754" }
+               , { "name" : "Omega Nebula"               , "position" : "2194,1168" }
+               , { "name" : "Pangaea Expanse"            , "position" : "2648,1358" }
+               , { "name" : "Hawking Eta"                , "position" : "2754,1832" }
+               , { "name" : "Hourglass Nebula"           , "position" : "1310,1100" }
+               , { "name" : "Pylos Nebula"               , "position" : "2854,1196" }
+               , { "name" : "Caleston Rift"              , "position" : "3178,1760" }
+               , { "name" : "Phoenix Massing"            , "position" : "3432,1424" }
+               , { "name" : "Far Rim"                    , "position" : "3960,980" }
+               , { "name" : "Perseus Veil"               , "position" : "4098,1185" }
+               , { "name" : "Sentry Omega"               , "position" : "3735,1842" }
+               , { "name" : "Hades Nexus"                , "position" : "4142,1702" }
+               , { "name" : "Crescent Nebula"            , "position" : "766,1677" }
+               , { "name" : "Eagle Nebula"               , "position" : "1106,2128" }
+               , { "name" : "Ismar Frontier"             , "position" : "246,2038" }
+               , { "name" : "Minos Wasteland"            , "position" : "482,2478" }
+               , { "name" : "Galactic Core"              , "position" : "2250,2250" }
+               , { "name" : "Ninmah Cluster"             , "position" : "2954,2028" }
+               , { "name" : "Kepler Verge"               , "position" : "3436,2240" }
+               , { "name" : "Shadow Sea"                 , "position" : "3024,2496" }
+               , { "name" : "Maroon Sea"                 , "position" : "3174,2806" }
+               , { "name" : "Styx Theta"                 , "position" : "2976,2254" }
+               , { "name" : "Nubian Expanse"             , "position" : "3978,2388" }
+               , { "name" : "Armonstrong Nebula"         , "position" : "3934,2745" }
+               , { "name" : "Attican Beta"               , "position" : "3558,2916" }
+               , { "name" : "Voyager Cluster"            , "position" : "3960,3128" }
+               , { "name" : "Hades Gamma"                , "position" : "3579,3302" }
+               , { "name" : "Argos Rho"                  , "position" : "2919,2979" }
+               , { "name" : "Gemini Sigma"               , "position" : "3192,3134" }
+               , { "name" : "Artemis Tau"                , "position" : "3406,3608" }
+               , { "name" : "Kite's Nest"                , "position" : "3033,3891" }
+               , { "name" : "Petra Nebula"               , "position" : "2601,3792" }
+               , { "name" : "Horse Head Nebula"          , "position" : "2410,3160" }
+               , { "name" : "Exodus Cluster"             , "position" : "2498,3498" }
+               , { "name" : "Sol Cluster"                , "position" : "2088,3614" }
+               , { "name" : "Arcturus Stream"            , "position" : "2252,3652" }
+               , { "name" : "Viper Nebula"               , "position" : "2758,4140" }
+               , { "name" : "Annos Basin"                , "position" : "1874,3116" }
+               , { "name" : "Aethon Cluster"             , "position" : "1629,3880" }
+               , { "name" : "Apien Crest"                , "position" : "1254,3710" }
+               , { "name" : "Krogan DMZ"                 , "position" : "1383,3176" }
+               , { "name" : "Serpent Nebula"             , "position" : "1281,2859" }
+               , { "name" : "Nimbus Cluster"             , "position" : "387,2838" }
+               , { "name" : "Silean Nebula"              , "position" : "760,3192" }
+               , { "name" : "Athena Nebula"              , "position" : "738,2888" }
             ]
       }
    , "clusters" :
@@ -84,17 +83,15 @@
               "name" : "Caleston Rift"
             , "increment" : 2
             , "major-increment" : 5
-            , "size-x" : 100
-            , "size-y" : 100
-            , "size-z" : 100
+            , "size" : "100,100,100"
             , "stars" :
                [
-                    { "name" : "Balor"       , "x" : 0    , "y" : 0   , "z" : 0      , "size" : 5    , "r" : 255 , "g" : 0   , "b" : 0   , "a" : 255  , "relay" : true }
-                  , { "name" : "Ogami"       , "x" : 30   , "y" : -10 , "z" : -25    , "size" : 5    , "r" : 255 , "g" : 0   , "b" : 0   , "a" : 255  , "relay" : false }
-                  , { "name" : "Talava"      , "x" : -20  , "y" : -10 , "z" : 15     , "size" : 5    , "r" : 255 , "g" : 128 , "b" : 0   , "a" : 255  , "relay" : false }
-                  , { "name" : "Solveig"     , "x" : -40  , "y" : 65  , "z" : -17.5  , "size" : 5    , "r" : 255 , "g" : 128 , "b" : 0   , "a" : 255  , "relay" : false }
-                  , { "name" : "Yakawa"      , "x" : 25   , "y" : 75  , "z" : 22.5   , "size" : 5    , "r" : 255 , "g" : 128 , "b" : 0   , "a" : 255  , "relay" : false }
-                  , { "name" : "Aysur"       , "x" : 50   , "y" : 60  , "z" : 25     , "size" : 5    , "r" : 255 , "g" : 128 , "b" : 0   , "a" : 255  , "relay" : false }
+                    { "name" : "Balor"       , "position" : "0,0,0"           , "size" : 5    , "color" : "255,0,0,255", "relay" : true }
+                  , { "name" : "Ogami"       , "position" : "30,-10,-25"      , "size" : 5    , "color" : "255,0,0,255", "relay" : false }
+                  , { "name" : "Talava"      , "position" : "-20,-10,15"      , "size" : 5    , "color" : "255,128,0,255", "relay" : false }
+                  , { "name" : "Solveig"     , "position" : "-40,65,-17.5"    , "size" : 5    , "color" : "255,128,0,255", "relay" : false }
+                  , { "name" : "Yakawa"      , "position" : "25,75,22.5"      , "size" : 5    , "color" : "255,128,0,255", "relay" : false }
+                  , { "name" : "Aysur"       , "position" : "50,60,25"        , "size" : 5    , "color" : "255,128,0,255", "relay" : false }
                ]
 
             , "distances" :
