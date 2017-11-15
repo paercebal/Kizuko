@@ -1,8 +1,11 @@
 #include <paercebal/KizukoLib/clusters/Star.hpp>
 #include <paercebal/KizukoLib/utilities.hpp>
 
+#include <paercebal/Graphics/maths/utilities.hpp>
+
 #include <SFML/Graphics.hpp>
 
+#include <cmath>
 #include <memory>
 #include <string>
 
@@ -30,12 +33,13 @@ void getStarHalo(sf::CircleShape & c, const sf::Color & color, sf::Uint8 transpa
    c.setPosition({ position.x - radius, position.y - radius });
 }
 
-Star::Star(const GlobalResources & globalResources, const std::string & name_, sf::Color color_, sf::Vector3f center_, float size_)
+Star::Star(const GlobalResources & globalResources, const std::string & name_, sf::Color color_, sf::Color coreColor_, sf::Vector3f center_, float size_)
    : super(globalResources)
    , name{ name_ }
    , shapes(8)
    , size{ size_ }
    , color{ color_ }
+   , coreColor{ coreColor_ }
 {
    this->setCenter(center_);
    this->setRelativePositions({ { 0, 0, 0 } });
@@ -53,10 +57,10 @@ void Star::createShapes2D()
       getStarHalo(this->shapes[1], this->color, 32, positions[0], this->size * 2.0f);
       getStarHalo(this->shapes[2], this->color, 64, positions[0], this->size * 1.5f);
       getStarHalo(this->shapes[3], this->color, 128, positions[0], this->size * 1.25f);
-      getGradientStar(this->shapes[4], this->color, sf::Color::White, 0, positions[0], this->size);
-      getGradientStar(this->shapes[5], this->color, sf::Color::White, .25f, positions[0], this->size);
-      getGradientStar(this->shapes[6], this->color, sf::Color::White, .50f, positions[0], this->size);
-      getGradientStar(this->shapes[7], this->color, sf::Color::White, 1.0f, positions[0], this->size);
+      getGradientStar(this->shapes[4], this->color, this->coreColor, 0, positions[0], this->size);
+      getGradientStar(this->shapes[5], this->color, this->coreColor, .25f, positions[0], this->size);
+      getGradientStar(this->shapes[6], this->color, this->coreColor, .50f, positions[0], this->size);
+      getGradientStar(this->shapes[7], this->color, this->coreColor, 1.0f, positions[0], this->size);
 
       this->nameLabel.setString(this->name);
       this->nameLabel.setFont(this->getGlobalResources().getFontScifi().font);

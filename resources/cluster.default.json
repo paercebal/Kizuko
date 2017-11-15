@@ -86,12 +86,12 @@
             , "size" : "100,100,100"
             , "stars" :
                [
-                    { "name" : "Balor"       , "position" : "0,0,0"           , "size" : 5    , "color" : "255,0,0,255", "relay" : true }
-                  , { "name" : "Ogami"       , "position" : "30,-10,-25"      , "size" : 5    , "color" : "255,0,0,255", "relay" : false }
-                  , { "name" : "Talava"      , "position" : "-20,-10,15"      , "size" : 5    , "color" : "255,128,0,255", "relay" : false }
-                  , { "name" : "Solveig"     , "position" : "-40,65,-17.5"    , "size" : 5    , "color" : "255,128,0,255", "relay" : false }
-                  , { "name" : "Yakawa"      , "position" : "25,75,22.5"      , "size" : 5    , "color" : "255,128,0,255", "relay" : false }
-                  , { "name" : "Aysur"       , "position" : "50,60,25"        , "size" : 5    , "color" : "255,128,0,255", "relay" : false }
+                    { "name" : "Balor"       , "position" : "0,0,0"           , "size" : 5    , "color" : "255,0,0,255"    , "core-color" : "255,128,0,255"    , "relay" : true }
+                  , { "name" : "Ogami"       , "position" : "30,-10,-25"      , "size" : 5    , "color" : "255,0,0,255"    , "core-color" : "255,128,0,255"    , "relay" : false }
+                  , { "name" : "Talava"      , "position" : "-20,-10,15"      , "size" : 5    , "color" : "255,128,0,255"  , "core-color" : "255,255,255,255"  , "relay" : false }
+                  , { "name" : "Solveig"     , "position" : "-40,65,-17.5"    , "size" : 5    , "color" : "255,128,0,255"  , "core-color" : "255,255,255,255"  , "relay" : false }
+                  , { "name" : "Yakawa"      , "position" : "25,75,22.5"      , "size" : 5    , "color" : "255,128,0,255"  , "core-color" : "255,255,255,255"  , "relay" : false }
+                  , { "name" : "Aysur"       , "position" : "50,60,25"        , "size" : 5    , "color" : "255,128,0,255"  , "core-color" : "255,255,255,255"  , "relay" : false }
                ]
 
             , "distances" :

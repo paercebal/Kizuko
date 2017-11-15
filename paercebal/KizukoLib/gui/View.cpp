@@ -70,8 +70,8 @@ void View::createShapes2D()
       const float xPos = this->viewCenter.x + (this->viewSize.x / 2.f) - (20 + 40);
       const float yPos = this->viewCenter.y + (this->viewSize.y / 2.f) - (40 + 40);
 
-      const sf::FloatRect labelBounds = this->buttonLabel.getLocalBounds();
-      this->nameLabel.setPosition({ xPos - labelBounds.width * 5, yPos });
+      const sf::FloatRect labelBounds = this->nameLabel.getLocalBounds();
+      this->nameLabel.setPosition({ xPos - labelBounds.width, yPos });
    }
 
    {
@@ -102,7 +102,7 @@ void View::createShapes2D()
       this->button.setOutlineColor(outlineColor);
       this->button.setOutlineThickness(2.f);
 
-      this->buttonLabel.setString("Hello");
+      this->buttonLabel.setString("Background");
       this->buttonLabel.setFont(this->getGlobalResources().getFontScifi().font);
       this->buttonLabel.setCharacterSize(this->getGlobalResources().getFontScifi().size);
       this->buttonLabel.setStyle(sf::Text::Regular);
@@ -110,6 +110,7 @@ void View::createShapes2D()
 
       const sf::FloatRect labelBounds = this->buttonLabel.getLocalBounds();
       this->buttonLabel.setPosition({ xPos + (xSize - labelBounds.width) / 2.f, yPos + (ySize - labelBounds.height) / 2.f }); /// @todo there's a bug, somewhere near. The label is too low.
+      //this->buttonLabel.setPosition({ 0, 0 - labelBounds.height/1.3f });
    }
 }
 

@@ -33,6 +33,9 @@ private:
 
    std::array<sf::Vertex, 2>        line2D;
    sf::Color                        color;
+   sf::ConvexShape                  baseShape;
+   int                              baseShapePointCount = 0;
+   bool                             isAltitudePositive = true;
 };
 
 
