@@ -58,6 +58,7 @@ struct Star
    sf::Vector3f               position = {};
    float                      size = 0;
    sf::Color                  color = {};
+   sf::Color                  coreColor = {};
    bool                       relay = false;
 };
 

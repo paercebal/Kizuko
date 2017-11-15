@@ -473,6 +473,7 @@ input::Star extractStar(const rapidjson::Value & t)
    extractValue(t, "position", value.position);
    extractValue(t, "size", value.size);
    extractValue(t, "color", value.color);
+   extractValue(t, "core-color", value.coreColor);
    extractValue(t, "relay", value.relay);
 
    return value;

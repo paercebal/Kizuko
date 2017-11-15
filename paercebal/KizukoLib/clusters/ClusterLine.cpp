@@ -15,8 +15,10 @@ inline sf::Color ClusterLineStyleToColor(ClusterLineStyle style)
 {
    switch (style)
    {
-      case ClusterLineStyle::AxisX: return sf::Color{ 255, 128, 128, 128 };
-      case ClusterLineStyle::AxisY: return sf::Color{ 128, 128, 255, 128 };
+      //case ClusterLineStyle::AxisX: return sf::Color{ 255, 128, 128, 128 };
+      //case ClusterLineStyle::AxisY: return sf::Color{ 128, 128, 255, 128 };
+      case ClusterLineStyle::AxisX: return sf::Color{ 255, 255, 255, 128 };
+      case ClusterLineStyle::AxisY: return sf::Color{ 255, 255, 255, 128 };
       case ClusterLineStyle::Major: return sf::Color{ 255, 255, 255, 64 };
       case ClusterLineStyle::Minor: return sf::Color{ 255, 255, 255, 32 };
    }

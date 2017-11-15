@@ -19,7 +19,7 @@ class PAERCEBAL_x_KIZUKOLIB_x_API Star : public objects::Object
    using super = objects::Object;
 public:
 
-   Star(const GlobalResources & globalResources, const std::string & name_, sf::Color color_, sf::Vector3f center_, float size_);
+   Star(const GlobalResources & globalResources, const std::string & name_, sf::Color color_, sf::Color coreColor_, sf::Vector3f center_, float size_);
 
    const std::string &           getName() const;
    sf::Color                     getColor() const;
@@ -35,6 +35,7 @@ private:
    std::vector<sf::CircleShape>  shapes;
    float                         size;
    sf::Color                     color;
+   sf::Color                     coreColor;
    sf::Text                      nameLabel;
 };
 
