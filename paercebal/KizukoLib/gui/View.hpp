@@ -6,6 +6,7 @@
 #include <paercebal/KizukoLib/objects/Object.hpp>
 #include <paercebal/KizukoLib/clusters/Cluster.hpp>
 #include <paercebal/KizukoLib/gui/Button.hpp>
+#include <paercebal/KizukoLib/gui/Label.hpp>
 
 #include <SFML/Graphics.hpp>
 
@@ -71,14 +72,12 @@ private:
 
    sf::Vector2f                  viewSize;
    sf::Vector2f                  viewCenter;
-   sf::Vector2i                  viewMousePosition;
 
    sf::Text                      debugLabel;
    std::string                   debugText;
 
    Button                        button;
-
-   sf::Text                      nameLabel;
+   Label                         label;
 
    sf::Texture                   spaceBackground;
    sf::Sprite                    spaceBackgroundSprite;

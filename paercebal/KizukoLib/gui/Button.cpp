@@ -88,25 +88,37 @@ sf::Vector2f calculateAbsolutePosition(const sf::Vector2f & viewCenter, const sf
    };
 }
 
+const WidgetStyles ButtonStyles =
+{
+   {
+      { { 0, 128, 255, 128 },{ 0, 128, 255, 192 }, 2.f }
+      ,{ { 255, 255, 255, 255 },{ 0, 0, 0, 0 }, 0, sf::Text::Regular }
+   }
+   ,{
+      { { 0, 128, 255, 192 },{ 0, 128, 255, 255 }, 2.f }
+      ,{ { 255, 255, 255, 255 },{ 0, 0, 0, 0 }, 0, sf::Text::Regular }
+   }
+};
 
-}
+
+} // anonymous namespace
 
 Button::Button(const GlobalResources & globalResources_, RelativePositionStyle relativePositionStyle_, const sf::Vector2f & relativePosition_, const sf::Vector2f & size_)
-   : Button(globalResources_, relativePositionStyle_, relativePosition_, size_, { { { 255, 255, 255, 255 },{ 0, 128, 255, 128 },{ 0, 128, 255, 192 } },{ { 255, 255, 255, 255 },{ 0, 128, 255, 192 },{ 0, 128, 255, 255 } } })
+   : Button(globalResources_, relativePositionStyle_, relativePosition_, size_, ButtonStyles)
 {
 }
 
-Button::Button(const GlobalResources & globalResources_, RelativePositionStyle relativePositionStyle_, const sf::Vector2f & relativePosition_, const sf::Vector2f & size_, const WidgetColors & widgetColors_)
-   : Button(globalResources_, relativePositionStyle_, relativePosition_, size_, widgetColors_, []() {})
+Button::Button(const GlobalResources & globalResources_, RelativePositionStyle relativePositionStyle_, const sf::Vector2f & relativePosition_, const sf::Vector2f & size_, const WidgetStyles & widgetStyles_)
+   : Button(globalResources_, relativePositionStyle_, relativePosition_, size_, widgetStyles_, []() {})
 {
 }
 
-Button::Button(const GlobalResources & globalResources_, RelativePositionStyle relativePositionStyle_, const sf::Vector2f & relativePosition_, const sf::Vector2f & size_, const WidgetColors & widgetColors_, CommandCallback commandCallback_)
+Button::Button(const GlobalResources & globalResources_, RelativePositionStyle relativePositionStyle_, const sf::Vector2f & relativePosition_, const sf::Vector2f & size_, const WidgetStyles & widgetStyles_, CommandCallback commandCallback_)
    : globalResources{ globalResources_ }
    , relativePositionStyle{ relativePositionStyle_ }
    , relativePosition{ relativePosition_ }
    , size{ size_ }
-   , colors(widgetColors_)
+   , styles(widgetStyles_)
    , commandCallback(commandCallback_)
 {
 }
@@ -163,16 +175,12 @@ void Button::createShapes2D()
       this->button.setSize(this->size);
       this->button.setPosition(this->absolutePosition);
 
-      this->button.setOutlineThickness(2.f);
-
-      this->buttonLabel.setString("Background");
       this->buttonLabel.setFont(this->getGlobalResources().getFontScifi().font);
-      this->buttonLabel.setCharacterSize(this->getGlobalResources().getFontScifi().size * 1.2);
-      this->buttonLabel.setStyle(sf::Text::Regular);
+      this->buttonLabel.setCharacterSize(static_cast<int>(this->getGlobalResources().getFontScifi().size * 1.2));
 
       const sf::FloatRect labelBounds = this->buttonLabel.getLocalBounds();
-      this->buttonLabel.setPosition({ this->absolutePosition.x + (this->size.x - (labelBounds.width - labelBounds.left)) / 2.f, this->absolutePosition.y + (this->size.y - (labelBounds.height + labelBounds.top)) / 2.f }); /// @todo there's a bug, somewhere near. The label is too low.
-      //this->buttonLabel.setPosition({ 0, 0 - labelBounds.height/1.3f });
+      const sf::Vector2f labelSize = { labelBounds.width + labelBounds.left, labelBounds.height + labelBounds.top }; // for some reason, the size and the local bounds are different. facepalm.
+      this->buttonLabel.setPosition({ this->absolutePosition.x + (this->size.x - labelSize.x) / 2.f, this->absolutePosition.y + (this->size.y - labelSize.y) / 2.f });
 
       this->setChanged(false);
    }
@@ -180,12 +188,15 @@ void Button::createShapes2D()
    sf::FloatRect buttonBounds = this->button.getGlobalBounds();
    const bool isHoveringOnButton = ((this->viewMousePosition.x >= buttonBounds.left) && (this->viewMousePosition.x <= buttonBounds.left + buttonBounds.width) && (this->viewMousePosition.y >= buttonBounds.top) && (this->viewMousePosition.y <= buttonBounds.top + buttonBounds.height));
 
-   WidgetColorStates colorState = isHoveringOnButton ? this->colors.hover : this->colors.normal;
+   WidgetStyle style = isHoveringOnButton ? this->styles.hover : this->styles.normal;
 
-   this->button.setFillColor(colorState.background);
-   this->button.setOutlineColor(colorState.outline);
-
-   this->buttonLabel.setFillColor(colorState.foreground);
+   this->button.setFillColor(style.area.background);
+   this->button.setOutlineColor(style.area.outline);
+   this->button.setOutlineThickness(style.area.outlineThickness);
+   this->buttonLabel.setFillColor(style.font.foreground);
+   this->buttonLabel.setStyle(style.font.style);
+   this->buttonLabel.setOutlineColor(style.font.outline);
+   this->buttonLabel.setOutlineThickness(style.font.outlineThickness);
 }
 
 void Button::warnMouseHovering(int x, int y)
