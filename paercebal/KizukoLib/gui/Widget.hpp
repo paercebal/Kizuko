@@ -86,6 +86,7 @@ public:
 
    void                          warnMouseHovering(int x, int y);
    void                          warnMouseClicking(sf::Vector2i pressed, sf::Vector2i released);
+   void                          warnLoseFocus();
 
 protected:
    Widget &                      setSize(const sf::Vector2f & size);

@@ -3,7 +3,8 @@
 
 #include <paercebal/KizukoLib/dllmain.hpp>
 #include <paercebal/KizukoLib/GlobalResources.hpp>
-#include <paercebal/KizukoLib/clusters/View.hpp>
+#include <paercebal/KizukoLib/clusters/ClusterView.hpp>
+#include <paercebal/KizukoLib/galaxy/GalaxyView.hpp>
 #include <paercebal/KizukoLib/gui/Button.hpp>
 #include <paercebal/KizukoLib/gui/Label.hpp>
 
@@ -30,36 +31,42 @@ public:
    Screen & operator = (Screen && that)                                                      noexcept;
 
 
-   const GlobalResources &             getGlobalResources()                            const;
+   const GlobalResources &                   getGlobalResources()                            const;
 
 
-   void                                drawInto(sf::RenderTarget & renderTarget)       const;
-   std::unique_ptr<Screen>             clone()                                         const;
+   void                                      drawInto(sf::RenderTarget & renderTarget)       const;
+   std::unique_ptr<Screen>                   clone()                                         const;
 
-   Screen &                            onLeftKeyPressed();
-   Screen &                            onUpKeyPressed();
-   Screen &                            onRightKeyPressed();
-   Screen &                            onDownKeyPressed();
-   Screen &                            onMouseDragByPixels(int x, int y);
-   Screen &                            onPageUpKeyPressed();
-   Screen &                            onPageDownKeyPressed();
-   Screen &                            onMouseWheelScrollPositive();
-   Screen &                            onMouseWheelScrollNegative();
+   Screen &                                  onLeftKeyPressed();
+   Screen &                                  onUpKeyPressed();
+   Screen &                                  onRightKeyPressed();
+   Screen &                                  onDownKeyPressed();
+   Screen &                                  onMouseDragByPixels(int x, int y);
+   Screen &                                  onPageUpKeyPressed();
+   Screen &                                  onPageDownKeyPressed();
+   Screen &                                  onMouseWheelScrollPositive();
+   Screen &                                  onMouseWheelScrollNegative();
 
-   Screen &                            setView(const sf::View & view);
+   Screen &                                  setView(const sf::View & view);
 
-   void                                warnMouseHovering(int x, int y);
-   void                                warnMouseClicking(sf::Vector2i pressed, sf::Vector2i released);
-   void                                calculateAbsolutePositionThenShapes2DRecursiveIfNeeded();
+   void                                      warnMouseHovering(int x, int y);
+   void                                      warnMouseClicking(sf::Vector2i pressed, sf::Vector2i released);
+   void                                      calculateAbsolutePositionThenShapes2DRecursiveIfNeeded();
 
 private:
 
-   virtual Screen *                    cloneImpl()                                     const;
+   virtual Screen *                          cloneImpl()                                     const;
 
+   void                                      onBackFromCluster();
+   void                                      onSelectCluster();
+   const View *                              getCurrentView()                                const;
+   View *                                    getCurrentView();
 
-   const GlobalResources *             globalResources;
-   std::unique_ptr<clusters::View>     clustersView;
-   sf::View                            sfmlView;
+   const GlobalResources *                   globalResources;
+   std::unique_ptr<clusters::ClusterView>    clusterView;
+   std::unique_ptr<galaxy::GalaxyView>       galaxyView;
+   std::vector<View *>                       views;
+   sf::View                                  sfmlView;
 };
 
 

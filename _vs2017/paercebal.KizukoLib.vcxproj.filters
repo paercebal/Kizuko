@@ -69,10 +69,16 @@
     <ClCompile Include="..\paercebal\KizukoLib\galaxy\GalaxyLine.cpp">
       <Filter>p.KizukoLib.galaxy</Filter>
     </ClCompile>
-    <ClCompile Include="..\paercebal\KizukoLib\clusters\View.cpp">
+    <ClCompile Include="..\paercebal\KizukoLib\gui\Screen.cpp">
+      <Filter>p.KizukoLib.gui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\paercebal\KizukoLib\clusters\ClusterView.cpp">
       <Filter>p.KizukoLib.clusters</Filter>
     </ClCompile>
-    <ClCompile Include="..\paercebal\KizukoLib\gui\Screen.cpp">
+    <ClCompile Include="..\paercebal\KizukoLib\galaxy\GalaxyView.cpp">
+      <Filter>p.KizukoLib.galaxy</Filter>
+    </ClCompile>
+    <ClCompile Include="..\paercebal\KizukoLib\gui\View.cpp">
       <Filter>p.KizukoLib.gui</Filter>
     </ClCompile>
   </ItemGroup>
@@ -128,10 +134,16 @@
     <ClInclude Include="..\paercebal\KizukoLib\galaxy\GalaxyLine.hpp">
       <Filter>p.KizukoLib.galaxy</Filter>
     </ClInclude>
-    <ClInclude Include="..\paercebal\KizukoLib\clusters\View.hpp">
+    <ClInclude Include="..\paercebal\KizukoLib\gui\Screen.hpp">
+      <Filter>p.KizukoLib.gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\paercebal\KizukoLib\clusters\ClusterView.hpp">
       <Filter>p.KizukoLib.clusters</Filter>
     </ClInclude>
-    <ClInclude Include="..\paercebal\KizukoLib\gui\Screen.hpp">
+    <ClInclude Include="..\paercebal\KizukoLib\galaxy\GalaxyView.hpp">
+      <Filter>p.KizukoLib.galaxy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\paercebal\KizukoLib\gui\View.hpp">
       <Filter>p.KizukoLib.gui</Filter>
     </ClInclude>
   </ItemGroup>
