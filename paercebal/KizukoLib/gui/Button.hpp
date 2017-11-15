@@ -3,15 +3,11 @@
 
 #include <paercebal/KizukoLib/dllmain.hpp>
 #include <paercebal/KizukoLib/GlobalResources.hpp>
-#include <paercebal/KizukoLib/objects/Object.hpp>
-#include <paercebal/KizukoLib/clusters/Cluster.hpp>
 
 #include <SFML/Graphics.hpp>
 
 #include <memory>
-#include <vector>
 #include <string>
-#include <sstream>
 #include <functional>
 
 
@@ -31,17 +27,31 @@ enum class RelativePositionStyle
    , BottomRight
 };
 
-struct WidgetColorStates
+struct WidgetStyle
 {
-   sf::Color foreground = {};
-   sf::Color background = {};
-   sf::Color outline = {};
+   struct Area
+   {
+      sf::Color background = {};
+      sf::Color outline = {};
+      float outlineThickness = {};
+   };
+
+   struct Font
+   {
+      sf::Color foreground = {};
+      sf::Color outline = {};
+      float outlineThickness = {};
+      sf::Uint32 style = sf::Text::Regular;
+   };
+
+   Area area;
+   Font font;
 };
 
-struct WidgetColors
+struct WidgetStyles
 {
-   WidgetColorStates normal;
-   WidgetColorStates hover;
+   WidgetStyle normal;
+   WidgetStyle hover;
 };
 
 
@@ -52,8 +62,8 @@ public:
    using CommandCallback = std::function<void(void)>;
 
    Button(const GlobalResources & globalResources_, RelativePositionStyle relativePositionStyle, const sf::Vector2f & relativePosition_, const sf::Vector2f & size_);
-   Button(const GlobalResources & globalResources_, RelativePositionStyle relativePositionStyle, const sf::Vector2f & relativePosition_, const sf::Vector2f & size_, const WidgetColors & widgetColors_);
-   Button(const GlobalResources & globalResources_, RelativePositionStyle relativePositionStyle, const sf::Vector2f & relativePosition_, const sf::Vector2f & size_, const WidgetColors & widgetColors_, CommandCallback commandCallback_);
+   Button(const GlobalResources & globalResources_, RelativePositionStyle relativePositionStyle, const sf::Vector2f & relativePosition_, const sf::Vector2f & size_, const WidgetStyles & widgetStyles_);
+   Button(const GlobalResources & globalResources_, RelativePositionStyle relativePositionStyle, const sf::Vector2f & relativePosition_, const sf::Vector2f & size_, const WidgetStyles & widgetStyles_, CommandCallback commandCallback_);
 
    virtual void                  createShapes2D();
    virtual void                  drawInto(sf::RenderTarget & renderTarget)       const;
@@ -64,7 +74,7 @@ public:
    Button &                      setCommand(CommandCallback commandCallback);
    Button &                      setPosition(RelativePositionStyle relativePositionStyle, const sf::Vector2f & relativePosition);
    Button &                      setSize(const sf::Vector2f & size);
-   Button &                      setColor(const WidgetColors & widgetColors);
+   Button &                      setColor(const WidgetStyles & widgetColors);
    Button &                      setLabel(const std::string & label);
 
    Button &                      setChanged(bool isChanged);
@@ -84,7 +94,7 @@ private:
    sf::Vector2f                  absolutePosition = {};
    sf::Vector2f                  size = {};
    bool                          changed = true;
-   WidgetColors                  colors;
+   WidgetStyles                  styles;
    CommandCallback               commandCallback;
 
    sf::Vector2f                  viewSize;

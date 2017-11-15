@@ -1,4 +1,4 @@
-#include <paercebal/KizukoLib/gui/Button.hpp>
+#include <paercebal/KizukoLib/gui/Label.hpp>
 
 #include <paercebal/Graphics/maths/Matrix3D.hpp>
 #include <paercebal/Graphics/maths/utilities.hpp>
@@ -88,54 +88,57 @@ sf::Vector2f calculateAbsolutePosition(const sf::Vector2f & viewCenter, const sf
    };
 }
 
-const WidgetStyles ButtonStyles =
+const WidgetStyles LabelStyles =
 {
    {
-      { { 0, 128, 255, 128 },{ 0, 128, 255, 192 }, 2.f }
-      ,{ { 255, 255, 255, 255 },{ 0, 0, 0, 0 }, 0, sf::Text::Regular }
+      { { 0, 0, 0, 0 },{ 0, 0, 0, 0 }, 0 }
+      ,{ { 255, 255, 255, 255 },{ 0, 0, 0, 128 }, 2.f, sf::Text::Regular }
    }
    ,{
-      { { 0, 128, 255, 192 },{ 0, 128, 255, 255 }, 2.f }
-      ,{ { 255, 255, 255, 255 },{ 0, 0, 0, 0 }, 0, sf::Text::Regular }
+      { { 0, 0, 0, 0 },{ 0, 0, 0, 0 }, 0 }
+      ,{ { 255, 255, 255, 255 },{ 0, 128, 255, 192 }, 3.f, sf::Text::Regular }
    }
 };
 
-
 } // anonymous namespace
 
-Button::Button(const GlobalResources & globalResources_, RelativePositionStyle relativePositionStyle_, const sf::Vector2f & relativePosition_, const sf::Vector2f & size_)
-   : Button(globalResources_, relativePositionStyle_, relativePosition_, size_, ButtonStyles)
+Label::Label(const GlobalResources & globalResources_, RelativePositionStyle relativePositionStyle_, const sf::Vector2f & relativePosition_)
+   : Label(globalResources_, relativePositionStyle_, relativePosition_, 1.f)
 {
 }
 
-Button::Button(const GlobalResources & globalResources_, RelativePositionStyle relativePositionStyle_, const sf::Vector2f & relativePosition_, const sf::Vector2f & size_, const WidgetStyles & widgetStyles_)
-   : Button(globalResources_, relativePositionStyle_, relativePosition_, size_, widgetStyles_, []() {})
+Label::Label(const GlobalResources & globalResources_, RelativePositionStyle relativePositionStyle_, const sf::Vector2f & relativePosition_, float fontScale_)
+   : Label(globalResources_, relativePositionStyle_, relativePosition_, fontScale_, LabelStyles)
 {
 }
 
-Button::Button(const GlobalResources & globalResources_, RelativePositionStyle relativePositionStyle_, const sf::Vector2f & relativePosition_, const sf::Vector2f & size_, const WidgetStyles & widgetStyles_, CommandCallback commandCallback_)
+Label::Label(const GlobalResources & globalResources_, RelativePositionStyle relativePositionStyle_, const sf::Vector2f & relativePosition_, float fontScale_, const WidgetStyles & widgetStyles_)
+   : Label(globalResources_, relativePositionStyle_, relativePosition_, fontScale_, widgetStyles_, []() {})
+{
+}
+
+Label::Label(const GlobalResources & globalResources_, RelativePositionStyle relativePositionStyle_, const sf::Vector2f & relativePosition_, float fontScale_, const WidgetStyles & widgetStyles_, CommandCallback commandCallback_)
    : globalResources{ globalResources_ }
    , relativePositionStyle{ relativePositionStyle_ }
    , relativePosition{ relativePosition_ }
-   , size{ size_ }
+   , fontScale{ fontScale_ }
    , styles(widgetStyles_)
    , commandCallback(commandCallback_)
 {
 }
 
-const GlobalResources & Button::getGlobalResources() const
+const GlobalResources & Label::getGlobalResources() const
 {
    return this->globalResources;
 }
 
-Button & Button::setSize(const sf::Vector2f & size)
+Label & Label::setFontScale(float fontScale)
 {
-   this->size = size;
+   this->fontScale = fontScale;
    this->setChanged(true);
    return *this;
 }
-
-Button & Button::setPosition(RelativePositionStyle relativePositionStyle, const sf::Vector2f & relativePosition)
+Label & Label::setPosition(RelativePositionStyle relativePositionStyle, const sf::Vector2f & relativePosition)
 {
    this->relativePositionStyle = relativePositionStyle;
    this->relativePosition = relativePosition;
@@ -143,7 +146,7 @@ Button & Button::setPosition(RelativePositionStyle relativePositionStyle, const 
    return *this;
 }
 
-Button & Button::setView(const sf::View & view)
+Label & Label::setView(const sf::View & view)
 {
    this->viewSize = view.getSize();
    this->viewCenter = view.getCenter();
@@ -152,54 +155,50 @@ Button & Button::setView(const sf::View & view)
    return *this;
 }
 
-Button & Button::setLabel(const std::string & label)
+Label & Label::setLabel(const std::string & label)
 {
-   this->buttonLabel.setString(label);
+   this->label.setString(label);
    this->setChanged(true);
    return *this;
 }
 
-Button & Button::setCommand(CommandCallback commandCallback)
+Label & Label::setCommand(CommandCallback commandCallback)
 {
    this->commandCallback = commandCallback;
    this->setChanged(true);
    return *this;
 }
 
-void Button::createShapes2D()
+void Label::createShapes2D()
 {
    if (this->isChanged())
    {
+      this->label.setFont(this->getGlobalResources().getFontScifi().font);
+      this->label.setCharacterSize(static_cast<int>(this->getGlobalResources().getFontScifi().size * this->fontScale));
+
+      const sf::FloatRect labelBounds = this->label.getLocalBounds();
+      this->size.x = labelBounds.width + labelBounds.left;  // I've yet to understand what the LocalBounds is for sf::Text, because that addition makes no sense
+      this->size.y = labelBounds.height + labelBounds.top;  // I've yet to understand what the LocalBounds is for sf::Text, because that addition makes no sense
+
       this->absolutePosition = calculateAbsolutePosition(this->viewCenter, this->viewSize, this->relativePositionStyle, this->relativePosition, this->size);
 
-      this->button.setSize(this->size);
-      this->button.setPosition(this->absolutePosition);
-
-      this->buttonLabel.setFont(this->getGlobalResources().getFontScifi().font);
-      this->buttonLabel.setCharacterSize(static_cast<int>(this->getGlobalResources().getFontScifi().size * 1.2));
-
-      const sf::FloatRect labelBounds = this->buttonLabel.getLocalBounds();
-      const sf::Vector2f labelSize = { labelBounds.width + labelBounds.left, labelBounds.height + labelBounds.top }; // for some reason, the size and the local bounds are different. facepalm.
-      this->buttonLabel.setPosition({ this->absolutePosition.x + (this->size.x - labelSize.x) / 2.f, this->absolutePosition.y + (this->size.y - labelSize.y) / 2.f });
+      this->label.setPosition(this->absolutePosition);
 
       this->setChanged(false);
    }
 
-   sf::FloatRect buttonBounds = this->button.getGlobalBounds();
-   const bool isHoveringOnButton = ((this->viewMousePosition.x >= buttonBounds.left) && (this->viewMousePosition.x <= buttonBounds.left + buttonBounds.width) && (this->viewMousePosition.y >= buttonBounds.top) && (this->viewMousePosition.y <= buttonBounds.top + buttonBounds.height));
+   sf::FloatRect labelBounds = { this->absolutePosition, this->size };
+   const bool isHoveringOnButton = ((this->viewMousePosition.x >= labelBounds.left) && (this->viewMousePosition.x <= labelBounds.left + labelBounds.width) && (this->viewMousePosition.y >= labelBounds.top) && (this->viewMousePosition.y <= labelBounds.top + labelBounds.height));
 
    WidgetStyle style = isHoveringOnButton ? this->styles.hover : this->styles.normal;
 
-   this->button.setFillColor(style.area.background);
-   this->button.setOutlineColor(style.area.outline);
-   this->button.setOutlineThickness(style.area.outlineThickness);
-   this->buttonLabel.setFillColor(style.font.foreground);
-   this->buttonLabel.setStyle(style.font.style);
-   this->buttonLabel.setOutlineColor(style.font.outline);
-   this->buttonLabel.setOutlineThickness(style.font.outlineThickness);
+   this->label.setFillColor(style.font.foreground);
+   this->label.setStyle(style.font.style);
+   this->label.setOutlineColor(style.font.outline);
+   this->label.setOutlineThickness(style.font.outlineThickness);
 }
 
-void Button::warnMouseHovering(int x, int y)
+void Label::warnMouseHovering(int x, int y)
 {
    const float xPos = this->viewCenter.x - (this->viewSize.x / 2.f) + x;
    const float yPos = this->viewCenter.y - (this->viewSize.y / 2.f) + y;
@@ -207,7 +206,7 @@ void Button::warnMouseHovering(int x, int y)
    this->viewMousePosition = { static_cast<int>(xPos), static_cast<int>(yPos) };
 }
 
-void Button::warnMouseClicking(sf::Vector2i pressed, sf::Vector2i released)
+void Label::warnMouseClicking(sf::Vector2i pressed, sf::Vector2i released)
 {
    auto convertToViewCoordinates = [this](sf::Vector2i pos) ->sf::Vector2i
    {
@@ -217,43 +216,42 @@ void Button::warnMouseClicking(sf::Vector2i pressed, sf::Vector2i released)
    auto realPressed = convertToViewCoordinates(pressed);
    auto realReleased = convertToViewCoordinates(released);
 
-   auto isWithinButtonBounds = [this](sf::Vector2i mouse) ->bool
+   auto isWithinLabelBounds = [this](sf::Vector2i mouse) ->bool
    {
-      sf::FloatRect buttonBounds = this->button.getGlobalBounds();
-      return ((mouse.x >= buttonBounds.left) && (mouse.x <= buttonBounds.left + buttonBounds.width) && (mouse.y >= buttonBounds.top) && (mouse.y <= buttonBounds.top + buttonBounds.height));
+      sf::FloatRect labelBounds = { this->absolutePosition, this->size };
+      return ((mouse.x >= labelBounds.left) && (mouse.x <= labelBounds.left + labelBounds.width) && (mouse.y >= labelBounds.top) && (mouse.y <= labelBounds.top + labelBounds.height));
    };
 
-   const bool isClickingOnButton = isWithinButtonBounds(realPressed) && isWithinButtonBounds(realReleased);
+   const bool isClickingOnLabel = isWithinLabelBounds(realPressed) && isWithinLabelBounds(realReleased);
 
-   if (isClickingOnButton)
+   if (isClickingOnLabel)
    {
       this->commandCallback();
    }
 }
 
-void Button::drawInto(sf::RenderTarget & renderTarget) const
+void Label::drawInto(sf::RenderTarget & renderTarget) const
 {
-   renderTarget.draw(this->button);
-   renderTarget.draw(this->buttonLabel);
+   renderTarget.draw(this->label);
 }
 
-std::unique_ptr<Button> Button::clone() const
+std::unique_ptr<Label> Label::clone() const
 {
-   return std::unique_ptr<Button>(this->cloneImpl());
+   return std::unique_ptr<Label>(this->cloneImpl());
 }
 
-Button * Button::cloneImpl() const
+Label * Label::cloneImpl() const
 {
-   return new Button(*this);
+   return new Label(*this);
 }
 
-Button & Button::setChanged(bool changed)
+Label & Label::setChanged(bool changed)
 {
    this->changed = changed;
    return *this;
 }
 
-bool Button::isChanged() const
+bool Label::isChanged() const
 {
    return this->changed;
 }

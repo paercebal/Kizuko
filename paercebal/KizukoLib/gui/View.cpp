@@ -28,6 +28,7 @@ View::View(const GlobalResources & globalResources, float translationIncrement_)
    : super(globalResources)
    , translationIncrement(translationIncrement_)
    , button(globalResources, RelativePositionStyle::BottomLeft, { 20.f, -20.f }, { 200.f, 40.f })
+   , label(globalResources, RelativePositionStyle::BottomRight, { -20.f, -20.f }, 2.f)
 {
    auto cluster = std::make_unique<clusters::Cluster>(globalResources);
    this->cluster = cluster.get();
@@ -41,7 +42,11 @@ View::View(const GlobalResources & globalResources, float translationIncrement_)
    this->spaceBackgroundSprite.setScale(sf::Vector2f(1.0f, 1.0f));
    this->spaceBackgroundSprite.setColor(sf::Color(255, 255, 255, 96));
 
+   this->button.setLabel("Background");
    this->button.setCommand([this]() { this->isSpaceBackgroundVisible = !this->isSpaceBackgroundVisible; this->setChanged(true); });
+
+   this->label.setLabel("Caleston Rift");
+   this->label.setCommand([this]() { this->isSpaceBackgroundVisible = !this->isSpaceBackgroundVisible; this->setChanged(true); });
 }
 
 View & View::setView(const sf::View & view)
@@ -49,6 +54,7 @@ View & View::setView(const sf::View & view)
    this->viewSize = view.getSize();
    this->viewCenter = view.getCenter();
    this->button.setView(view);
+   this->label.setView(view);
    this->setChanged(true);
 
    return *this;
@@ -64,37 +70,25 @@ void View::createShapes2D()
    this->debugLabel.setPosition({ 0, 0 });
 
    {
-      this->nameLabel.setString("Caleston Rift");
-      this->nameLabel.setFont(this->getGlobalResources().getFontScifi().font);
-      this->nameLabel.setCharacterSize(this->getGlobalResources().getFontScifi().size * 2);
-      this->nameLabel.setStyle(sf::Text::Regular);
-      this->nameLabel.setFillColor(sf::Color::White);
-
-      // right-bottom Cluster Name position
-      const float xPos = this->viewCenter.x + (this->viewSize.x / 2.f) - (20 + 40);
-      const float yPos = this->viewCenter.y + (this->viewSize.y / 2.f) - (40 + 40);
-
-      const sf::FloatRect labelBounds = this->nameLabel.getLocalBounds();
-      this->nameLabel.setPosition({ xPos - labelBounds.width, yPos });
-   }
-
-   {
       const float xPos = this->viewCenter.x - (this->viewSize.x / 2.f);
       const float yPos = this->viewCenter.y - (this->viewSize.y / 2.f);
       this->spaceBackgroundSprite.setPosition(sf::Vector2f(xPos, yPos));
    }
 
    this->button.createShapes2D();
+   this->label.createShapes2D();
 }
 
 void View::warnMouseHovering(int x, int y)
 {
    this->button.warnMouseHovering(x, y);
+   this->label.warnMouseHovering(x, y);
 }
 
 void View::warnMouseClicking(sf::Vector2i pressed, sf::Vector2i released)
 {
    this->button.warnMouseClicking(pressed, released);
+   this->label.warnMouseClicking(pressed, released);
 }
 
 void View::drawInto(sf::RenderTarget & renderTarget) const
@@ -106,8 +100,8 @@ void View::drawInto(sf::RenderTarget & renderTarget) const
 
    this->cluster->drawInto(renderTarget);
    renderTarget.draw(this->debugLabel);
-   renderTarget.draw(this->nameLabel);
    this->button.drawInto(renderTarget);
+   this->label.drawInto(renderTarget);
 }
 
 std::unique_ptr<View> View::clone() const
