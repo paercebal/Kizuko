@@ -1,5 +1,5 @@
-#ifndef PAERCEBAL_x_KIZUKOLIB_x_GUI_x_VIEW_x_HPP
-#define PAERCEBAL_x_KIZUKOLIB_x_GUI_x_VIEW_x_HPP
+#ifndef PAERCEBAL_x_KIZUKOLIB_x_CLUSTERS_x_VIEW_x_HPP
+#define PAERCEBAL_x_KIZUKOLIB_x_CLUSTERS_x_VIEW_x_HPP
 
 #include <paercebal/KizukoLib/dllmain.hpp>
 #include <paercebal/KizukoLib/GlobalResources.hpp>
@@ -16,7 +16,7 @@
 #include <sstream>
 
 
-namespace paercebal::KizukoLib::gui
+namespace paercebal::KizukoLib::clusters
 {
 
 
@@ -76,8 +76,8 @@ private:
    sf::Text                      debugLabel;
    std::string                   debugText;
 
-   Button                        button;
-   Label                         label;
+   gui::Button                   button;
+   gui::Label                    label;
 
    sf::Texture                   spaceBackground;
    sf::Sprite                    spaceBackgroundSprite;
@@ -87,11 +87,11 @@ private:
 PAERCEBAL_x_KIZUKOLIB_x_API void calculateAbsolutePositionThenShapes2DRecursiveIfNeeded(View & view);
 
 
-} // namespace paercebal::KizukoLib::gui
+} // namespace paercebal::KizukoLib::clusters
 
 
 
 
 
-#endif // PAERCEBAL_x_KIZUKOLIB_x_GUI_x_VIEW_x_HPP
+#endif // PAERCEBAL_x_KIZUKOLIB_x_CLUSTERS_x_VIEW_x_HPP
 

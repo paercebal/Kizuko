@@ -1,6 +1,6 @@
 #include <paercebal/Kizuko/main.hpp>
 
-#include <paercebal/KizukoLib/gui/View.hpp>
+#include <paercebal/KizukoLib/gui/screen.hpp>
 #include <paercebal/KizukoLib/Exception.hpp>
 #include <paercebal/KizukoLib/GlobalResources.hpp>
 #include <paercebal/KizukoLib/utilities.hpp>
@@ -338,9 +338,9 @@ class Application : public ApplicationBase<Application>
 {
    using super = ApplicationBase<Application>;
 public:
-   Application(paercebal::KizukoLib::gui::View & view_, sf::RenderWindow & sfml_window_, sf::View & sfml_view_)
+   Application(paercebal::KizukoLib::gui::Screen & screen_, sf::RenderWindow & sfml_window_, sf::View & sfml_view_)
       : super(sfml_window_, sfml_view_)
-      , view(view_)
+      , screen(screen_)
    {
       this->dragRight.isDraggingActive = true;
    }
@@ -348,7 +348,7 @@ public:
    void onWindowResize(const sf::Event::SizeEvent & event)
    {
       this->sfml_view.setSize({ static_cast<float>(event.width), static_cast<float>(event.height) });
-      this->view.setView(this->sfml_view);
+      this->screen.setView(this->sfml_view);
       this->sfml_window.setView(this->sfml_view);
    }
 
@@ -356,17 +356,17 @@ public:
    {
       if (event.delta > 0)
       {
-         view.zoomInByWheel();
+         screen.onMouseWheelScrollPositive();
       }
       else  if (event.delta < 0)
       {
-         view.zoomOutByWheel();
+         screen.onMouseWheelScrollNegative();
       }
    }
 
    void onMouseDrag(const sf::Event::MouseMoveEvent & eventNow, const sf::Event::MouseMoveEvent & eventOld)
    {
-      view.translateByPixels(eventNow.x - eventOld.x, eventNow.y - eventOld.y);
+      screen.onMouseDragByPixels(eventNow.x - eventOld.x, eventNow.y - eventOld.y);
    }
 
    void processState()
@@ -379,38 +379,37 @@ public:
 
       if (this->isKeyPressed<sf::Keyboard::Key::Left>())
       {
-         this->view.translateXPositive();
+         this->screen.onLeftKeyPressed();
       }
       if (this->isKeyPressed<sf::Keyboard::Key::Right>())
       {
-         this->view.translateXNegative();
+         this->screen.onRightKeyPressed();
       }
       if (this->isKeyPressed<sf::Keyboard::Key::Up>())
       {
-         this->view.translateYPositive();
+         this->screen.onUpKeyPressed();
       }
       if (this->isKeyPressed<sf::Keyboard::Key::Down>())
       {
-         this->view.translateYNegative();
+         this->screen.onDownKeyPressed();
       }
       if (this->isKeyPressed<sf::Keyboard::Key::PageUp>())
       {
-         this->view.zoomIn();
+         this->screen.onPageUpKeyPressed();
       }
       if (this->isKeyPressed<sf::Keyboard::Key::PageDown>())
       {
-         this->view.zoomOut();
+         this->screen.onPageDownKeyPressed();
       }
 
-      view.warnMouseHovering(sf::Mouse::getPosition(this->sfml_window).x, sf::Mouse::getPosition(this->sfml_window).y);
-      this->view.setChanged(true);
+      this->screen.warnMouseHovering(sf::Mouse::getPosition(this->sfml_window).x, sf::Mouse::getPosition(this->sfml_window).y);
 
       {
          size_t steps = this->leftButtonClicked.size() / 2;
 
          for (size_t i = 0; i < steps; ++i)
          {
-            view.warnMouseClicking(this->leftButtonClicked[i * 2], this->leftButtonClicked[i * 2 + 1]);
+            screen.warnMouseClicking(this->leftButtonClicked[i * 2], this->leftButtonClicked[i * 2 + 1]);
          }
 
          if (this->leftButtonClicked.size() % 2 != 0)
@@ -424,21 +423,21 @@ public:
          }
       }
 
-      calculateAbsolutePositionThenShapes2DRecursiveIfNeeded(view);
+      this->screen.calculateAbsolutePositionThenShapes2DRecursiveIfNeeded();
    }
 
    void display()
    {
-      sfml_window.clear(sf::Color::Black);
+      this->sfml_window.clear(sf::Color::Black);
 
-      view.drawInto(sfml_window);
+      this->screen.drawInto(sfml_window);
 
       //sfml_window.setView(sfml_view);
-      sfml_window.display();
+      this->sfml_window.display();
    }
 
 private:
-   paercebal::KizukoLib::gui::View & view;
+   paercebal::KizukoLib::gui::Screen & screen;
 };
 
 
@@ -450,12 +449,12 @@ int main(int argc, char * argv[])
    {
       GlobalResources globalResources(argc, argv);
       
-      gui::View view{ globalResources };
+      gui::Screen screen{ globalResources };
 
-      calculateAbsolutePositionThenShapes2DRecursive(view);
+      screen.calculateAbsolutePositionThenShapes2DRecursiveIfNeeded();
 
       sf::View sfml_view(sf::Vector2f(0, 0), sf::Vector2f(static_cast<float>(windowWidth), static_cast<float>(windowHeight)));
-      view.setView(sfml_view);
+      screen.setView(sfml_view);
 
       sf::ContextSettings settings;
       settings.antialiasingLevel = 8;
@@ -463,11 +462,11 @@ int main(int argc, char * argv[])
       sfml_window.setFramerateLimit(60);
       sfml_window.setView(sfml_view);
 
-      Application application(view, sfml_window, sfml_view);
+      Application application(screen, sfml_window, sfml_view);
 
       try
       {
-         view.getGlobalResources().getMusicCluster().music.play();
+         screen.getGlobalResources().getMusicCluster().music.play();
 
 
          while (sfml_window.isOpen())

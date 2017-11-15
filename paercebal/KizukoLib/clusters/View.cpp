@@ -1,4 +1,4 @@
-#include <paercebal/KizukoLib/gui/View.hpp>
+#include <paercebal/KizukoLib/clusters/View.hpp>
 
 #include <paercebal/KizukoLib/clusters/Cluster.hpp>
 #include <paercebal/Graphics/maths/Matrix3D.hpp>
@@ -12,7 +12,7 @@
 #include <sstream>
 #include <cmath>
 
-namespace paercebal::KizukoLib::gui
+namespace paercebal::KizukoLib::clusters
 {
 
 namespace {
@@ -27,8 +27,8 @@ View::View(const GlobalResources & globalResources)
 View::View(const GlobalResources & globalResources, float translationIncrement_)
    : super(globalResources)
    , translationIncrement(translationIncrement_)
-   , button(globalResources, RelativePositionStyle::BottomLeft, { 20.f, -20.f }, { 200.f, 40.f })
-   , label(globalResources, RelativePositionStyle::BottomRight, { -20.f, -20.f }, 2.f)
+   , button(globalResources, gui::RelativePositionStyle::BottomLeft, { 20.f, -20.f }, { 200.f, 40.f })
+   , label(globalResources, gui::RelativePositionStyle::BottomRight, { -20.f, -20.f }, 2.f)
 {
    auto cluster = std::make_unique<clusters::Cluster>(globalResources);
    this->cluster = cluster.get();
@@ -260,4 +260,4 @@ PAERCEBAL_x_KIZUKOLIB_x_API void calculateAbsolutePositionThenShapes2DRecursiveI
 }
 
 
-} // namespace paercebal::KizukoLib::gui
+} // namespace paercebal::KizukoLib::clusters
