@@ -22,12 +22,17 @@ namespace {
 Screen::Screen(const GlobalResources & globalResources_)
    : globalResources{ &globalResources_ }
 {
-   this->clustersView = std::make_unique<clusters::View>(globalResources_);
+   // WARNING: CLONING WON'T WORK AS THE "THIS" POINTER IN THE LAMBDAS WON'T BE UPDATED
+   this->clusterView = std::make_unique<clusters::ClusterView>(globalResources_, clusters::ClusterViewCommands{ [this]() { this->onBackFromCluster(); } });
+   this->galaxyView = std::make_unique<galaxy::GalaxyView>(globalResources_, galaxy::GalaxyViewCommands{ [this]() { this->onSelectCluster(); } });
+   // WARNING: CLONING WON'T WORK FOR SAME REASONS
+   this->views.push_back(this->galaxyView.get());
 }
 
 Screen::Screen(const Screen & that)
    : globalResources{ that.globalResources }
-   , clustersView{ that.clustersView->clone() }
+   , clusterView{ that.clusterView->clone() }
+   , galaxyView{ that.galaxyView->clone() }
    , sfmlView{ that.sfmlView }
 {
 }
@@ -45,7 +50,8 @@ Screen & Screen::operator = (const Screen & that)
 
 Screen::Screen(Screen && that) noexcept
    : globalResources{ std::move(that.globalResources) }
-   , clustersView{ std::move(that.clustersView) }
+   , clusterView{ std::move(that.clusterView) }
+   , galaxyView{ std::move(that.galaxyView) }
    , sfmlView{ std::move(that.sfmlView) }
 {
 }
@@ -55,7 +61,8 @@ Screen & Screen::operator = (Screen && that) noexcept
    if (this != &that)
    {
       this->globalResources = std::move(that.globalResources);
-      this->clustersView = std::move(that.clustersView);
+      this->clusterView = std::move(that.clusterView);
+      this->galaxyView = std::move(that.galaxyView);
       this->sfmlView = std::move(that.sfmlView);
    }
 
@@ -72,23 +79,25 @@ const GlobalResources & Screen::getGlobalResources() const
 Screen & Screen::setView(const sf::View & view)
 {
    this->sfmlView = view;
-   this->clustersView->setView(view);
+   /// @todo Do we really need to update the view on all the views?
+   this->clusterView->setView(view);
+   this->galaxyView->setView(view);
    return *this;
 }
 
 void Screen::warnMouseHovering(int x, int y)
 {
-   this->clustersView->warnMouseHovering(x, y);
+   this->getCurrentView()->warnMouseHovering(x, y);
 }
 
 void Screen::warnMouseClicking(sf::Vector2i pressed, sf::Vector2i released)
 {
-   this->clustersView->warnMouseClicking(pressed, released);
+   this->getCurrentView()->warnMouseClicking(pressed, released);
 }
 
 void Screen::drawInto(sf::RenderTarget & renderTarget) const
 {
-   this->clustersView->drawInto(renderTarget);
+   this->getCurrentView()->drawInto(renderTarget);
 }
 
 std::unique_ptr<Screen> Screen::clone() const
@@ -103,62 +112,85 @@ Screen * Screen::cloneImpl() const
 
 Screen & Screen::onMouseDragByPixels(int x, int y)
 {
-   this->clustersView->translateByPixels(x, y);
+   this->getCurrentView()->translateByPixels(x, y);
    return *this;
 }
 
 
 Screen & Screen::onLeftKeyPressed()
 {
-   this->clustersView->translateXPositive();
+   this->getCurrentView()->translateXPositive();
    return *this;
 }
 
 Screen & Screen::onUpKeyPressed()
 {
-   this->clustersView->translateYPositive();
+   this->getCurrentView()->translateYPositive();
    return *this;
 }
 
 Screen & Screen::onRightKeyPressed()
 {
-   this->clustersView->translateXNegative();
+   this->getCurrentView()->translateXNegative();
    return *this;
 }
 
 Screen & Screen::onDownKeyPressed()
 {
-   this->clustersView->translateYNegative();
+   this->getCurrentView()->translateYNegative();
    return *this;
 }
 
 Screen & Screen::onPageUpKeyPressed()
 {
-   this->clustersView->zoomIn();
+   this->getCurrentView()->zoomIn();
    return *this;
 }
 
 Screen & Screen::onPageDownKeyPressed()
 {
-   this->clustersView->zoomOut();
+   this->getCurrentView()->zoomOut();
    return *this;
 }
 
 Screen & Screen::onMouseWheelScrollPositive()
 {
-   this->clustersView->zoomInByWheel();
+   this->getCurrentView()->zoomInByWheel();
    return *this;
 }
 
 Screen & Screen::onMouseWheelScrollNegative()
 {
-   this->clustersView->zoomOutByWheel();
+   this->getCurrentView()->zoomOutByWheel();
    return *this;
 }
 
 void Screen::calculateAbsolutePositionThenShapes2DRecursiveIfNeeded()
 {
-   clusters::calculateAbsolutePositionThenShapes2DRecursiveIfNeeded(*this->clustersView);
+   this->getCurrentView()->calculateAbsolutePositionThenShapes2DRecursiveIfNeeded();
 }
+
+void Screen::onBackFromCluster()
+{
+   this->getCurrentView()->warnLoseFocus();
+   this->views.pop_back();
+}
+
+void Screen::onSelectCluster()
+{
+   this->getCurrentView()->warnLoseFocus();
+   this->views.push_back(this->clusterView.get());
+}
+
+const View * Screen::getCurrentView() const
+{
+   return this->views[this->views.size() - 1];
+}
+
+View * Screen::getCurrentView()
+{
+   return this->views[this->views.size() - 1];
+}
+
 
 } // namespace paercebal::KizukoLib::gui

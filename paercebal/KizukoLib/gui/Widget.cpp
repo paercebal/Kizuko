@@ -10,6 +10,7 @@
 #include <string>
 #include <sstream>
 #include <cmath>
+#include <limits>
 
 namespace paercebal::KizukoLib::gui
 {
@@ -220,6 +221,11 @@ void Widget::warnMouseClicking(sf::Vector2i pressed, sf::Vector2i released)
    {
       this->commandCallback();
    }
+}
+
+void Widget::warnLoseFocus()
+{
+   this->viewMousePosition = { std::numeric_limits<int>::max(), std::numeric_limits<int>::max() };
 }
 
 std::unique_ptr<Widget> Widget::clone() const

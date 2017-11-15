@@ -1,4 +1,4 @@
-#include <paercebal/KizukoLib/clusters/View.hpp>
+#include <paercebal/KizukoLib/clusters/ClusterView.hpp>
 
 #include <paercebal/KizukoLib/clusters/Cluster.hpp>
 #include <paercebal/Graphics/maths/Matrix3D.hpp>
@@ -19,16 +19,18 @@ namespace {
 
 }
 
-View::View(const GlobalResources & globalResources)
-   : View(globalResources, 10.0f)
+ClusterView::ClusterView(const GlobalResources & globalResources, ClusterViewCommands clusterViewCommands)
+   : ClusterView(globalResources, clusterViewCommands, 10.0f)
 {
 }
 
-View::View(const GlobalResources & globalResources, float translationIncrement_)
+ClusterView::ClusterView(const GlobalResources & globalResources, ClusterViewCommands clusterViewCommands, float translationIncrement_)
    : super(globalResources)
    , translationIncrement(translationIncrement_)
+   , commands(clusterViewCommands)
    , button(globalResources, gui::RelativePositionStyle::BottomLeft, { 20.f, -20.f }, { 200.f, 40.f })
    , label(globalResources, gui::RelativePositionStyle::BottomRight, { -20.f, -20.f }, 2.f)
+   , milkyWay(globalResources, gui::RelativePositionStyle::TopLeft, { 20.f, 20.f }, 2.f)
 {
    auto cluster = std::make_unique<clusters::Cluster>(globalResources);
    this->cluster = cluster.get();
@@ -47,20 +49,24 @@ View::View(const GlobalResources & globalResources, float translationIncrement_)
 
    this->label.setLabel("Caleston Rift");
    this->label.setCommand([this]() { this->isSpaceBackgroundVisible = !this->isSpaceBackgroundVisible; this->setChanged(true); });
+
+   this->milkyWay.setLabel("Milky Way");
+   this->milkyWay.setCommand(this->commands.onBack);
 }
 
-View & View::setView(const sf::View & view)
+ClusterView & ClusterView::setView(const sf::View & view)
 {
    this->viewSize = view.getSize();
    this->viewCenter = view.getCenter();
    this->button.setView(view);
    this->label.setView(view);
+   this->milkyWay.setView(view);
    this->setChanged(true);
 
    return *this;
 }
 
-void View::createShapes2D()
+void ClusterView::createShapes2D()
 {
    this->debugLabel.setString(this->debugText);
    this->debugLabel.setFont(this->getGlobalResources().getFontNormal().font);
@@ -77,21 +83,31 @@ void View::createShapes2D()
 
    this->button.createShapes2D();
    this->label.createShapes2D();
+   this->milkyWay.createShapes2D();
 }
 
-void View::warnMouseHovering(int x, int y)
+void ClusterView::warnMouseHovering(int x, int y)
 {
    this->button.warnMouseHovering(x, y);
    this->label.warnMouseHovering(x, y);
+   this->milkyWay.warnMouseHovering(x, y);
 }
 
-void View::warnMouseClicking(sf::Vector2i pressed, sf::Vector2i released)
+void ClusterView::warnMouseClicking(sf::Vector2i pressed, sf::Vector2i released)
 {
    this->button.warnMouseClicking(pressed, released);
    this->label.warnMouseClicking(pressed, released);
+   this->milkyWay.warnMouseClicking(pressed, released);
 }
 
-void View::drawInto(sf::RenderTarget & renderTarget) const
+void ClusterView::warnLoseFocus()
+{
+   this->button.warnLoseFocus();
+   this->label.warnLoseFocus();
+   this->milkyWay.warnLoseFocus();
+}
+
+void ClusterView::drawInto(sf::RenderTarget & renderTarget) const
 {
    if (this->isSpaceBackgroundVisible)
    {
@@ -102,31 +118,32 @@ void View::drawInto(sf::RenderTarget & renderTarget) const
    renderTarget.draw(this->debugLabel);
    this->button.drawInto(renderTarget);
    this->label.drawInto(renderTarget);
+   this->milkyWay.drawInto(renderTarget);
 }
 
-std::unique_ptr<View> View::clone() const
+std::unique_ptr<ClusterView> ClusterView::clone() const
 {
-   return std::unique_ptr<View>(this->cloneImpl());
+   return std::unique_ptr<ClusterView>(this->cloneImpl());
 }
 
-View * View::cloneImpl() const
+ClusterView * ClusterView::cloneImpl() const
 {
-   return new View(*this);
+   return new ClusterView(*this);
 }
 
-View & View::setDebugText(const std::string & debugText_)
+ClusterView & ClusterView::setDebugText(const std::string & debugText_)
 {
    this->debugText = debugText_;
    return *this;
 }
 
-View & View::setDebugText(std::string && debugText_)
+ClusterView & ClusterView::setDebugText(std::string && debugText_)
 {
    this->debugText = std::move(debugText_);
    return *this;
 }
 
-View & View::updateTranslation()
+ClusterView & ClusterView::updateTranslation()
 {
    auto v = Graphics::maths::utilities::createTranslationVector<float>(static_cast<float>(this->translationX), static_cast<float>(this->translationY), 0);
    this->cluster->setCenter(v);
@@ -140,7 +157,7 @@ View & View::updateTranslation()
    return *this;
 }
 
-View & View::updateZoom()
+ClusterView & ClusterView::updateZoom()
 {
    this->zoomPosition = std::clamp(this->zoomPosition, -100, +100);
    this->zoom = static_cast<float>(std::pow(10., (this->zoomPosition / 100.) + 1.));
@@ -156,7 +173,7 @@ View & View::updateZoom()
    return *this;
 }
 
-View & View::translateByPixels(int x, int y)
+ClusterView & ClusterView::translateByPixels(int x, int y)
 {
    if ((x != 0) || (y != 0))
    {
@@ -171,7 +188,7 @@ View & View::translateByPixels(int x, int y)
 }
 
 
-View & View::translateXPositive()
+ClusterView & ClusterView::translateXPositive()
 {
    this->translationIncrementX += 1;
    this->translationX = static_cast<int>(this->translationIncrementX * this->translationIncrement);
@@ -180,7 +197,7 @@ View & View::translateXPositive()
    return *this;
 }
 
-View & View::translateYPositive()
+ClusterView & ClusterView::translateYPositive()
 {
    this->translationIncrementY += 1;
    this->translationY = static_cast<int>(this->translationIncrementY * this->translationIncrement);
@@ -189,7 +206,7 @@ View & View::translateYPositive()
    return *this;
 }
 
-View & View::translateXNegative()
+ClusterView & ClusterView::translateXNegative()
 {
    this->translationIncrementX -= 1;
    this->translationX = static_cast<int>(this->translationIncrementX * this->translationIncrement);
@@ -198,7 +215,7 @@ View & View::translateXNegative()
    return *this;
 }
 
-View & View::translateYNegative()
+ClusterView & ClusterView::translateYNegative()
 {
    this->translationIncrementY -= 1;
    this->translationY = static_cast<int>(this->translationIncrementY * this->translationIncrement);
@@ -207,7 +224,7 @@ View & View::translateYNegative()
    return *this;
 }
 
-View & View::zoomIn()
+ClusterView & ClusterView::zoomIn()
 {
    this->zoomPosition += 1;
    this->updateZoom();
@@ -215,7 +232,7 @@ View & View::zoomIn()
    return *this;
 }
 
-View & View::zoomOut()
+ClusterView & ClusterView::zoomOut()
 {
    this->zoomPosition -= 1;
    this->updateZoom();
@@ -223,7 +240,7 @@ View & View::zoomOut()
    return *this;
 }
 
-View & View::zoomInByWheel()
+ClusterView & ClusterView::zoomInByWheel()
 {
    this->zoomPosition += 5;
    this->updateZoom();
@@ -231,7 +248,7 @@ View & View::zoomInByWheel()
    return *this;
 }
 
-View & View::zoomOutByWheel()
+ClusterView & ClusterView::zoomOutByWheel()
 {
    this->zoomPosition -= 5;
    this->updateZoom();
@@ -239,25 +256,33 @@ View & View::zoomOutByWheel()
    return *this;
 }
 
-View & View::setChanged(bool isChanged_)
+ClusterView & ClusterView::setChanged(bool isChanged_)
 {
    this->isChanged_ = isChanged_;
    return *this;
 }
 
-bool View::isChanged() const
+bool ClusterView::isChanged() const
 {
    return this->isChanged_;
 }
 
-PAERCEBAL_x_KIZUKOLIB_x_API void calculateAbsolutePositionThenShapes2DRecursiveIfNeeded(View & view)
+void ClusterView::calculateAbsolutePositionThenShapes2DRecursiveIfNeeded()
 {
-   if (view.isChanged())
+   if (this->isChanged())
    {
-      calculateAbsolutePositionThenShapes2DRecursive(view);
-      view.setChanged(false);
+      calculateAbsolutePositionThenShapes2DRecursive(*this);
+      this->setChanged(false);
    }
 }
 
+//PAERCEBAL_x_KIZUKOLIB_x_API void calculateAbsolutePositionThenShapes2DRecursiveIfNeeded(ClusterView & view)
+//{
+//   if (view.isChanged())
+//   {
+//      calculateAbsolutePositionThenShapes2DRecursive(view);
+//      view.setChanged(false);
+//   }
+//}
 
 } // namespace paercebal::KizukoLib::clusters
