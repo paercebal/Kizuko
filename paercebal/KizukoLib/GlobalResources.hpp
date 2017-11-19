@@ -26,6 +26,7 @@ struct GlobalMusic
    mutable sf::Music   music;    ///< @todo this "mutable" is a problem. See if we can change the design to accomodate constness and need to play the music
 };
 
+
 class PAERCEBAL_x_KIZUKOLIB_x_API GlobalResources
 {
 public:
@@ -36,19 +37,22 @@ public:
    GlobalResources(const GlobalResources &) = delete;
    GlobalResources &       operator = (const GlobalResources &) = delete;
 
-   const GlobalFont &      getFontNormal()               const noexcept;
-   const GlobalFont &      getFontScifi()                const noexcept;
-   const GlobalMusic &     getMusicCluster()             const noexcept;
-   const GlobalMusic &     getMusicGalaxy()              const noexcept;
+   const GlobalFont &      getFontNormal()                           const noexcept;
+   const GlobalFont &      getFontScifi()                            const noexcept;
+   const GlobalMusic &     getMusicCluster()                         const noexcept;
+   const GlobalMusic &     getMusicGalaxy()                          const noexcept;
 
-   const input::Data &     getData()                     const noexcept;
+   const sf::Texture &     getTexture(const std::string path)        const;
+
+   const input::Data &     getData()                                 const noexcept;
 
 private:
-   GlobalFont              fontNormal;
-   GlobalFont              fontScifi;
-   GlobalMusic             musicCluster;
-   GlobalMusic             musicGalaxy;
-   input::Data             data;
+   GlobalFont                             fontNormal;
+   GlobalFont                             fontScifi;
+   GlobalMusic                            musicCluster;
+   GlobalMusic                            musicGalaxy;
+   input::Data                            data;
+   std::map<std::string, sf::Texture>     textures;
 };
 
 

@@ -30,12 +30,14 @@ public:
 
 private:
    virtual FlatImage *           cloneImpl()                                     const override;
+   const sf::Texture &           getTexture()                                    const noexcept;
+
 
    sf::Vector3f topLeft = {};
    sf::Vector3f bottomRight = {};
 
    std::string                   filename;
-   sf::Texture                   image;
+   const sf::Texture *           texture;
    sf::Sprite                    sprite;
    bool                          visible = true;
 };

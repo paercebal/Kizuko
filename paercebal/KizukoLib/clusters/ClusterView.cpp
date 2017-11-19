@@ -1,6 +1,8 @@
 #include <paercebal/KizukoLib/clusters/ClusterView.hpp>
 
 #include <paercebal/KizukoLib/clusters/Cluster.hpp>
+#include <paercebal/KizukoLib/utilities.hpp>
+
 #include <paercebal/Graphics/maths/Matrix3D.hpp>
 #include <paercebal/Graphics/maths/utilities.hpp>
 
@@ -38,7 +40,7 @@ ClusterView::ClusterView(const GlobalResources & globalResources, ClusterViewCom
    this->updateTranslation();
    this->updateZoom();
 
-   this->spaceBackground.loadFromFile("./copyrighted/caleston-rift.png");
+   PAERCEBAL_x_KIZUKOLIB_x_ASSERT_RESOURCE_LOADING(this->spaceBackground, "./copyrighted/caleston-rift.png", "./resources/cluster-empty.png");
    this->spaceBackground.setSmooth(true);
    this->spaceBackgroundSprite.setTexture(this->spaceBackground);
    this->spaceBackgroundSprite.setScale(sf::Vector2f(1.0f, 1.0f));

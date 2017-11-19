@@ -29,6 +29,27 @@ GlobalResources::GlobalResources(int argc, char * argv[])
 
    PAERCEBAL_x_KIZUKOLIB_x_ASSERT_RESOURCE_LOADING(this->musicCluster.music, generateResourceList(this->data.style.musicCluster));
    PAERCEBAL_x_KIZUKOLIB_x_ASSERT_RESOURCE_LOADING(this->musicGalaxy.music, generateResourceList(this->data.style.musicGalaxy));
+
+   {
+      const std::string & path = this->data.galaxy.image;
+      sf::Texture & texture = this->textures[this->data.galaxy.image];
+      PAERCEBAL_x_KIZUKOLIB_x_ASSERT_RESOURCE_LOADING(texture, this->data.galaxy.image);
+   }
+
+   {
+      std::string emptyPath;
+      sf::Texture & texture = this->textures[emptyPath];
+      PAERCEBAL_x_KIZUKOLIB_x_ASSERT_RESOURCE_LOADING(texture, "./resources/cluster-empty.png");
+   }
+
+   for (const auto & cluster : this->data.clusters)
+   {
+      if (!cluster.image.empty())
+      {
+         sf::Texture & texture = this->textures[cluster.image];
+         PAERCEBAL_x_KIZUKOLIB_x_ASSERT_RESOURCE_LOADING(texture, cluster.image, "./resources/cluster-empty.png");
+      }
+   }
 }
 
 GlobalResources::~GlobalResources() = default;
@@ -57,6 +78,18 @@ const GlobalMusic & GlobalResources::getMusicGalaxy() const noexcept
 const input::Data & GlobalResources::getData() const noexcept
 {
    return this->data;
+}
+
+const sf::Texture & GlobalResources::getTexture(const std::string path) const
+{
+   auto it = this->textures.find(path);
+
+   if (it != this->textures.end())
+   {
+      return it->second;
+   }
+
+   throw Exception() << "Texture " << path << " wasn't loaded at initialization.";
 }
 
 } // namespace paercebal::KizukoLib
