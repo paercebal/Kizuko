@@ -47,7 +47,12 @@ GalaxyView::GalaxyView(const GlobalResources & globalResources, GalaxyViewComman
    this->button.setCommand(commands.onBack);
 
    this->label.setLabel("Milky Way");
-   this->label.setCommand([this]() { this->isSpaceBackgroundVisible = !this->isSpaceBackgroundVisible; this->setChanged(true); });
+   this->label.setCommand([this]()
+   {
+      //this->isSpaceBackgroundVisible = !this->isSpaceBackgroundVisible;
+      this->galaxy->setBackgroundImageVisible(!this->galaxy->isBackgroundImageVisible());
+      this->setChanged(true);
+   });
 }
 
 GalaxyView & GalaxyView::setView(const sf::View & view)
@@ -103,10 +108,10 @@ void GalaxyView::warnLoseFocus()
 
 void GalaxyView::drawInto(sf::RenderTarget & renderTarget) const
 {
-   if (this->isSpaceBackgroundVisible)
-   {
-      renderTarget.draw(this->spaceBackgroundSprite);
-   }
+   //if (this->isSpaceBackgroundVisible)
+   //{
+   //   renderTarget.draw(this->spaceBackgroundSprite);
+   //}
 
    this->galaxy->drawInto(renderTarget);
    renderTarget.draw(this->debugLabel);

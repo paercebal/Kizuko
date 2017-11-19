@@ -48,7 +48,11 @@ struct ClusterData
 
 struct Galaxy
 {
-   sf::Vector2f               size;
+   float                      imageRadius;
+   std::string                image;
+   float                      radius;
+   float                      gridIncrement = 0.f;
+   float                      gridMajorIncrement = 0.f;
    std::vector<ClusterData>   clusterDataList;
 };
 
@@ -71,8 +75,8 @@ struct Distance
 struct Cluster
 {
    std::string                name;                         // Not used currently
-   float                      increment = 0.f;
-   float                      majorIncrement = 0.f;
+   float                      gridIncrement = 0.f;
+   float                      gridMajorIncrement = 0.f;
    sf::Vector3f               size;
    std::vector<Star>          stars;
    std::vector<Distance>      distances;

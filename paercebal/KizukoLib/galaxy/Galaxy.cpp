@@ -1,5 +1,6 @@
 #include <paercebal/KizukoLib/galaxy/Galaxy.hpp>
 
+#include <paercebal/KizukoLib/galaxy/GalaxyCircle.hpp>
 #include <paercebal/KizukoLib/galaxy/GalaxyLine.hpp>
 #include <paercebal/KizukoLib/utilities.hpp>
 
@@ -14,92 +15,71 @@ namespace paercebal::KizukoLib::galaxy
 
 namespace {
 
-std::vector<std::unique_ptr<GalaxyLine>> createClusterGrid(const GlobalResources & globalResources, sf::Vector3f size3D, float gridIncrement_, int gridMajorIncrement_)
+std::vector<std::unique_ptr<GalaxyLine>> createClusterCartesianGrid(const GlobalResources & globalResources, float radius, float gridIncrement_, int gridMajorIncrement_)
 {
    std::vector<std::unique_ptr<GalaxyLine>> v;
 
-   if (size3D.x == size3D.y)
+   // Y lines
    {
-      // Y lines
+      int Increment = 0;
+
+      for (float x = 0, xEnd = radius; x <= xEnd; x += gridIncrement_, ++Increment)
       {
-         int Increment = 0;
-
-         for (float x = 0, xEnd = size3D.x; x <= xEnd; x += gridIncrement_, ++Increment)
+         if (Increment == 0)
          {
-            if (Increment == 0)
-            {
-               v.push_back(std::make_unique<GalaxyLine>(globalResources, GalaxyLineStyle::AxisY, sf::Vector3f{ x, size3D.y, 0 }, sf::Vector3f{ x, -size3D.y, 0 }));
-            }
-            else
-            {
-               const float halfLength = std::pow(std::pow(size3D.x, 2.f) - std::pow(x, 2.f), 0.5f);
-
-               const GalaxyLineStyle style = ((Increment % gridMajorIncrement_) == 0) ? GalaxyLineStyle::Major : GalaxyLineStyle::Minor;
-               v.push_back(std::make_unique<GalaxyLine>(globalResources, style, sf::Vector3f{ x, halfLength, 0 }, sf::Vector3f{ x, -halfLength, 0 }));
-               v.push_back(std::make_unique<GalaxyLine>(globalResources, style, sf::Vector3f{ -x, halfLength, 0 }, sf::Vector3f{ -x, -halfLength, 0 }));
-            }
+            v.push_back(std::make_unique<GalaxyLine>(globalResources, GalaxyLineStyle::AxisY, sf::Vector3f{ x, radius, 0 }, sf::Vector3f{ x, -radius, 0 }));
          }
-      }
-
-      // X lines
-      {
-         int Increment = 0;
-
-         for (float y = 0, yEnd = size3D.y; y <= yEnd; y += gridIncrement_, ++Increment)
+         else
          {
-            if (Increment == 0)
-            {
-               v.push_back(std::make_unique<GalaxyLine>(globalResources, GalaxyLineStyle::AxisX, sf::Vector3f{ size3D.x, y, 0 }, sf::Vector3f{ -size3D.x, y, 0 }));
-            }
-            else
-            {
-               const float halfLength = std::pow(std::pow(size3D.y, 2.f) - std::pow(y, 2.f), 0.5f);
+            const float halfLength = std::pow(std::pow(radius, 2.f) - std::pow(x, 2.f), 0.5f);
 
-               const GalaxyLineStyle style = ((Increment % gridMajorIncrement_) == 0) ? GalaxyLineStyle::Major : GalaxyLineStyle::Minor;
-               v.push_back(std::make_unique<GalaxyLine>(globalResources, style, sf::Vector3f{ halfLength, y, 0 }, sf::Vector3f{ -halfLength, y, 0 }));
-               v.push_back(std::make_unique<GalaxyLine>(globalResources, style, sf::Vector3f{ halfLength, -y, 0 }, sf::Vector3f{ -halfLength, -y, 0 }));
-            }
+            const GalaxyLineStyle style = GalaxyLineStyle::Minor;
+            v.push_back(std::make_unique<GalaxyLine>(globalResources, style, sf::Vector3f{ x, halfLength, 0 }, sf::Vector3f{ x, -halfLength, 0 }));
+            v.push_back(std::make_unique<GalaxyLine>(globalResources, style, sf::Vector3f{ -x, halfLength, 0 }, sf::Vector3f{ -x, -halfLength, 0 }));
          }
       }
    }
-   else
-   {
-      // Y lines
-      {
-         int Increment = 0;
 
-         for (float x = 0, xEnd = size3D.x; x <= xEnd; x += gridIncrement_, ++Increment)
+   // X lines
+   {
+      int Increment = 0;
+
+      for (float y = 0, yEnd = radius; y <= yEnd; y += gridIncrement_, ++Increment)
+      {
+         if (Increment == 0)
          {
-            if (Increment == 0)
-            {
-               v.push_back(std::make_unique<GalaxyLine>(globalResources, GalaxyLineStyle::AxisY, sf::Vector3f{ x, size3D.y, 0 }, sf::Vector3f{ x, -size3D.y, 0 }));
-            }
-            else
-            {
-               const GalaxyLineStyle style = ((Increment % gridMajorIncrement_) == 0) ? GalaxyLineStyle::Major : GalaxyLineStyle::Minor;
-               v.push_back(std::make_unique<GalaxyLine>(globalResources, style, sf::Vector3f{ x, size3D.y, 0 }, sf::Vector3f{ x, -size3D.y, 0 }));
-               v.push_back(std::make_unique<GalaxyLine>(globalResources, style, sf::Vector3f{ -x, size3D.y, 0 }, sf::Vector3f{ -x, -size3D.y, 0 }));
-            }
+            v.push_back(std::make_unique<GalaxyLine>(globalResources, GalaxyLineStyle::AxisX, sf::Vector3f{ radius, y, 0 }, sf::Vector3f{ -radius, y, 0 }));
+         }
+         else
+         {
+            const float halfLength = std::pow(std::pow(radius, 2.f) - std::pow(y, 2.f), 0.5f);
+
+            const GalaxyLineStyle style = GalaxyLineStyle::Minor;
+            v.push_back(std::make_unique<GalaxyLine>(globalResources, style, sf::Vector3f{ halfLength, y, 0 }, sf::Vector3f{ -halfLength, y, 0 }));
+            v.push_back(std::make_unique<GalaxyLine>(globalResources, style, sf::Vector3f{ halfLength, -y, 0 }, sf::Vector3f{ -halfLength, -y, 0 }));
          }
       }
+   }
 
-      // X lines
+   return v;
+}
+
+std::vector<std::unique_ptr<GalaxyCircle>> createClusterPolarGrid(const GlobalResources & globalResources, float radius, float gridIncrement_, int gridMajorIncrement_)
+{
+   std::vector<std::unique_ptr<GalaxyCircle>> v;
+
+   int Increment = 0;
+
+   for (float x = 0, xEnd = radius; x <= xEnd; x += gridIncrement_, ++Increment)
+   {
+      if (Increment == 0)
       {
-         int Increment = 0;
-
-         for (float y = 0, yEnd = size3D.y; y <= yEnd; y += gridIncrement_, ++Increment)
-         {
-            if (Increment == 0)
-            {
-               v.push_back(std::make_unique<GalaxyLine>(globalResources, GalaxyLineStyle::AxisX, sf::Vector3f{ size3D.x, y, 0 }, sf::Vector3f{ -size3D.x, y, 0 }));
-            }
-            else
-            {
-               const GalaxyLineStyle style = ((Increment % gridMajorIncrement_) == 0) ? GalaxyLineStyle::Major : GalaxyLineStyle::Minor;
-               v.push_back(std::make_unique<GalaxyLine>(globalResources, style, sf::Vector3f{ size3D.x, y, 0 }, sf::Vector3f{ -size3D.x, y, 0 }));
-               v.push_back(std::make_unique<GalaxyLine>(globalResources, style, sf::Vector3f{ size3D.x, -y, 0 }, sf::Vector3f{ -size3D.x, -y, 0 }));
-            }
-         }
+         v.push_back(std::make_unique<GalaxyCircle>(globalResources, GalaxyCircleStyle::AxisY, x));
+      }
+      else
+      {
+         const GalaxyCircleStyle style = ((Increment % gridMajorIncrement_) == 0) ? GalaxyCircleStyle::Major : GalaxyCircleStyle::Minor;
+         v.push_back(std::make_unique<GalaxyCircle>(globalResources, style, x));
       }
    }
 
@@ -148,13 +128,13 @@ void doLog(const std::stringstream & str)
 
 
 Galaxy::Galaxy(const GlobalResources & globalResources)
-   : Galaxy(globalResources, globalResources.getData().clusters.at(0).increment, static_cast<int>(globalResources.getData().clusters.at(0).majorIncrement), 1.f, globalResources.getData().clusters.at(0).size)
+   : Galaxy(globalResources, globalResources.getData().galaxy.gridIncrement, static_cast<int>(globalResources.getData().galaxy.gridMajorIncrement), 1.f, globalResources.getData().galaxy.radius)
 {
 }
 
-Galaxy::Galaxy(const GlobalResources & globalResources, float gridIncrement_, int gridMajorIncrement_, float scaling_, sf::Vector3f size3D_)
+Galaxy::Galaxy(const GlobalResources & globalResources, float gridIncrement_, int gridMajorIncrement_, float scaling_, float radius_)
    : super(globalResources)
-   , size3D(size3D_)
+   , radius(radius_)
    , gridIncrement(gridIncrement_)
    , gridMajorIncrement(gridMajorIncrement_)
    , scaling(scaling_)
@@ -166,24 +146,40 @@ Galaxy::Galaxy(const GlobalResources & globalResources, float gridIncrement_, in
    this->setRelativeScaling(Graphics::maths::utilities::createScaleMatrix<float>(this->scaling));
 
    // We create the cluster lines.
-   auto grid = createClusterGrid(this->getGlobalResources(), this->size3D, this->gridIncrement, this->gridMajorIncrement);
-   this->galaxyLines.reserve(grid.size());
-   
-   for (auto & p : grid)
    {
-      GalaxyLine * pp = p.get();
-      this->getChildren().push_back(std::move(p));
-      this->galaxyLines.push_back(pp);
+      auto grid = createClusterCartesianGrid(this->getGlobalResources(), this->radius, this->gridIncrement, this->gridMajorIncrement);
+      this->galaxyLines.reserve(grid.size());
+
+      for (auto & p : grid)
+      {
+         GalaxyLine * pp = p.get();
+         this->getChildren().push_back(std::move(p));
+         this->galaxyLines.push_back(pp);
+      }
+   }
+
+   // Polar
+   {
+      // We create the cluster lines.
+      auto grid = createClusterPolarGrid(this->getGlobalResources(), this->radius, this->gridIncrement, this->gridMajorIncrement);
+      this->galaxyCircles.reserve(grid.size());
+
+      for (auto & p : grid)
+      {
+         GalaxyCircle * pp = p.get();
+         this->getChildren().push_back(std::move(p));
+         this->galaxyCircles.push_back(pp);
+      }
    }
 
    for (const auto & cluster : this->getGlobalResources().getData().galaxy.clusterDataList)
    {
-      //DO_LOG("               , { \"name\" : \"" << cluster.name << "\"             , \"position\" : \"" << (std::round(cluster.position.x * 100.f - 5000.f )/100.f)  << ", " << (std::round(cluster.position.y * 100.f - 5000.f)/100.f) << "\" }");
-      this->addCluster({ this->getGlobalResources(), cluster.name, {cluster.position.x * 10, cluster.position.y * 10, 0} });
+      //DO_LOG("               , { \"name\" : \"" << cluster.name << "\"             , \"position\" : \"" << (std::round(cluster.position.x * 100.f * .83f )/100.f)  << ", " << (std::round(cluster.position.y * 100.f * .83f)/100.f) << "\" }");
+      this->addCluster({ this->getGlobalResources(), cluster.name, {cluster.position.x, cluster.position.y, 0} });
    }
 
-   const float sizeGalaxy = 80.f;
-   auto image = std::make_unique<objects::FlatImage>(this->getGlobalResources(), sf::Vector3f{ -sizeGalaxy, -sizeGalaxy, 0 }, sf::Vector3f{ sizeGalaxy, sizeGalaxy, 0 });
+   const float radius = this->getGlobalResources().getData().galaxy.imageRadius;
+   auto image = std::make_unique<objects::FlatImage>(this->getGlobalResources(), this->getGlobalResources().getData().galaxy.image, sf::Vector3f{ -radius, -radius, 0 }, sf::Vector3f{ radius, radius, 0 });
    this->milkyWayImage = image.get();
    this->getChildren().push_back(std::move(image));
 }
@@ -209,6 +205,12 @@ void Galaxy::drawInto(sf::RenderTarget & renderTarget) const
       p->drawInto(renderTarget);
    }
 
+   // Then, the galaxy Circles
+   for (auto & p : this->galaxyCircles)
+   {
+      p->drawInto(renderTarget);
+   }
+
    // Last, the clusters
    for (auto & p : this->clusters)
    {
@@ -225,6 +227,28 @@ Galaxy * Galaxy::cloneImpl() const
 {
    return new Galaxy(*this);
 }
+
+bool Galaxy::isBackgroundImageVisible() const
+{
+   if (this->milkyWayImage)
+   {
+      return this->milkyWayImage->isVisible();
+   }
+
+   return false;
+}
+
+Galaxy & Galaxy::setBackgroundImageVisible(bool visible)
+{
+   if (this->milkyWayImage)
+   {
+      this->milkyWayImage->setVisible(visible);
+   }
+
+   return *this;
+}
+
+
 
 Galaxy & Galaxy::addCluster(const GalaxyCluster & cluster)
 {

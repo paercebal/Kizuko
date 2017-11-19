@@ -450,7 +450,11 @@ input::Galaxy extractGalaxy(const rapidjson::Value & t)
 
    expectTrue(t.IsObject(), "json 'galaxy' is not an object");
 
-   extractValue(t, "size", galaxy.size);
+   extractValue(t, "image-radius", galaxy.imageRadius);
+   extractValue(t, "image", galaxy.image);
+   extractValue(t, "radius", galaxy.radius);
+   extractValue(t, "grid-increment", galaxy.gridIncrement);
+   extractValue(t, "grid-major-increment", galaxy.gridMajorIncrement);
 
    expectTrue(t.HasMember("cluster-data-list"), "cluster file json content has no \"cluster-data-list\" property");
    galaxy.clusterDataList = extractClusterDatas(t["cluster-data-list"]);
@@ -523,8 +527,8 @@ input::Cluster extractCluster(const rapidjson::Value & t)
    expectTrue(t.IsObject(), "json 'cluster' is not an object");
 
    extractValue(t, "name", value.name);
-   extractValue(t, "increment", value.increment);
-   extractValue(t, "major-increment", value.majorIncrement);
+   extractValue(t, "grid-increment", value.gridIncrement);
+   extractValue(t, "grid-major-increment", value.gridMajorIncrement);
    extractValue(t, "size", value.size);
 
    expectTrue(t.HasMember("stars"), "cluster file json content has no \"stars\" property");

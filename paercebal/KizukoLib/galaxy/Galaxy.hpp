@@ -3,6 +3,7 @@
 
 #include <paercebal/KizukoLib/GlobalResources.hpp>
 #include <paercebal/KizukoLib/objects/Object.hpp>
+#include <paercebal/KizukoLib/galaxy/GalaxyCircle.hpp>
 #include <paercebal/KizukoLib/galaxy/GalaxyLine.hpp>
 #include <paercebal/KizukoLib/galaxy/GalaxyCluster.hpp>
 #include <paercebal/KizukoLib/objects/FlatImage.hpp>
@@ -24,7 +25,7 @@ class PAERCEBAL_x_KIZUKOLIB_x_API Galaxy : public objects::Object
 public:
 
    Galaxy(const GlobalResources & globalResources);
-   Galaxy(const GlobalResources & globalResources, float gridIncrement_, int gridMajorIncrement_, float scaling_, sf::Vector3f size3D_);
+   Galaxy(const GlobalResources & globalResources, float gridIncrement_, int gridMajorIncrement_, float scaling_, float radius_);
 
    virtual void                  createShapes2D()                                      override;
    virtual void                  drawInto(sf::RenderTarget & renderTarget)       const override;
@@ -34,16 +35,20 @@ public:
    //Galaxy &                      addDistance(const DistanceShape & distance);
    Galaxy &                      addCluster(const GalaxyCluster & cluster);
 
+   bool                          isBackgroundImageVisible()                      const;
+   Galaxy &                      setBackgroundImageVisible(bool visible);
+
 private:
    virtual Galaxy *              cloneImpl()                                     const override;
 
-   sf::Vector3f                  size3D                  = { 100.f, 100.f, 100.f };
+   float                         radius                  = 100.f;
    float                         gridIncrement           = 2.f;
    int                           gridMajorIncrement      = 5;
    float                         scaling                 = 1.f;
 
    objects::FlatImage *          milkyWayImage = nullptr;
    std::vector<GalaxyLine *>     galaxyLines;
+   std::vector<GalaxyCircle *>   galaxyCircles;
    //std::vector<DistanceShape *>  distanceShapes;
    //std::vector<AltitudeLine *>   altitudeLine;
    std::vector<GalaxyCluster *>  clusters;

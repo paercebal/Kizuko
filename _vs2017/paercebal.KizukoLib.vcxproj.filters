@@ -87,6 +87,9 @@
     <ClCompile Include="..\paercebal\KizukoLib\objects\FlatImage.cpp">
       <Filter>p.KizukoLib.objects</Filter>
     </ClCompile>
+    <ClCompile Include="..\paercebal\KizukoLib\galaxy\GalaxyCircle.cpp">
+      <Filter>p.KizukoLib.galaxy</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\paercebal\KizukoLib\dllmain.hpp">
@@ -157,6 +160,9 @@
     </ClInclude>
     <ClInclude Include="..\paercebal\KizukoLib\objects\FlatImage.hpp">
       <Filter>p.KizukoLib.objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\paercebal\KizukoLib\galaxy\GalaxyCircle.hpp">
+      <Filter>p.KizukoLib.galaxy</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

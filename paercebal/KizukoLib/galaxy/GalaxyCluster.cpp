@@ -36,12 +36,11 @@ void getStarHalo(sf::CircleShape & c, const sf::Color & color, sf::Uint8 transpa
 GalaxyCluster::GalaxyCluster(const GlobalResources & globalResources, const std::string & name_, sf::Vector3f center_)
    : super(globalResources)
    , name{ name_ }
-   , shapes(8)
    , size{ 5.f }
    , color{ sf::Color::Red }
    , coreColor{ sf::Color::White }
 {
-   this->setCenter({ center_.x / 10.f, center_.y / 10.f, center_.z / 10.f });
+   this->setCenter({ center_.x, center_.y, center_.z });
    this->setRelativePositions({ { 0, 0, 0 } });
 }
 
@@ -53,31 +52,29 @@ void GalaxyCluster::createShapes2D()
    {
       GalaxyCluster::Position & position = positions[0];
 
-      getStarHalo(this->shapes[0], this->color, 16, positions[0], this->size * 3.f);
-      getStarHalo(this->shapes[1], this->color, 32, positions[0], this->size * 2.0f);
-      getStarHalo(this->shapes[2], this->color, 64, positions[0], this->size * 1.5f);
-      getStarHalo(this->shapes[3], this->color, 128, positions[0], this->size * 1.25f);
-      getGradientStar(this->shapes[4], this->color, this->coreColor, 0, positions[0], this->size);
-      getGradientStar(this->shapes[5], this->color, this->coreColor, .25f, positions[0], this->size);
-      getGradientStar(this->shapes[6], this->color, this->coreColor, .50f, positions[0], this->size);
-      getGradientStar(this->shapes[7], this->color, this->coreColor, 1.0f, positions[0], this->size);
+      const float radius = size;
+      this->circle.setFillColor(sf::Color::Transparent);
+      this->circle.setOutlineColor(this->color);
+      this->circle.setOutlineThickness(2.f);
+      this->circle.setRadius(this->size);
+      this->circle.setPosition({ position.x - this->size, position.y - this->size });
+
+
 
       this->nameLabel.setString(this->name);
       this->nameLabel.setFont(this->getGlobalResources().getFontScifi().font);
       this->nameLabel.setCharacterSize(this->getGlobalResources().getFontScifi().size);
       this->nameLabel.setStyle(sf::Text::Regular);
       this->nameLabel.setFillColor(sf::Color::White);
+      this->nameLabel.setOutlineColor({0, 0, 0, 128});
+      this->nameLabel.setOutlineThickness(2.f);
       this->nameLabel.setPosition({ position.x + 2 * this->size, position.y - 4 * this->size });
    }
 }
 
 void GalaxyCluster::drawInto(sf::RenderTarget & renderTarget) const
 {
-   for (const auto & c : this->shapes)
-   {
-      renderTarget.draw(c);
-   }
-
+   renderTarget.draw(this->circle);
    renderTarget.draw(this->nameLabel);
 }
 
