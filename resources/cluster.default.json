@@ -85,6 +85,7 @@
       [
          {
               "name" : "Caleston Rift"
+            , "image" : "./copyrighted/caleston-rift.png"
             , "grid-increment" : 2
             , "grid-major-increment" : 5
             , "size" : "100,100,100"

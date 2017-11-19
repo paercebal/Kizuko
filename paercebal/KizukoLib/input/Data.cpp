@@ -68,13 +68,37 @@ std::string concat(Args... args)
 ///////////////////////////////////////////////////////////////////////////////
 
 template <typename T>
-void extractValue(T & t, const std::string & name, std::string & value)
+void extractValueImpl(T & t, const std::string & name, std::string & value, bool isFacultative)
 {
    expectTrue(t.IsObject(), "json data is not an object");
    rapidjson::Value::ConstMemberIterator it = t.FindMember(name.c_str());
-   expectTrue(it != t.MemberEnd(), concat("json data has no \"", name, "\" property"));
+   if (isFacultative)
+   {
+      if (it == t.MemberEnd())
+      {
+         value.clear();
+         return;
+      }
+   }
+   else
+   {
+      expectTrue(it != t.MemberEnd(), concat("json data has no \"", name, "\" property"));
+   }
+
    expectTrue(it->value.IsString(), concat("json data's \"", name, "\" property is not a string"));
    value = it->value.GetString();
+}
+
+template <typename T>
+void extractValueFacultative(T & t, const std::string & name, std::string & value)
+{
+   extractValueImpl(t, name, value, true);
+}
+
+template <typename T>
+void extractValue(T & t, const std::string & name, std::string & value)
+{
+   extractValueImpl(t, name, value, false);
 }
 
 template <typename T>
@@ -527,6 +551,7 @@ input::Cluster extractCluster(const rapidjson::Value & t)
    expectTrue(t.IsObject(), "json 'cluster' is not an object");
 
    extractValue(t, "name", value.name);
+   extractValueFacultative(t, "image", value.image);
    extractValue(t, "grid-increment", value.gridIncrement);
    extractValue(t, "grid-major-increment", value.gridMajorIncrement);
    extractValue(t, "size", value.size);

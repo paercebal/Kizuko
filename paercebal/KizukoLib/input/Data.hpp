@@ -75,6 +75,7 @@ struct Distance
 struct Cluster
 {
    std::string                name;                         // Not used currently
+   std::string                image;
    float                      gridIncrement = 0.f;
    float                      gridMajorIncrement = 0.f;
    sf::Vector3f               size;
