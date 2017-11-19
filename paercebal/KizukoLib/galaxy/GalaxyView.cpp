@@ -84,18 +84,21 @@ void GalaxyView::warnMouseHovering(int x, int y)
 {
    this->button.warnMouseHovering(x, y);
    this->label.warnMouseHovering(x, y);
+   this->setChanged(true); // This is wrong. I should do better.
 }
 
 void GalaxyView::warnMouseClicking(sf::Vector2i pressed, sf::Vector2i released)
 {
    this->button.warnMouseClicking(pressed, released);
    this->label.warnMouseClicking(pressed, released);
+   this->setChanged(true); // This is wrong. I should do better.
 }
 
 void GalaxyView::warnLoseFocus()
 {
    this->button.warnLoseFocus();
    this->label.warnLoseFocus();
+   this->setChanged(true); // This is wrong. I should do better.
 }
 
 void GalaxyView::drawInto(sf::RenderTarget & renderTarget) const
