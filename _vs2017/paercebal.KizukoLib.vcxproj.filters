@@ -81,6 +81,12 @@
     <ClCompile Include="..\paercebal\KizukoLib\gui\View.cpp">
       <Filter>p.KizukoLib.gui</Filter>
     </ClCompile>
+    <ClCompile Include="..\paercebal\KizukoLib\galaxy\GalaxyCluster.cpp">
+      <Filter>p.KizukoLib.galaxy</Filter>
+    </ClCompile>
+    <ClCompile Include="..\paercebal\KizukoLib\objects\FlatImage.cpp">
+      <Filter>p.KizukoLib.objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\paercebal\KizukoLib\dllmain.hpp">
@@ -145,6 +151,12 @@
     </ClInclude>
     <ClInclude Include="..\paercebal\KizukoLib\gui\View.hpp">
       <Filter>p.KizukoLib.gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\paercebal\KizukoLib\galaxy\GalaxyCluster.hpp">
+      <Filter>p.KizukoLib.galaxy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\paercebal\KizukoLib\objects\FlatImage.hpp">
+      <Filter>p.KizukoLib.objects</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

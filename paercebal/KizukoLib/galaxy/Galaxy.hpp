@@ -4,6 +4,9 @@
 #include <paercebal/KizukoLib/GlobalResources.hpp>
 #include <paercebal/KizukoLib/objects/Object.hpp>
 #include <paercebal/KizukoLib/galaxy/GalaxyLine.hpp>
+#include <paercebal/KizukoLib/galaxy/GalaxyCluster.hpp>
+#include <paercebal/KizukoLib/objects/FlatImage.hpp>
+
 
 #include <SFML/Graphics.hpp>
 
@@ -29,6 +32,7 @@ public:
 
    //Galaxy &                      addStar(const Star & star);
    //Galaxy &                      addDistance(const DistanceShape & distance);
+   Galaxy &                      addCluster(const GalaxyCluster & cluster);
 
 private:
    virtual Galaxy *              cloneImpl()                                     const override;
@@ -38,10 +42,11 @@ private:
    int                           gridMajorIncrement      = 5;
    float                         scaling                 = 1.f;
 
+   objects::FlatImage *          milkyWayImage = nullptr;
    std::vector<GalaxyLine *>     galaxyLines;
    //std::vector<DistanceShape *>  distanceShapes;
    //std::vector<AltitudeLine *>   altitudeLine;
-   //std::vector<Star *>           stars;
+   std::vector<GalaxyCluster *>  clusters;
 };
 
 
