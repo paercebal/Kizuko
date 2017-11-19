@@ -31,7 +31,7 @@ private:
    virtual GalaxyCluster *             cloneImpl()                                     const override;
 
    std::string                         name;
-   std::vector<sf::CircleShape>        shapes;
+   sf::CircleShape                     circle;
    float                               size;
    sf::Color                           color;
    sf::Color                           coreColor;

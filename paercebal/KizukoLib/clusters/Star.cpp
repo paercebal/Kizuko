@@ -67,6 +67,8 @@ void Star::createShapes2D()
       this->nameLabel.setCharacterSize(this->getGlobalResources().getFontScifi().size);
       this->nameLabel.setStyle(sf::Text::Regular);
       this->nameLabel.setFillColor(sf::Color::White);
+      this->nameLabel.setOutlineColor({ 0, 0, 0, 128 });
+      this->nameLabel.setOutlineThickness(2.f);
       this->nameLabel.setPosition({ position.x + 2 * this->size, position.y - 4 * this->size });
    }
 }

@@ -23,6 +23,7 @@
     <ClCompile Include="..\paercebal\KizukoLib\clusters\Star.cpp" />
     <ClCompile Include="..\paercebal\KizukoLib\dllmain.cpp" />
     <ClCompile Include="..\paercebal\KizukoLib\galaxy\Galaxy.cpp" />
+    <ClCompile Include="..\paercebal\KizukoLib\galaxy\GalaxyCircle.cpp" />
     <ClCompile Include="..\paercebal\KizukoLib\galaxy\GalaxyCluster.cpp" />
     <ClCompile Include="..\paercebal\KizukoLib\galaxy\GalaxyLine.cpp" />
     <ClCompile Include="..\paercebal\KizukoLib\galaxy\GalaxyView.cpp" />
@@ -48,6 +49,7 @@
     <ClInclude Include="..\paercebal\KizukoLib\dllmain.hpp" />
     <ClInclude Include="..\paercebal\KizukoLib\Exception.hpp" />
     <ClInclude Include="..\paercebal\KizukoLib\galaxy\Galaxy.hpp" />
+    <ClInclude Include="..\paercebal\KizukoLib\galaxy\GalaxyCircle.hpp" />
     <ClInclude Include="..\paercebal\KizukoLib\galaxy\GalaxyCluster.hpp" />
     <ClInclude Include="..\paercebal\KizukoLib\galaxy\GalaxyLine.hpp" />
     <ClInclude Include="..\paercebal\KizukoLib\galaxy\GalaxyView.hpp" />

@@ -18,7 +18,7 @@ class PAERCEBAL_x_KIZUKOLIB_x_API FlatImage : public Object
 {
    using super = Object;
 public:
-   FlatImage(const GlobalResources & globalResources_, sf::Vector3f topLeft_, sf::Vector3f bottomRight_);
+   FlatImage(const GlobalResources & globalResources_, const std::string & filename_, sf::Vector3f topLeft_, sf::Vector3f bottomRight_);
    virtual ~FlatImage();
 
    virtual void                  createShapes2D()                                      override;
@@ -34,6 +34,7 @@ private:
    sf::Vector3f topLeft = {};
    sf::Vector3f bottomRight = {};
 
+   std::string                   filename;
    sf::Texture                   image;
    sf::Sprite                    sprite;
    bool                          visible = true;

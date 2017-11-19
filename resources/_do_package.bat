@@ -16,5 +16,5 @@ xcopy *.ttf ..\Kizuko /E /Q
 PUSHD ..\Kizuko
 SET DT=%date%_%time:~0,2%-%time:~3,2%-%time:~6,2%
 SET DT=%DT: =0%
-7z.exe a -r Kizuko-%DT%.zip *.*
+7z.exe a -r Kizuko_%DT%.zip *.*
 POPD

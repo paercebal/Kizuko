@@ -109,7 +109,7 @@ std::vector<std::unique_ptr<ClusterLine>> createClusterGrid(const GlobalResource
 }
 
 Cluster::Cluster(const GlobalResources & globalResources)
-   : Cluster(globalResources, globalResources.getData().clusters.at(0).increment, static_cast<int>(globalResources.getData().clusters.at(0).majorIncrement), 1.f, globalResources.getData().clusters.at(0).size)
+   : Cluster(globalResources, globalResources.getData().clusters.at(0).gridIncrement, static_cast<int>(globalResources.getData().clusters.at(0).gridMajorIncrement), 1.f, globalResources.getData().clusters.at(0).size)
 {
 }
 

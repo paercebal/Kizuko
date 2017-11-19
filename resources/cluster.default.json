@@ -23,66 +23,70 @@
       }
    , "galaxy" :
       {
-           "size" : "4500,4500"
+           "image" : "./resources/milky_way.2000x2000.png"
+         , "image-radius" : 67
+         , "radius" : 100
+         , "grid-increment" : 5
+         , "grid-major-increment" : 2
          , "cluster-data-list" :
             [
-                 { "name" : "Shrike Abyssal"             , "position" : "-34.91, -29.98" }
-               , { "name" : "Vallhallan Threshold"             , "position" : "-21.4, -38.76" }
-               , { "name" : "Titan Nebula"             , "position" : "-5.47, -42.07" }
-               , { "name" : "Rosetta Nebula"             , "position" : "13.04, -41.2" }
-               , { "name" : "Sigurd's Craddle"             , "position" : "-0.02, -33.24" }
-               , { "name" : "Omega Nebula"             , "position" : "-1.24, -24.04" }
-               , { "name" : "Pangaea Expanse"             , "position" : "8.84, -19.82" }
-               , { "name" : "Hawking Eta"             , "position" : "11.2, -9.29" }
-               , { "name" : "Hourglass Nebula"             , "position" : "-20.89, -25.56" }
-               , { "name" : "Pylos Nebula"             , "position" : "13.42, -23.42" }
-               , { "name" : "Caleston Rift"             , "position" : "20.62, -10.89" }
-               , { "name" : "Phoenix Massing"             , "position" : "26.27, -18.36" }
-               , { "name" : "Far Rim"             , "position" : "38, -28.22" }
-               , { "name" : "Perseus Veil"             , "position" : "41.07, -23.67" }
-               , { "name" : "Sentry Omega"             , "position" : "33, -9.07" }
-               , { "name" : "Hades Nexus"             , "position" : "42.04, -12.18" }
-               , { "name" : "Crescent Nebula"             , "position" : "-32.98, -12.73" }
-               , { "name" : "Eagle Nebula"             , "position" : "-25.42, -2.71" }
-               , { "name" : "Ismar Frontier"             , "position" : "-44.53, -4.71" }
-               , { "name" : "Minos Wasteland"             , "position" : "-39.29, 5.07" }
+                 { "name" : "Shrike Abyssal"             , "position" : "-28.98, -24.88" }
+               , { "name" : "Vallhallan Threshold"             , "position" : "-17.76, -32.17" }
+               , { "name" : "Titan Nebula"             , "position" : "-4.54, -34.92" }
+               , { "name" : "Rosetta Nebula"             , "position" : "10.82, -34.2" }
+               , { "name" : "Sigurd's Craddle"             , "position" : "-0.02, -27.59" }
+               , { "name" : "Omega Nebula"             , "position" : "-1.03, -19.95" }
+               , { "name" : "Pangaea Expanse"             , "position" : "7.34, -16.45" }
+               , { "name" : "Hawking Eta"             , "position" : "9.3, -7.71" }
+               , { "name" : "Hourglass Nebula"             , "position" : "-17.34, -21.21" }
+               , { "name" : "Pylos Nebula"             , "position" : "11.14, -19.44" }
+               , { "name" : "Caleston Rift"             , "position" : "17.11, -9.04" }
+               , { "name" : "Phoenix Massing"             , "position" : "21.8, -15.24" }
+               , { "name" : "Far Rim"             , "position" : "31.54, -23.42" }
+               , { "name" : "Perseus Veil"             , "position" : "34.09, -19.65" }
+               , { "name" : "Sentry Omega"             , "position" : "27.39, -7.53" }
+               , { "name" : "Hades Nexus"             , "position" : "34.89, -10.11" }
+               , { "name" : "Crescent Nebula"             , "position" : "-27.37, -10.57" }
+               , { "name" : "Eagle Nebula"             , "position" : "-21.1, -2.25" }
+               , { "name" : "Ismar Frontier"             , "position" : "-36.96, -3.91" }
+               , { "name" : "Minos Wasteland"             , "position" : "-32.61, 4.21" }
                , { "name" : "Galactic Core"             , "position" : "0, 0" }
-               , { "name" : "Ninmah Cluster"             , "position" : "15.64, -4.93" }
-               , { "name" : "Kepler Verge"             , "position" : "26.36, -0.22" }
-               , { "name" : "Shadow Sea"             , "position" : "17.2, 5.47" }
-               , { "name" : "Maroon Sea"             , "position" : "20.53, 12.36" }
-               , { "name" : "Styx Theta"             , "position" : "16.13, 0.09" }
-               , { "name" : "Nubian Expanse"             , "position" : "38.4, 3.07" }
-               , { "name" : "Armstrong Nebula"             , "position" : "37.42, 11" }
-               , { "name" : "Attican Beta"             , "position" : "29.07, 14.8" }
-               , { "name" : "Voyager Cluster"             , "position" : "38, 19.51" }
-               , { "name" : "Hades Gamma"             , "position" : "29.53, 23.38" }
-               , { "name" : "Argos Rho"             , "position" : "14.87, 16.2" }
-               , { "name" : "Gemini Sigma"             , "position" : "20.93, 19.64" }
-               , { "name" : "Artemis Tau"             , "position" : "25.69, 30.18" }
-               , { "name" : "Kite's Nest"             , "position" : "17.4, 36.47" }
-               , { "name" : "Petra Nebula"             , "position" : "7.8, 34.27" }
-               , { "name" : "Horse Head Nebula"             , "position" : "3.56, 20.22" }
-               , { "name" : "Exodus Cluster"             , "position" : "5.51, 27.73" }
-               , { "name" : "Sol Cluster"             , "position" : "-3.6, 30.31" }
-               , { "name" : "Arcturus Stream"             , "position" : "0.04, 31.16" }
-               , { "name" : "Viper Nebula"             , "position" : "11.29, 42" }
-               , { "name" : "Annos Basin"             , "position" : "-8.36, 19.24" }
-               , { "name" : "Aethon Cluster"             , "position" : "-13.8, 36.22" }
-               , { "name" : "Apien Crest"             , "position" : "-22.13, 32.44" }
-               , { "name" : "Krogan DMZ"             , "position" : "-19.27, 20.58" }
-               , { "name" : "Serpent Nebula"             , "position" : "-21.53, 13.53" }
-               , { "name" : "Nimbus Cluster"             , "position" : "-41.4, 13.07" }
-               , { "name" : "Silean Nebula"             , "position" : "-33.11, 20.93" }
-               , { "name" : "Athena Nebula"             , "position" : "-33.6, 14.18" }
+               , { "name" : "Ninmah Cluster"             , "position" : "12.98, -4.09" }
+               , { "name" : "Kepler Verge"             , "position" : "21.88, -0.18" }
+               , { "name" : "Shadow Sea"             , "position" : "14.28, 4.54" }
+               , { "name" : "Maroon Sea"             , "position" : "17.04, 10.26" }
+               , { "name" : "Styx Theta"             , "position" : "13.39, 0.07" }
+               , { "name" : "Nubian Expanse"             , "position" : "31.87, 2.55" }
+               , { "name" : "Armstrong Nebula"             , "position" : "31.06, 9.13" }
+               , { "name" : "Attican Beta"             , "position" : "24.13, 12.28" }
+               , { "name" : "Voyager Cluster"             , "position" : "31.54, 16.19" }
+               , { "name" : "Hades Gamma"             , "position" : "24.51, 19.41" }
+               , { "name" : "Argos Rho"             , "position" : "12.34, 13.45" }
+               , { "name" : "Gemini Sigma"             , "position" : "17.37, 16.3" }
+               , { "name" : "Artemis Tau"             , "position" : "21.32, 25.05" }
+               , { "name" : "Kite's Nest"             , "position" : "14.44, 30.27" }
+               , { "name" : "Petra Nebula"             , "position" : "6.47, 28.44" }
+               , { "name" : "Horse Head Nebula"             , "position" : "2.95, 16.78" }
+               , { "name" : "Exodus Cluster"             , "position" : "4.57, 23.02" }
+               , { "name" : "Sol Cluster"             , "position" : "-2.99, 25.16" }
+               , { "name" : "Arcturus Stream"             , "position" : "0.03, 25.86" }
+               , { "name" : "Viper Nebula"             , "position" : "9.37, 34.86" }
+               , { "name" : "Annos Basin"             , "position" : "-6.94, 15.97" }
+               , { "name" : "Aethon Cluster"             , "position" : "-11.45, 30.06" }
+               , { "name" : "Apien Crest"             , "position" : "-18.37, 26.93" }
+               , { "name" : "Krogan DMZ"             , "position" : "-15.99, 17.08" }
+               , { "name" : "Serpent Nebula"             , "position" : "-17.87, 11.23" }
+               , { "name" : "Nimbus Cluster"             , "position" : "-34.36, 10.85" }
+               , { "name" : "Silean Nebula"             , "position" : "-27.48, 17.37" }
+               , { "name" : "Athena Nebula"             , "position" : "-27.89, 11.77" }
             ]
       }
    , "clusters" :
       [
          {
               "name" : "Caleston Rift"
-            , "increment" : 2
-            , "major-increment" : 5
+            , "grid-increment" : 2
+            , "grid-major-increment" : 5
             , "size" : "100,100,100"
             , "stars" :
                [

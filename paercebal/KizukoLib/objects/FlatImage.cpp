@@ -9,12 +9,13 @@
 namespace paercebal::KizukoLib::objects
 {
 
-FlatImage::FlatImage(const GlobalResources & globalResources_, sf::Vector3f topLeft_, sf::Vector3f bottomRight_)
+FlatImage::FlatImage(const GlobalResources & globalResources_, const std::string & filename_, sf::Vector3f topLeft_, sf::Vector3f bottomRight_)
    : super(globalResources_)
    , topLeft{ topLeft_ }
    , bottomRight{ bottomRight_ }
+   , filename(filename_)
 {
-   this->image.loadFromFile("./resources/milky_way.2000x2000.png");
+   this->image.loadFromFile(this->filename);
    this->image.setSmooth(true);
 
    this->sprite.setTexture(this->image);
@@ -70,7 +71,10 @@ void FlatImage::createShapes2D()
 
 void FlatImage::drawInto(sf::RenderTarget & renderTarget) const
 {
-   renderTarget.draw(this->sprite);
+   if (this->visible)
+   {
+      renderTarget.draw(this->sprite);
+   }
 }
 
 } // namespace paercebal::KizukoLib::objects
