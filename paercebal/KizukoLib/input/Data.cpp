@@ -623,4 +623,20 @@ Data extractDatafromJSon(const std::string & jsonText)
    return data;
 }
 
+
+const Cluster * Data::getCluster(const std::string & clusterName) const
+{
+   auto it = std::find_if(clusters.begin(), clusters.end(), [&clusterName](const input::Cluster & cluster)
+   {
+      return cluster.name == clusterName;
+   });
+
+   if (it != clusters.end())
+   {
+      return &(*it);
+   }
+
+   return nullptr;
+}
+
 } // namespace paercebal::KizukoLib::input

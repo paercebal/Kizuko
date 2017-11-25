@@ -1,1 +1,1 @@
-paercebal.Kizuko.exe --cluster cluster.default.json
+paercebal.Kizuko.exe --galaxy galaxy.default.json

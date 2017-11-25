@@ -12,36 +12,33 @@
 namespace paercebal::KizukoLib::galaxy
 {
 
-sf::Color getGradient(const sf::Color & lower, const sf::Color & higher, float gradient)
-{
-   return { static_cast<sf::Uint8>(lower.r + (higher.r - lower.r) * gradient), static_cast<sf::Uint8>(lower.g + (higher.g - lower.g) * gradient), static_cast<sf::Uint8>(lower.b + (higher.b - lower.b) * gradient), static_cast<sf::Uint8>(lower.a + (higher.a - lower.a) * gradient) };
-}
-
-void getGradientStar(sf::CircleShape & c, const sf::Color & lower, const sf::Color & higher, float gradient, const GalaxyCluster::Position & position, float size)
-{
-   const float radius = size - (0.5f * size * gradient);
-   c.setFillColor(getGradient(lower, higher, gradient));
-   c.setRadius(radius);
-   c.setPosition({ position.x - radius, position.y - radius });
-}
-
-void getStarHalo(sf::CircleShape & c, const sf::Color & color, sf::Uint8 transparency, const GalaxyCluster::Position & position, float size)
-{
-   const float radius = size;
-   c.setFillColor({ color.r, color.g, color.b, transparency });
-   c.setRadius(radius);
-   c.setPosition({ position.x - radius, position.y - radius });
-}
-
 GalaxyCluster::GalaxyCluster(const GlobalResources & globalResources, const std::string & name_, sf::Vector3f center_)
    : super(globalResources)
    , name{ name_ }
    , size{ 5.f }
    , color{ sf::Color::Red }
-   , coreColor{ sf::Color::White }
+   , hoverColor{ sf::Color::Cyan }
 {
    this->setCenter({ center_.x, center_.y, center_.z });
    this->setRelativePositions({ { 0, 0, 0 } });
+
+   this->isClusterDefined = this->getGlobalResources().getData().getCluster(name_) != nullptr;
+}
+
+void GalaxyCluster::registerIntoObserver(gui::ObserverWidget3D & observerWidget3D_)
+{
+   this->unregisterFromObserver();
+   observerWidget3D_.registerWidget3D(*this);
+   this->observerWidget3D = &observerWidget3D_;
+}
+
+void GalaxyCluster::unregisterFromObserver()
+{
+   if (this->observerWidget3D)
+   {
+      this->observerWidget3D->unregisterWidget3D(*this);
+      this->observerWidget3D = nullptr;
+   }
 }
 
 void GalaxyCluster::createShapes2D()
@@ -52,20 +49,58 @@ void GalaxyCluster::createShapes2D()
    {
       GalaxyCluster::Position & position = positions[0];
 
-      const float radius = size;
-      this->circle.setFillColor(sf::Color::Transparent);
-      this->circle.setOutlineColor(this->color);
-      this->circle.setOutlineThickness(2.f);
-      this->circle.setRadius(this->size);
-      this->circle.setPosition({ position.x - this->size, position.y - this->size });
+      const sf::Vector2f controlPosition = { position.x - this->size, position.y - this->size };
+      const sf::Vector2f controlSize = { this->size * 2, this->size * 2 };
+      this->setControlBounds({ controlPosition, controlSize });
 
+      if (this->isClusterDefined)
+      {
+         if (this->isMouseHovering())
+         {
+            this->circle.setFillColor(sf::Color::Transparent);
+            this->circle.setOutlineColor(this->hoverColor);
+            this->circle.setOutlineThickness(3.f);
+            this->circle.setRadius(this->size);
+         }
+         else
+         {
+            this->circle.setFillColor(sf::Color::Transparent);
+            this->circle.setOutlineColor(this->color);
+            this->circle.setOutlineThickness(2.f);
+            this->circle.setRadius(this->size);
+         }
+      }
+      else
+      {
+         this->circle.setFillColor(sf::Color::Transparent);
+         this->circle.setOutlineColor({ 192, 192, 192 ,128 });
+         this->circle.setOutlineThickness(2.f);
+         this->circle.setRadius(this->size);
+      }
 
+      this->circle.setPosition(controlPosition);
 
       this->nameLabel.setString(this->name);
       this->nameLabel.setFont(this->getGlobalResources().getFontScifi().font);
       this->nameLabel.setCharacterSize(this->getGlobalResources().getFontScifi().size);
       this->nameLabel.setStyle(sf::Text::Regular);
-      this->nameLabel.setFillColor(sf::Color::White);
+
+      if (this->isClusterDefined)
+      {
+         if (this->isMouseHovering())
+         {
+            this->nameLabel.setFillColor(sf::Color::White);
+         }
+         else
+         {
+            this->nameLabel.setFillColor({ 255, 255, 255, 192 });
+         }
+      }
+      else
+      {
+         this->nameLabel.setFillColor({ 192, 192, 192, 128 });
+      }
+
       this->nameLabel.setOutlineColor({0, 0, 0, 128});
       this->nameLabel.setOutlineThickness(2.f);
       this->nameLabel.setPosition({ position.x + 2 * this->size, position.y - 4 * this->size });

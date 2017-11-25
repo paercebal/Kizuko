@@ -48,13 +48,80 @@ View & View::setViewedObject(std::unique_ptr<objects::Object> viewedObject_)
    return *this;
 }
 
+View & View::setChanged(bool isChanged_)
+{
+   this->isChanged_ = isChanged_;
+   return *this;
+}
+
+bool View::isChanged() const
+{
+   return this->isChanged_;
+}
+
 View & View::setView(const sf::View & view)
 {
    this->viewSize = view.getSize();
    this->viewCenter = view.getCenter();
+
+   for (auto p : this->widgetGui)
+   {
+      p->setView(view);
+   }
+
+   for (auto p : this->widget3D)
+   {
+      p->setView(view);
+   }
+
    this->setChanged(true);
 
    return *this;
+}
+
+void View::warnViewAboutMouseHovering(int x, int y)
+{
+   for (auto p : this->widgetGui)
+   {
+      p->warnMouseHovering(x, y);
+   }
+
+   for (auto p : this->widget3D)
+   {
+      p->warnMouseHovering(x, y);
+   }
+
+   this->setChanged(true); // This is wrong. I should do better.
+}
+
+void View::warnViewAboutMouseClicking(sf::Vector2i pressed, sf::Vector2i released)
+{
+   for (auto p : this->widgetGui)
+   {
+      p->warnMouseClicking(pressed, released);
+   }
+
+   for (auto p : this->widget3D)
+   {
+      p->warnMouseClicking(pressed, released);
+   }
+
+   this->setChanged(true); // This is wrong. I should do better.
+}
+
+void View::warnViewAboutLoseFocus()
+{
+   for (auto p : this->widgetGui)
+   {
+      p->warnLoseFocus();
+   }
+
+   for (auto p : this->widget3D)
+   {
+      p->warnLoseFocus();
+   }
+
+   this->setChanged(true); // This is wrong. I should do better.
 }
 
 void View::createShapes2D()
@@ -71,21 +138,6 @@ void View::createShapes2D()
       const float yPos = this->viewCenter.y - (this->viewSize.y / 2.f);
       this->spaceBackgroundSprite.setPosition(sf::Vector2f(xPos, yPos));
    }
-}
-
-void View::warnMouseHovering(int x, int y)
-{
-   this->setChanged(true); // This is wrong. I should do better.
-}
-
-void View::warnMouseClicking(sf::Vector2i pressed, sf::Vector2i released)
-{
-   this->setChanged(true); // This is wrong. I should do better.
-}
-
-void View::warnLoseFocus()
-{
-   this->setChanged(true); // This is wrong. I should do better.
 }
 
 void View::drawInto(sf::RenderTarget & renderTarget) const
@@ -229,17 +281,6 @@ View & View::zoomOutByWheel()
    return *this;
 }
 
-View & View::setChanged(bool isChanged_)
-{
-   this->isChanged_ = isChanged_;
-   return *this;
-}
-
-bool View::isChanged() const
-{
-   return this->isChanged_;
-}
-
 void View::calculateAbsolutePositionThenShapes2DRecursiveIfNeeded()
 {
    if (this->isChanged())
@@ -248,6 +289,27 @@ void View::calculateAbsolutePositionThenShapes2DRecursiveIfNeeded()
       this->setChanged(false);
    }
 }
+
+void View::registerWidget3D(Control & control)
+{
+   this->widget3D.insert(&control);
+}
+
+void View::unregisterWidget3D(Control & control)
+{
+   this->widget3D.erase(&control);
+}
+
+void View::registerWidgetGui(Control & control)
+{
+   this->widgetGui.insert(&control);
+}
+
+void View::unregisterWidgetGui(Control & control)
+{
+   this->widgetGui.erase(&control);
+}
+
 
 
 } // namespace paercebal::KizukoLib::gui

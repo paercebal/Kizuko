@@ -402,14 +402,14 @@ public:
          this->screen.onPageDownKeyPressed();
       }
 
-      this->screen.warnMouseHovering(sf::Mouse::getPosition(this->sfml_window).x, sf::Mouse::getPosition(this->sfml_window).y);
+      this->screen.warnScreenAboutMouseHovering(sf::Mouse::getPosition(this->sfml_window).x, sf::Mouse::getPosition(this->sfml_window).y);
 
       {
          size_t steps = this->leftButtonClicked.size() / 2;
 
          for (size_t i = 0; i < steps; ++i)
          {
-            screen.warnMouseClicking(this->leftButtonClicked[i * 2], this->leftButtonClicked[i * 2 + 1]);
+            screen.warnScreenAboutMouseClicking(this->leftButtonClicked[i * 2], this->leftButtonClicked[i * 2 + 1]);
          }
 
          if (this->leftButtonClicked.size() % 2 != 0)
