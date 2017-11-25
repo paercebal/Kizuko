@@ -27,17 +27,20 @@ GalaxyView::GalaxyView(const GlobalResources & globalResources, GalaxyViewComman
 GalaxyView::GalaxyView(const GlobalResources & globalResources, GalaxyViewCommands galaxyViewCommands, float translationIncrement_)
    : super(globalResources, translationIncrement_)
    , commands(galaxyViewCommands)
-   , button(globalResources, gui::RelativePositionStyle::BottomLeft, { 20.f, -20.f }, { 200.f, 40.f })
+   //, button(globalResources, gui::RelativePositionStyle::BottomLeft, { 20.f, -20.f }, { 200.f, 40.f })
    , label(globalResources, gui::RelativePositionStyle::BottomRight, { -20.f, -20.f }, 2.f)
 {
    {
-      auto viewedGalaxy = std::make_unique<galaxy::Galaxy>(globalResources);
+      GalaxyCommands galaxyCommands;
+      galaxyCommands.onSelectCluster = [this](const std::string & clusterName) { this->commands.onSelectCluster(clusterName); };
+      auto viewedGalaxy = std::make_unique<galaxy::Galaxy>(globalResources, galaxyCommands, *this);
       this->galaxy = viewedGalaxy.get();
       this->setViewedObject(std::move(viewedGalaxy));
    }
 
-   this->button.setLabel("Go to Caleston Rift");
-   this->button.setCommand(commands.onBack);
+   //this->button.setLabel("Go to Caleston Rift");
+   //this->button.setCommand([]() commands.onSelectCluster();
+   //this->button.registerIntoObserver(*this);
 
    this->label.setLabel("Milky Way");
    this->label.setCommand([this]()
@@ -46,59 +49,22 @@ GalaxyView::GalaxyView(const GlobalResources & globalResources, GalaxyViewComman
       this->galaxy->setBackgroundImageVisible(!this->galaxy->isBackgroundImageVisible());
       this->setChanged(true);
    });
-}
-
-GalaxyView & GalaxyView::setView(const sf::View & view)
-{
-   super::setView(view);
-
-   this->button.setView(view);
-   this->label.setView(view);
-   this->setChanged(true);
-
-   return *this;
+   this->label.registerIntoObserver(*this);
 }
 
 void GalaxyView::createShapes2D()
 {
    super::createShapes2D();
 
-   this->button.createShapes2D();
+   //this->button.createShapes2D();
    this->label.createShapes2D();
-}
-
-void GalaxyView::warnMouseHovering(int x, int y)
-{
-   super::warnMouseHovering(x, y);
-
-   this->button.warnMouseHovering(x, y);
-   this->label.warnMouseHovering(x, y);
-   this->setChanged(true); // This is wrong. I should do better.
-}
-
-void GalaxyView::warnMouseClicking(sf::Vector2i pressed, sf::Vector2i released)
-{
-   super::warnMouseClicking(pressed, released);
-
-   this->button.warnMouseClicking(pressed, released);
-   this->label.warnMouseClicking(pressed, released);
-   this->setChanged(true); // This is wrong. I should do better.
-}
-
-void GalaxyView::warnLoseFocus()
-{
-   super::warnLoseFocus();
-
-   this->button.warnLoseFocus();
-   this->label.warnLoseFocus();
-   this->setChanged(true); // This is wrong. I should do better.
 }
 
 void GalaxyView::drawInto(sf::RenderTarget & renderTarget) const
 {
    super::drawInto(renderTarget);
 
-   this->button.drawInto(renderTarget);
+   //this->button.drawInto(renderTarget);
    this->label.drawInto(renderTarget);
 }
 

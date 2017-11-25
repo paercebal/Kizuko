@@ -34,20 +34,14 @@ class PAERCEBAL_x_KIZUKOLIB_x_API ClusterView : public gui::View
    using super = gui::View;
 public:
 
-   ClusterView(const GlobalResources & globalResources, ClusterViewCommands clusterViewCommands);
+   ClusterView(const GlobalResources & globalResources, ClusterViewCommands clusterViewCommands, const input::Cluster & inputCluster);
 
    virtual void                  createShapes2D()                                      override;
    virtual void                  drawInto(sf::RenderTarget & renderTarget)       const override;
    std::unique_ptr<ClusterView>  clone()                                         const;
 
-   virtual ClusterView &                 setView(const sf::View & view);
-
-   virtual void                          warnMouseHovering(int x, int y);
-   virtual void                          warnMouseClicking(sf::Vector2i pressed, sf::Vector2i released);
-   virtual void                          warnLoseFocus();
-
 private:
-   ClusterView(const GlobalResources & globalResources, ClusterViewCommands clusterViewCommands, float translationIncrement_);
+   ClusterView(const GlobalResources & globalResources, ClusterViewCommands clusterViewCommands, const input::Cluster & inputCluster, float translationIncrement_);
 
    virtual ClusterView *         cloneImpl()                                     const override;
 

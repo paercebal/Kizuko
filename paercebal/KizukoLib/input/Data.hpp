@@ -1,6 +1,8 @@
 #ifndef PAERCEBAL_x_KIZUKOLIB_x_INPUT_x_DATA_x_HPP
 #define PAERCEBAL_x_KIZUKOLIB_x_INPUT_x_DATA_x_HPP
 
+#include <paercebal/KizukoLib/dllmain.hpp>
+
 #include <SFML/Graphics.hpp>
 
 #include <array>
@@ -83,11 +85,13 @@ struct Cluster
    std::vector<Distance>      distances;
 };
 
-struct Data
+struct PAERCEBAL_x_KIZUKOLIB_x_API Data
 {
    Style                      style;
    Galaxy                     galaxy;
    std::vector<Cluster>       clusters;
+
+   const Cluster *            getCluster(const std::string & clusterName) const;
 };
 
 Data extractDatafromJSon(const std::string & jsonText);

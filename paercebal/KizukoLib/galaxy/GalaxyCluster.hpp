@@ -3,6 +3,8 @@
 
 #include <paercebal/KizukoLib/GlobalResources.hpp>
 #include <paercebal/KizukoLib/objects/Object.hpp>
+#include <paercebal/KizukoLib/gui/Control.hpp>
+#include <paercebal/KizukoLib/gui/ObserverWidget3D.hpp>
 
 #include <SFML/Graphics.hpp>
 
@@ -14,7 +16,7 @@ namespace paercebal::KizukoLib::galaxy
 {
 
 
-class PAERCEBAL_x_KIZUKOLIB_x_API GalaxyCluster : public objects::Object
+class PAERCEBAL_x_KIZUKOLIB_x_API GalaxyCluster : public objects::Object, public gui::Control
 {
    using super = objects::Object;
 public:
@@ -27,15 +29,20 @@ public:
    virtual void                        drawInto(sf::RenderTarget & renderTarget)       const override;
    std::unique_ptr<GalaxyCluster>      clone()                                         const;
 
+   void                                registerIntoObserver(gui::ObserverWidget3D & observerWidget3D_);
+   void                                unregisterFromObserver();
+
 private:
    virtual GalaxyCluster *             cloneImpl()                                     const override;
 
+   gui::ObserverWidget3D *             observerWidget3D = nullptr;
    std::string                         name;
    sf::CircleShape                     circle;
    float                               size;
    sf::Color                           color;
-   sf::Color                           coreColor;
+   sf::Color                           hoverColor;
    sf::Text                            nameLabel;
+   bool                                isClusterDefined = false;
 };
 
 

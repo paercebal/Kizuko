@@ -5,8 +5,12 @@
 #include <paercebal/KizukoLib/GlobalResources.hpp>
 #include <paercebal/KizukoLib/objects/Object.hpp>
 #include <paercebal/KizukoLib/galaxy/Galaxy.hpp>
+#include <paercebal/KizukoLib/gui/Control.hpp>
+#include <paercebal/KizukoLib/gui/ObserverWidgetGui.hpp>
+#include <paercebal/KizukoLib/gui/ObserverWidget3D.hpp>
 #include <paercebal/KizukoLib/gui/Button.hpp>
 #include <paercebal/KizukoLib/gui/Label.hpp>
+
 
 #include <SFML/Graphics.hpp>
 
@@ -20,7 +24,7 @@ namespace paercebal::KizukoLib::gui
 {
 
 
-class PAERCEBAL_x_KIZUKOLIB_x_API View : public objects::Object
+class PAERCEBAL_x_KIZUKOLIB_x_API View : public objects::Object, public ObserverWidgetGui, public ObserverWidget3D
 {
    using super = objects::Object;
 public:
@@ -44,14 +48,19 @@ public:
    View &                        setDebugText(const std::string & debugText_);
    View &                        setDebugText(std::string && debugText_);
 
-   View &                        setChanged(bool isChanged);
-   bool                          isChanged()                                     const;
+   virtual void                  registerWidget3D(Control & control)                   override;
+   virtual void                  unregisterWidget3D(Control & control)                 override;
+   virtual void                  registerWidgetGui(Control & control)                  override;
+   virtual void                  unregisterWidgetGui(Control & control)                override;
+
+   View &                                 setChanged(bool isChanged);
+   bool                                   isChanged()                                     const;
 
    virtual View &                        setView(const sf::View & view);
 
-   virtual void                          warnMouseHovering(int x, int y);
-   virtual void                          warnMouseClicking(sf::Vector2i pressed, sf::Vector2i released);
-   virtual void                          warnLoseFocus();
+   virtual void                          warnViewAboutMouseHovering(int x, int y);
+   virtual void                          warnViewAboutMouseClicking(sf::Vector2i pressed, sf::Vector2i released);
+   virtual void                          warnViewAboutLoseFocus();
 
    void                          calculateAbsolutePositionThenShapes2DRecursiveIfNeeded();
 
@@ -84,6 +93,9 @@ protected:
 private:
 
    virtual View *                cloneImpl()                                     const = 0;
+
+   std::set<Control *>           widget3D;
+   std::set<Control *>           widgetGui;
 
 protected:
    View(const View &) = default;

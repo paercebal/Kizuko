@@ -22,9 +22,11 @@ namespace {
 Screen::Screen(const GlobalResources & globalResources_)
    : globalResources{ &globalResources_ }
 {
-   // WARNING: CLONING WON'T WORK AS THE "THIS" POINTER IN THE LAMBDAS WON'T BE UPDATED
-   this->clusterView = std::make_unique<clusters::ClusterView>(globalResources_, clusters::ClusterViewCommands{ [this]() { this->onBackFromCluster(); } });
-   this->galaxyView = std::make_unique<galaxy::GalaxyView>(globalResources_, galaxy::GalaxyViewCommands{ [this]() { this->onSelectCluster(); } });
+   galaxy::GalaxyViewCommands galaxyViewCommands;
+   galaxyViewCommands.onSelectCluster = [this](const std::string & clusterName) { this->onSelectCluster(clusterName); };
+
+   this->galaxyView = std::make_unique<galaxy::GalaxyView>(globalResources_, galaxyViewCommands);
+
    // WARNING: CLONING WON'T WORK FOR SAME REASONS
    this->views.push_back(this->galaxyView.get());
 }
@@ -79,20 +81,23 @@ const GlobalResources & Screen::getGlobalResources() const
 Screen & Screen::setView(const sf::View & view)
 {
    this->sfmlView = view;
-   /// @todo Do we really need to update the view on all the views?
-   this->clusterView->setView(view);
-   this->galaxyView->setView(view);
+
+   for (auto & view : this->views)
+   {
+      view->setView(this->sfmlView);
+   }
+
    return *this;
 }
 
-void Screen::warnMouseHovering(int x, int y)
+void Screen::warnScreenAboutMouseHovering(int x, int y)
 {
-   this->getCurrentView()->warnMouseHovering(x, y);
+   this->getCurrentView()->warnViewAboutMouseHovering(x, y);
 }
 
-void Screen::warnMouseClicking(sf::Vector2i pressed, sf::Vector2i released)
+void Screen::warnScreenAboutMouseClicking(sf::Vector2i pressed, sf::Vector2i released)
 {
-   this->getCurrentView()->warnMouseClicking(pressed, released);
+   this->getCurrentView()->warnViewAboutMouseClicking(pressed, released);
 }
 
 void Screen::drawInto(sf::RenderTarget & renderTarget) const
@@ -172,14 +177,29 @@ void Screen::calculateAbsolutePositionThenShapes2DRecursiveIfNeeded()
 
 void Screen::onBackFromCluster()
 {
-   this->getCurrentView()->warnLoseFocus();
+   this->getCurrentView()->warnViewAboutLoseFocus();
    this->views.pop_back();
+
+   // NOTE: We should send a custom event to the message loop to ask for the closing
+   // of the cluster screen. The following line will crash.
+   //this->clusterView.reset();
 }
 
-void Screen::onSelectCluster()
+void Screen::onSelectCluster(const std::string & clusterName)
 {
-   this->getCurrentView()->warnLoseFocus();
-   this->views.push_back(this->clusterView.get());
+   if (const input::Cluster * cluster = this->getGlobalResources().getData().getCluster(clusterName))
+   {
+      this->getCurrentView()->warnViewAboutLoseFocus();
+
+      // WARNING: CLONING WON'T WORK AS THE "THIS" POINTER IN THE LAMBDAS WON'T BE UPDATED
+      clusters::ClusterViewCommands clusterViewCommands;
+      clusterViewCommands.onBack = [this]() { this->onBackFromCluster(); };
+      this->clusterView = std::make_unique<clusters::ClusterView>(this->getGlobalResources(), clusterViewCommands, *cluster);
+
+      this->views.push_back(this->clusterView.get());
+
+      this->clusterView->setView(this->sfmlView);
+   }
 }
 
 const View * Screen::getCurrentView() const

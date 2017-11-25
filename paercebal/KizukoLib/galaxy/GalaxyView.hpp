@@ -23,9 +23,7 @@ namespace paercebal::KizukoLib::galaxy
 
 struct GalaxyViewCommands
 {
-   using Command = std::function<void()>;
-
-   Command onBack;
+   std::function<void(const std::string &)> onSelectCluster;
 };
 
 
@@ -40,12 +38,6 @@ public:
    virtual void                  drawInto(sf::RenderTarget & renderTarget)       const override;
    std::unique_ptr<GalaxyView>   clone()                                         const;
 
-   virtual GalaxyView &                  setView(const sf::View & view);
-
-   virtual void                          warnMouseHovering(int x, int y);
-   virtual void                          warnMouseClicking(sf::Vector2i pressed, sf::Vector2i released);
-   virtual void                          warnLoseFocus();
-
 private:
    GalaxyView(const GlobalResources & globalResources, GalaxyViewCommands galaxyViewCommands, float translationIncrement_);
 
@@ -53,7 +45,7 @@ private:
 
    galaxy::Galaxy *              galaxy = nullptr;
    GalaxyViewCommands            commands;
-   gui::Button                   button;
+   //gui::Button                   button;
    gui::Label                    label;
 };
 

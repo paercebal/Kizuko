@@ -127,18 +127,21 @@ void doLog(const std::stringstream & str)
 
 
 
-Galaxy::Galaxy(const GlobalResources & globalResources)
-   : Galaxy(globalResources, globalResources.getData().galaxy.gridIncrement, static_cast<int>(globalResources.getData().galaxy.gridMajorIncrement), 1.f, globalResources.getData().galaxy.radius)
+Galaxy::Galaxy(const GlobalResources & globalResources, GalaxyCommands galaxyCommands_, gui::ObserverWidget3D & observerWidget3D_)
+   : Galaxy(globalResources, galaxyCommands_, observerWidget3D_, globalResources.getData().galaxy.gridIncrement, static_cast<int>(globalResources.getData().galaxy.gridMajorIncrement), 1.f, globalResources.getData().galaxy.radius)
 {
 }
 
-Galaxy::Galaxy(const GlobalResources & globalResources, float gridIncrement_, int gridMajorIncrement_, float scaling_, float radius_)
+Galaxy::Galaxy(const GlobalResources & globalResources, GalaxyCommands galaxyCommands_, gui::ObserverWidget3D & observerWidget3D_, float gridIncrement_, int gridMajorIncrement_, float scaling_, float radius_)
    : super(globalResources)
+   , galaxyCommands(galaxyCommands_)
    , radius(radius_)
    , gridIncrement(gridIncrement_)
    , gridMajorIncrement(gridMajorIncrement_)
    , scaling(scaling_)
 {
+   this->registerIntoObserver(observerWidget3D_);
+
    // we set an isometric presentation
    // this->setCenter()
 
@@ -182,6 +185,35 @@ Galaxy::Galaxy(const GlobalResources & globalResources, float gridIncrement_, in
    auto image = std::make_unique<objects::FlatImage>(this->getGlobalResources(), this->getGlobalResources().getData().galaxy.image, sf::Vector3f{ -radius, -radius, 0 }, sf::Vector3f{ radius, radius, 0 });
    this->milkyWayImage = image.get();
    this->getChildren().push_back(std::move(image));
+}
+
+Galaxy::~Galaxy()
+{
+   this->unregisterFromObserver();
+}
+
+void Galaxy::registerIntoObserver(gui::ObserverWidget3D & observerWidget3D_)
+{
+   this->unregisterFromObserver();
+   observerWidget3D_.registerWidget3D(*this);
+   this->observerWidget3D = &observerWidget3D_;
+}
+
+void Galaxy::unregisterFromObserver()
+{
+   if (this->observerWidget3D)
+   {
+      this->observerWidget3D->unregisterWidget3D(*this);
+      this->observerWidget3D = nullptr;
+   }
+}
+
+void Galaxy::onSelectCluster(const std::string & clusterName)
+{
+   if (this->galaxyCommands.onSelectCluster)
+   {
+      this->galaxyCommands.onSelectCluster(clusterName);
+   }
 }
 
 void Galaxy::createShapes2D()
@@ -259,9 +291,15 @@ Galaxy & Galaxy::addCluster(const GalaxyCluster & cluster)
 
    auto sp = cluster.clone();
    auto * p = sp.get();
+   const auto & name = p->getName();
 
    this->getChildren().push_back(std::move(sp));
    this->clusters.push_back(p);
+   p->registerIntoObserver(*(this->observerWidget3D));
+   p->setCommand([this, name]()
+   {
+      this->onSelectCluster(name);
+   });
 
    return *this;
 }

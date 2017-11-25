@@ -90,6 +90,15 @@
     <ClCompile Include="..\paercebal\KizukoLib\galaxy\GalaxyCircle.cpp">
       <Filter>p.KizukoLib.galaxy</Filter>
     </ClCompile>
+    <ClCompile Include="..\paercebal\KizukoLib\gui\Control.cpp">
+      <Filter>p.KizukoLib.gui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\paercebal\KizukoLib\gui\ObserverWidget3D.cpp">
+      <Filter>p.KizukoLib.gui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\paercebal\KizukoLib\gui\ObserverWidgetGui.cpp">
+      <Filter>p.KizukoLib.gui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\paercebal\KizukoLib\dllmain.hpp">
@@ -163,6 +172,15 @@
     </ClInclude>
     <ClInclude Include="..\paercebal\KizukoLib\galaxy\GalaxyCircle.hpp">
       <Filter>p.KizukoLib.galaxy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\paercebal\KizukoLib\gui\Control.hpp">
+      <Filter>p.KizukoLib.gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\paercebal\KizukoLib\gui\ObserverWidget3D.hpp">
+      <Filter>p.KizukoLib.gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\paercebal\KizukoLib\gui\ObserverWidgetGui.hpp">
+      <Filter>p.KizukoLib.gui</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

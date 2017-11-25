@@ -49,8 +49,8 @@ public:
 
    Screen &                                  setView(const sf::View & view);
 
-   void                                      warnMouseHovering(int x, int y);
-   void                                      warnMouseClicking(sf::Vector2i pressed, sf::Vector2i released);
+   void                                      warnScreenAboutMouseHovering(int x, int y);
+   void                                      warnScreenAboutMouseClicking(sf::Vector2i pressed, sf::Vector2i released);
    void                                      calculateAbsolutePositionThenShapes2DRecursiveIfNeeded();
 
 private:
@@ -58,7 +58,7 @@ private:
    virtual Screen *                          cloneImpl()                                     const;
 
    void                                      onBackFromCluster();
-   void                                      onSelectCluster();
+   void                                      onSelectCluster(const std::string & clusterName);
    const View *                              getCurrentView()                                const;
    View *                                    getCurrentView();
 

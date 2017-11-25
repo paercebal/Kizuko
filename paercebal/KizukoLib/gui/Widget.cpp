@@ -118,8 +118,13 @@ Widget::Widget(const GlobalResources & globalResources_, RelativePositionStyle r
    , relativePositionStyle{ relativePositionStyle_ }
    , relativePosition{ relativePosition_ }
    , styles(widgetStyles_)
-   , commandCallback(commandCallback_)
 {
+   this->setCommand(commandCallback_);
+}
+
+Widget::~Widget()
+{
+   this->unregisterFromObserver();
 }
 
 const GlobalResources & Widget::getGlobalResources() const
@@ -127,9 +132,26 @@ const GlobalResources & Widget::getGlobalResources() const
    return this->globalResources;
 }
 
+void Widget::registerIntoObserver(ObserverWidgetGui & observerWidgetGui_)
+{
+   this->unregisterFromObserver();
+   observerWidgetGui_.registerWidgetGui(*this);
+   this->observerWidgetGui = &observerWidgetGui_;
+}
+
+void Widget::unregisterFromObserver()
+{
+   if (this->observerWidgetGui)
+   {
+      this->observerWidgetGui->unregisterWidgetGui(*this);
+      this->observerWidgetGui = nullptr;
+   }
+}
+
 Widget & Widget::setSize(const sf::Vector2f & size)
 {
    this->size = size;
+   this->setControlBounds({ this->absolutePosition, this->size });
    return *this;
 }
 
@@ -147,37 +169,10 @@ Widget & Widget::setPosition(RelativePositionStyle relativePositionStyle, const 
    return *this;
 }
 
-Widget & Widget::setView(const sf::View & view)
-{
-   this->viewSize = view.getSize();
-   this->viewCenter = view.getCenter();
-   this->setChanged(true);
-
-   return *this;
-}
-
-Widget & Widget::setCommand(CommandCallback commandCallback)
-{
-   this->commandCallback = commandCallback;
-   this->setChanged(true);
-   return *this;
-}
-
 void Widget::calculateAbsolutePosition()
 {
    this->absolutePosition = doCalculateAbsolutePosition(this->viewCenter, this->viewSize, this->relativePositionStyle, this->relativePosition, this->size);
-}
-
-sf::FloatRect Widget::getWidgetBounds() const
-{
-   return { this->absolutePosition, this->size };
-}
-
-bool Widget::isMouseHovering() const
-{
-   sf::FloatRect widgetBounds = this->getWidgetBounds();
-   const bool isHoveringOnWidget = ((this->viewMousePosition.x >= widgetBounds.left) && (this->viewMousePosition.x <= widgetBounds.left + widgetBounds.width) && (this->viewMousePosition.y >= widgetBounds.top) && (this->viewMousePosition.y <= widgetBounds.top + widgetBounds.height));
-   return isHoveringOnWidget;
+   this->setControlBounds({ this->absolutePosition, this->size });
 }
 
 void Widget::createShapes2D()
@@ -191,57 +186,9 @@ void Widget::createShapes2D()
    this->createShapes2DSecondAlways();
 }
 
-void Widget::warnMouseHovering(int x, int y)
-{
-   const float xPos = this->viewCenter.x - (this->viewSize.x / 2.f) + x;
-   const float yPos = this->viewCenter.y - (this->viewSize.y / 2.f) + y;
-
-   this->viewMousePosition = { static_cast<int>(xPos), static_cast<int>(yPos) };
-}
-
-void Widget::warnMouseClicking(sf::Vector2i pressed, sf::Vector2i released)
-{
-   auto convertToViewCoordinates = [this](sf::Vector2i pos) ->sf::Vector2i
-   {
-      return { static_cast<int>(this->viewCenter.x - (this->viewSize.x / 2.f) + pos.x), static_cast<int>(this->viewCenter.y - (this->viewSize.y / 2.f) + pos.y) };
-   };
-
-   auto realPressed = convertToViewCoordinates(pressed);
-   auto realReleased = convertToViewCoordinates(released);
-
-   auto isWithinWidgetBounds = [this](sf::Vector2i mouse) ->bool
-   {
-      sf::FloatRect widgetBounds = this->getWidgetBounds();
-      return ((mouse.x >= widgetBounds.left) && (mouse.x <= widgetBounds.left + widgetBounds.width) && (mouse.y >= widgetBounds.top) && (mouse.y <= widgetBounds.top + widgetBounds.height));
-   };
-
-   const bool isClickingOnWidget = isWithinWidgetBounds(realPressed) && isWithinWidgetBounds(realReleased);
-
-   if (isClickingOnWidget)
-   {
-      this->commandCallback();
-   }
-}
-
-void Widget::warnLoseFocus()
-{
-   this->viewMousePosition = { std::numeric_limits<int>::max(), std::numeric_limits<int>::max() };
-}
-
 std::unique_ptr<Widget> Widget::clone() const
 {
    return std::unique_ptr<Widget>(this->cloneImpl());
-}
-
-Widget & Widget::setChanged(bool changed)
-{
-   this->changed = changed;
-   return *this;
-}
-
-bool Widget::isChanged() const
-{
-   return this->changed;
 }
 
 } // namespace paercebal::KizukoLib::gui

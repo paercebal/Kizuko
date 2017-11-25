@@ -108,17 +108,12 @@ std::vector<std::unique_ptr<ClusterLine>> createClusterGrid(const GlobalResource
 
 }
 
-Cluster::Cluster(const GlobalResources & globalResources)
-   : Cluster(globalResources, globalResources.getData().clusters.at(0).gridIncrement, static_cast<int>(globalResources.getData().clusters.at(0).gridMajorIncrement), 1.f, globalResources.getData().clusters.at(0).size)
-{
-}
-
-Cluster::Cluster(const GlobalResources & globalResources, float gridIncrement_, int gridMajorIncrement_, float scaling_, sf::Vector3f size3D_)
+Cluster::Cluster(const GlobalResources & globalResources, const input::Cluster & inputCluster)
    : super(globalResources)
-   , size3D(size3D_)
-   , gridIncrement(gridIncrement_)
-   , gridMajorIncrement(gridMajorIncrement_)
-   , scaling(scaling_)
+   , size3D(inputCluster.size)
+   , gridIncrement(inputCluster.gridIncrement)
+   , gridMajorIncrement(static_cast<int>(inputCluster.gridMajorIncrement))
+   , scaling(1.f)
 {
    // we set an isometric presentation
    // this->setCenter()

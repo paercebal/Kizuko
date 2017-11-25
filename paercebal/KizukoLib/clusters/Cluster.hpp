@@ -23,8 +23,7 @@ class PAERCEBAL_x_KIZUKOLIB_x_API Cluster : public objects::Object
    using super = objects::Object;
 public:
 
-   Cluster(const GlobalResources & globalResources);
-   Cluster(const GlobalResources & globalResources, float gridIncrement_, int gridMajorIncrement_, float scaling_, sf::Vector3f size3D_);
+   Cluster(const GlobalResources & globalResources, const input::Cluster & inputCluster);
 
    virtual void                  createShapes2D()                                      override;
    virtual void                  drawInto(sf::RenderTarget & renderTarget)       const override;
