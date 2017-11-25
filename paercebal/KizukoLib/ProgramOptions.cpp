@@ -15,9 +15,9 @@ ProgramOptions::ProgramOptions(int argc, char * argv[])
 
    auto cli
       = clara::Help(help)
-      + clara::Opt(this->clusterFileName, "cluster")
-         ["-c"]["--cluster"]
-         ("the cluster json filename");
+      + clara::Opt(this->galaxyFileName, "galaxy")
+         ["-g"]["--galaxy"]
+         ("the galaxy json filename");
 
    auto result = cli.parse(clara::Args(argc, argv));
 
@@ -31,9 +31,9 @@ ProgramOptions::ProgramOptions(int argc, char * argv[])
 
 ProgramOptions::~ProgramOptions() = default;
 
-const std::string & ProgramOptions::getClusterFileName() const noexcept
+const std::string & ProgramOptions::getGalaxyFileName() const noexcept
 {
-   return this->clusterFileName;
+   return this->galaxyFileName;
 }
 
 

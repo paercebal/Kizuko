@@ -20,10 +20,10 @@ public:
    ProgramOptions(int argc, char * argv[]);
    ~ProgramOptions();
 
-   const std::string &           getClusterFileName()          const noexcept;
+   const std::string &           getGalaxyFileName()           const noexcept;
 
 private:
-   std::string          clusterFileName;
+   std::string                   galaxyFileName;
 };
 
 

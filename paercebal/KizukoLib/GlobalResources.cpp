@@ -14,12 +14,12 @@ GlobalResources::GlobalResources(int argc, char * argv[])
 {
    ProgramOptions o(argc, argv);
 
-   if (o.getClusterFileName().empty())
+   if (o.getGalaxyFileName().empty())
    {
       throw std::runtime_error("There is no cluster file to read from");
    }
 
-   std::string jsonText = utilities::loadFile(o.getClusterFileName());
+   std::string jsonText = utilities::loadFile(o.getGalaxyFileName());
    this->data = input::extractDatafromJSon(jsonText);
 
    const size_t foundFontNormalIndex = PAERCEBAL_x_KIZUKOLIB_x_ASSERT_RESOURCE_LOADING(this->fontNormal.font, generateResourceList(this->data.style.fontNormal));
