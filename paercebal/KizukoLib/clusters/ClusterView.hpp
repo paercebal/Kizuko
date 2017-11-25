@@ -29,9 +29,9 @@ struct ClusterViewCommands
 };
 
 
-class PAERCEBAL_x_KIZUKOLIB_x_API ClusterView : public objects::Object, public gui::View
+class PAERCEBAL_x_KIZUKOLIB_x_API ClusterView : public gui::View
 {
-   using super = objects::Object;
+   using super = gui::View;
 public:
 
    ClusterView(const GlobalResources & globalResources, ClusterViewCommands clusterViewCommands);
@@ -40,62 +40,21 @@ public:
    virtual void                  drawInto(sf::RenderTarget & renderTarget)       const override;
    std::unique_ptr<ClusterView>  clone()                                         const;
 
-   ClusterView &                 translateXPositive();
-   ClusterView &                 translateYPositive();
-   ClusterView &                 translateXNegative();
-   ClusterView &                 translateYNegative();
-   ClusterView &                 translateByPixels(int x, int y);
-   ClusterView &                 zoomIn();
-   ClusterView &                 zoomOut();
-   ClusterView &                 zoomInByWheel();
-   ClusterView &                 zoomOutByWheel();
+   virtual ClusterView &                 setView(const sf::View & view);
 
-   ClusterView &                 setDebugText(const std::string & debugText_);
-   ClusterView &                 setDebugText(std::string && debugText_);
-
-   ClusterView &                 setChanged(bool isChanged);
-   bool                          isChanged()                                     const;
-
-   ClusterView &                 setView(const sf::View & view);
-
-   virtual void                  warnMouseHovering(int x, int y)                                      override;
-   virtual void                  warnMouseClicking(sf::Vector2i pressed, sf::Vector2i released)       override;
-   virtual void                  warnLoseFocus()                                                      override;
-
-   virtual void                  calculateAbsolutePositionThenShapes2DRecursiveIfNeeded() override;
+   virtual void                          warnMouseHovering(int x, int y);
+   virtual void                          warnMouseClicking(sf::Vector2i pressed, sf::Vector2i released);
+   virtual void                          warnLoseFocus();
 
 private:
    ClusterView(const GlobalResources & globalResources, ClusterViewCommands clusterViewCommands, float translationIncrement_);
 
    virtual ClusterView *         cloneImpl()                                     const override;
 
-   ClusterView &                 updateTranslation();
-   ClusterView &                 updateZoom();
-
-   bool                          isChanged_              = true;
-   clusters::Cluster *           cluster                 = nullptr;
-   float                         translationIncrement    = 10.f;
-   int                           translationIncrementX   = 0;
-   int                           translationIncrementY   = 0;
-   int                           translationX            = 0;
-   int                           translationY            = 0;
-   int                           zoomPosition            = 0;
-   float                         zoom                    = 100.f;
-
-   sf::Vector2f                  viewSize;
-   sf::Vector2f                  viewCenter;
-
-   sf::Text                      debugLabel;
-   std::string                   debugText;
-
    ClusterViewCommands           commands;
    gui::Button                   button;
    gui::Label                    label;
    gui::Label                    milkyWay;
-
-   sf::Texture                   spaceBackground;
-   sf::Sprite                    spaceBackgroundSprite;
-   bool                          isSpaceBackgroundVisible = false;
 };
 
 //PAERCEBAL_x_KIZUKOLIB_x_API void calculateAbsolutePositionThenShapes2DRecursiveIfNeeded(ClusterView & view);
