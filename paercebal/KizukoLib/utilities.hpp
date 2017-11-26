@@ -206,7 +206,7 @@ sf::Vector2<T> convert_3D_to_iso2D(const sf::Vector3<T> value)
 
 inline sf::Vector3<long double> getBarycenter(const sf::Vector3<long double> begin_, const sf::Vector3<long double> end_, long double relativePosition)
 {
-   auto result = (begin_ + end_) * relativePosition;
+   auto result = ((end_ - begin_) * relativePosition) + begin_;
    return result;
 }
 

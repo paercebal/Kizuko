@@ -84,8 +84,36 @@
    , "clusters" :
       [
          {
+              "name" : "Arcturus Stream"
+            , "image" : "./copyrighted/cluster-arcturus-stream.png"
+            , "grid-increment" : 2
+            , "grid-major-increment" : 5
+            , "size" : "100,100,100"
+            , "stars" :
+               [
+                    { "name" : "Eta Bootis"        , "position" : "2,2,1"        , "size" : 7    , "color" : "255,0,0,255"       , "core-color" : "255,128,0,255"    , "relay" : false }
+                  , { "name" : "Arcturus"          , "position" : "0,0,0"        , "size" : 10   , "color" : "255,0,0,255"       , "core-color" : "255,128,0,255"    , "relay" : true }
+                  , { "name" : "Euler"             , "position" : "20,30,10"     , "size" : 5    , "color" : "255,128,0,255"     , "core-color" : "255,255,255,255"  , "relay" : false }
+                  , { "name" : "Sol"               , "position" : "29,19,-12"    , "size" : 5    , "color" : "255,128,0,255"     , "core-color" : "255,255,255,255"  , "relay" : false }
+                  , { "name" : "61 Ursae Majoris"  , "position" : "3,21,6"       , "size" : 4    , "color" : "255,128,0,255"     , "core-color" : "255,255,255,255"  , "relay" : false }
+                  , { "name" : "Proxima Centauri"  , "position" : "27.5,19,-16"  , "size" : 3    , "color" : "255,0,0,255"       , "core-color" : "255,128,0,255"    , "relay" : false }
+                  , { "name" : "Gamma Virginis"    , "position" : "8,13,-13"     , "size" : 5    , "color" : "255,255,255,255"   , "core-color" : "255,255,255,255"  , "relay" : false }
+                  , { "name" : "Groombridge 1830"  , "position" : "5,20,6"       , "size" : 3    , "color" : "255,128,0,255"     , "core-color" : "255,255,255,255"  , "relay" : false }
+               ]
+
+            , "distances" :
+               [
+                    { "begin" : "Arcturus", "end" : "Euler" }
+                  , { "begin" : "Arcturus", "end" : "Sol" }
+                  , { "begin" : "Arcturus", "end" : "61 Ursae Majoris" }
+                  , { "begin" : "Sol", "end" : "Euler" }
+                  , { "begin" : "Sol", "end" : "61 Ursae Majoris" }
+            ]
+         }
+         ,
+         {
               "name" : "Caleston Rift"
-            , "image" : "./copyrighted/caleston-rift.png"
+            , "image" : "./copyrighted/cluster-caleston-rift.png"
             , "grid-increment" : 2
             , "grid-major-increment" : 5
             , "size" : "100,100,100"
