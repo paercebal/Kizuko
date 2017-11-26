@@ -25,9 +25,9 @@ GalaxyView::GalaxyView(const GlobalResources & globalResources, GalaxyViewComman
 }
 
 GalaxyView::GalaxyView(const GlobalResources & globalResources, GalaxyViewCommands galaxyViewCommands, float translationIncrement_)
-   : super(globalResources, translationIncrement_)
+   : super(globalResources, "./resources/space-empty.png", translationIncrement_)
    , commands(galaxyViewCommands)
-   //, button(globalResources, gui::RelativePositionStyle::BottomLeft, { 20.f, -20.f }, { 200.f, 40.f })
+   , button(globalResources, gui::RelativePositionStyle::BottomLeft, { 20.f, -20.f }, { 200.f, 40.f })
    , label(globalResources, gui::RelativePositionStyle::BottomRight, { -20.f, -20.f }, 2.f)
 {
    {
@@ -38,9 +38,13 @@ GalaxyView::GalaxyView(const GlobalResources & globalResources, GalaxyViewComman
       this->setViewedObject(std::move(viewedGalaxy));
    }
 
-   //this->button.setLabel("Go to Caleston Rift");
-   //this->button.setCommand([]() commands.onSelectCluster();
-   //this->button.registerIntoObserver(*this);
+   this->button.setLabel("Background");
+   this->button.setCommand([this]()
+   {
+      this->isSpaceBackgroundVisible = !this->isSpaceBackgroundVisible;
+      this->setChanged(true);
+   });
+   this->button.registerIntoObserver(*this);
 
    this->label.setLabel("Milky Way");
    this->label.setCommand([this]()
@@ -56,7 +60,7 @@ void GalaxyView::createShapes2D()
 {
    super::createShapes2D();
 
-   //this->button.createShapes2D();
+   this->button.createShapes2D();
    this->label.createShapes2D();
 }
 
@@ -64,7 +68,7 @@ void GalaxyView::drawInto(sf::RenderTarget & renderTarget) const
 {
    super::drawInto(renderTarget);
 
-   //this->button.drawInto(renderTarget);
+   this->button.drawInto(renderTarget);
    this->label.drawInto(renderTarget);
 }
 

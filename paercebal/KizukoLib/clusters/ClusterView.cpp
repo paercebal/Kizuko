@@ -27,13 +27,13 @@ ClusterView::ClusterView(const GlobalResources & globalResources, ClusterViewCom
 }
 
 ClusterView::ClusterView(const GlobalResources & globalResources, ClusterViewCommands clusterViewCommands, const input::Cluster & inputCluster, float translationIncrement_)
-   : super(globalResources, translationIncrement_)
+   : super(globalResources, inputCluster.image, translationIncrement_)
    , commands(clusterViewCommands)
    , button(globalResources, gui::RelativePositionStyle::BottomLeft, { 20.f, -20.f }, { 200.f, 40.f })
    , label(globalResources, gui::RelativePositionStyle::BottomRight, { -20.f, -20.f }, 2.f)
    , milkyWay(globalResources, gui::RelativePositionStyle::TopLeft, { 20.f, 20.f }, 2.f)
 {
-   this->setViewedObject(std::make_unique<clusters::Cluster>(globalResources, inputCluster));
+   this->setViewedObject(std::make_unique<clusters::Cluster>(globalResources, *this, inputCluster));
 
    this->button.setLabel("Background");
    this->button.registerIntoObserver(*this);

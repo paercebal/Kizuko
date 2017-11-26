@@ -14,20 +14,6 @@
 #include <fstream>
 #include <ios>
 
-// VC++2010: Disable  warning C4482: nonstandard extension used: enum 'xyz' used in qualified name
-#pragma warning(disable: 4482)
-
-
-
-// This code was inspired by Vittorio Romeo's excellent tutorial on SFML:
-// https://www.youtube.com/watch?v=_4K3tsKa1Uc
-//
-// Vittorio's homepage: http://vittorioromeo.info/
-//
-// The original license for this code can be found at:
-// http://opensource.org/licenses/AFL-3.0
-
-
 
 #if defined(_WIN32)
 

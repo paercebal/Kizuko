@@ -17,15 +17,18 @@
 namespace paercebal::KizukoLib::gui
 {
 
-View::View(const GlobalResources & globalResources_, float translationIncrement_)
+View::View(const GlobalResources & globalResources_, const std::string & spaceBackgroundPath, float translationIncrement_)
    : super(globalResources_)
    , translationIncrement(translationIncrement_)
 {
-   PAERCEBAL_x_KIZUKOLIB_x_ASSERT_RESOURCE_LOADING(this->spaceBackground, "./copyrighted/caleston-rift.png", "./resources/cluster-empty.png");
-   this->spaceBackground.setSmooth(true);
-   this->spaceBackgroundSprite.setTexture(this->spaceBackground);
-   this->spaceBackgroundSprite.setScale(sf::Vector2f(1.0f, 1.0f));
-   this->spaceBackgroundSprite.setColor(sf::Color(255, 255, 255, 96));
+   if (!spaceBackgroundPath.empty())
+   {
+      PAERCEBAL_x_KIZUKOLIB_x_ASSERT_RESOURCE_LOADING(this->spaceBackground, spaceBackgroundPath, "./resources/cluster-empty.png");
+      this->spaceBackground.setSmooth(true);
+      this->spaceBackgroundSprite.setTexture(this->spaceBackground);
+      this->spaceBackgroundSprite.setColor(sf::Color(255, 255, 255, 96));
+      this->isSpaceBackground = true;
+   }
 
 }
 
@@ -133,16 +136,22 @@ void View::createShapes2D()
    this->debugLabel.setFillColor(sf::Color::White);
    this->debugLabel.setPosition({ 0, 0 });
 
+   if(this->isSpaceBackground)
    {
+      const float xScale = this->viewSize.x / this->spaceBackground.getSize().x;
+      const float yScale = this->viewSize.y / this->spaceBackground.getSize().y;
+      const float finalScale = (xScale > yScale) ? xScale : yScale;
+
       const float xPos = this->viewCenter.x - (this->viewSize.x / 2.f);
       const float yPos = this->viewCenter.y - (this->viewSize.y / 2.f);
+      this->spaceBackgroundSprite.setScale(sf::Vector2f(finalScale, finalScale));
       this->spaceBackgroundSprite.setPosition(sf::Vector2f(xPos, yPos));
    }
 }
 
 void View::drawInto(sf::RenderTarget & renderTarget) const
 {
-   if (this->isSpaceBackgroundVisible)
+   if (this->isSpaceBackground && this->isSpaceBackgroundVisible)
    {
       renderTarget.draw(this->spaceBackgroundSprite);
    }

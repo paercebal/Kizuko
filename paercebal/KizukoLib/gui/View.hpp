@@ -28,7 +28,7 @@ class PAERCEBAL_x_KIZUKOLIB_x_API View : public objects::Object, public Observer
 {
    using super = objects::Object;
 public:
-   View(const GlobalResources & globalResources_, float translationIncrement_);
+   View(const GlobalResources & globalResources_, const std::string & spaceBackgroundPath, float translationIncrement_);
    virtual ~View();
 
    virtual void                  createShapes2D()                                      override;
@@ -89,6 +89,7 @@ protected:
    sf::Texture                   spaceBackground;
    sf::Sprite                    spaceBackgroundSprite;
    bool                          isSpaceBackgroundVisible = false;
+   bool                          isSpaceBackground = false;
 
 private:
 
