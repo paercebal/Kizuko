@@ -45,6 +45,22 @@ Star::Star(const GlobalResources & globalResources, const std::string & name_, s
    this->setRelativePositions({ { 0, 0, 0 } });
 }
 
+void Star::registerIntoObserver(gui::ObserverWidget3D & observerWidget3D_)
+{
+   this->unregisterFromObserver();
+   observerWidget3D_.registerWidget3D(*this);
+   this->observerWidget3D = &observerWidget3D_;
+}
+
+void Star::unregisterFromObserver()
+{
+   if (this->observerWidget3D)
+   {
+      this->observerWidget3D->unregisterWidget3D(*this);
+      this->observerWidget3D = nullptr;
+   }
+}
+
 void Star::createShapes2D()
 {
    Star::Positions & positions = this->getAbsolutePositions();
@@ -52,6 +68,10 @@ void Star::createShapes2D()
    if (positions.size() > 0)
    {
       Star::Position & position = positions[0];
+
+      const sf::Vector2f controlPosition = { position.x - this->size, position.y - this->size };
+      const sf::Vector2f controlSize = { this->size * 2, this->size * 2 };
+      this->setControlBounds({ controlPosition, controlSize });
 
       getStarHalo(this->shapes[0], this->color, 16, positions[0], this->size * 3.f);
       getStarHalo(this->shapes[1], this->color, 32, positions[0], this->size * 2.0f);
@@ -66,9 +86,18 @@ void Star::createShapes2D()
       this->nameLabel.setFont(this->getGlobalResources().getFontScifi().font);
       this->nameLabel.setCharacterSize(this->getGlobalResources().getFontScifi().size);
       this->nameLabel.setStyle(sf::Text::Regular);
-      this->nameLabel.setFillColor(sf::Color::White);
-      this->nameLabel.setOutlineColor({ 0, 0, 0, 128 });
-      this->nameLabel.setOutlineThickness(2.f);
+      if (this->isMouseHovering())
+      {
+         this->nameLabel.setFillColor(sf::Color::White);
+         this->nameLabel.setOutlineColor({ 0, 0, 0, 128 });
+         this->nameLabel.setOutlineThickness(2.f);
+      }
+      else
+      {
+         this->nameLabel.setFillColor({ 255, 255, 255, 128 });
+         this->nameLabel.setOutlineColor({ 0, 0, 0, 128 });
+         this->nameLabel.setOutlineThickness(2.f);
+      }
       this->nameLabel.setPosition({ position.x + 2 * this->size, position.y - 4 * this->size });
    }
 }

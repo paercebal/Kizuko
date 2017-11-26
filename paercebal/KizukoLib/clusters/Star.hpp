@@ -3,6 +3,8 @@
 
 #include <paercebal/KizukoLib/GlobalResources.hpp>
 #include <paercebal/KizukoLib/objects/Object.hpp>
+#include <paercebal/KizukoLib/gui/Control.hpp>
+#include <paercebal/KizukoLib/gui/ObserverWidget3D.hpp>
 
 #include <SFML/Graphics.hpp>
 
@@ -14,7 +16,7 @@ namespace paercebal::KizukoLib::clusters
 {
 
 
-class PAERCEBAL_x_KIZUKOLIB_x_API Star : public objects::Object
+class PAERCEBAL_x_KIZUKOLIB_x_API Star : public objects::Object, public gui::Control
 {
    using super = objects::Object;
 public:
@@ -28,9 +30,13 @@ public:
    virtual void                  drawInto(sf::RenderTarget & renderTarget)       const override;
    std::unique_ptr<Star>         clone()                                         const;
 
+   void                          registerIntoObserver(gui::ObserverWidget3D & observerWidget3D_);
+   void                          unregisterFromObserver();
+
 private:
    virtual Star *                cloneImpl()                                     const override;
 
+   gui::ObserverWidget3D *       observerWidget3D = nullptr;
    std::string                   name;
    std::vector<sf::CircleShape>  shapes;
    float                         size;

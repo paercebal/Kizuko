@@ -108,12 +108,13 @@ std::vector<std::unique_ptr<ClusterLine>> createClusterGrid(const GlobalResource
 
 }
 
-Cluster::Cluster(const GlobalResources & globalResources, const input::Cluster & inputCluster)
+Cluster::Cluster(const GlobalResources & globalResources, gui::ObserverWidget3D & observerWidget3D_, const input::Cluster & inputCluster)
    : super(globalResources)
    , size3D(inputCluster.size)
    , gridIncrement(inputCluster.gridIncrement)
    , gridMajorIncrement(static_cast<int>(inputCluster.gridMajorIncrement))
    , scaling(1.f)
+   , observerWidget3D(&observerWidget3D_)
 {
    // we set an isometric presentation
    // this->setCenter()
@@ -200,6 +201,7 @@ Cluster & Cluster::addStar(const Star & star)
 
    this->getChildren().push_back(std::move(sp));
    this->stars.push_back(p);
+   p->registerIntoObserver(*(this->observerWidget3D));
 
    const auto starCenter = p->getCenter();
    auto spAltitudeLine = std::make_unique<AltitudeLine>(this->getGlobalResources(), starCenter);

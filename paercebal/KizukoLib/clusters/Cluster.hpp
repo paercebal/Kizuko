@@ -23,7 +23,7 @@ class PAERCEBAL_x_KIZUKOLIB_x_API Cluster : public objects::Object
    using super = objects::Object;
 public:
 
-   Cluster(const GlobalResources & globalResources, const input::Cluster & inputCluster);
+   Cluster(const GlobalResources & globalResources, gui::ObserverWidget3D & observerWidget3D_, const input::Cluster & inputCluster);
 
    virtual void                  createShapes2D()                                      override;
    virtual void                  drawInto(sf::RenderTarget & renderTarget)       const override;
@@ -40,6 +40,7 @@ private:
    int                           gridMajorIncrement      = 5;
    float                         scaling                 = 1.f;
 
+   gui::ObserverWidget3D *       observerWidget3D = nullptr;
    std::vector<ClusterLine *>    clusterLines;
    std::vector<DistanceShape *>  distanceShapes;
    std::vector<AltitudeLine *>   altitudeLine;

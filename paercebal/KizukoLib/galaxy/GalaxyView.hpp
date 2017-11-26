@@ -45,7 +45,7 @@ private:
 
    galaxy::Galaxy *              galaxy = nullptr;
    GalaxyViewCommands            commands;
-   //gui::Button                   button;
+   gui::Button                   button;
    gui::Label                    label;
 };
 
